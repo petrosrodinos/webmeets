@@ -17,3 +17,5 @@ npx prisma generate
 
 docker compose up dev-db id
 npx prisma studio
+
+npx dotenv -e .env.test -- prisma studio
