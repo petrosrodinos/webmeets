@@ -11,8 +11,8 @@ import { BookModule } from './book/book.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
       envFilePath: '.env',
+      isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGO_URL),
     AuthModule,
