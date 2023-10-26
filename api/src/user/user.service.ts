@@ -1,26 +1,24 @@
-// import { Injectable } from '@nestjs/common';
-// import { PrismaService } from '../prisma/prisma.service';
-// import { EditUserDto } from './dto';
+import { Injectable } from '@nestjs/common';
+import { EditUserDto } from './dto';
+import * as mongoose from 'mongoose';
+import { User } from 'src/schemas/user.schema';
+import { InjectModel } from '@nestjs/mongoose';
 
-// @Injectable()
-// export class UserService {
-//   constructor(private prisma: PrismaService) {}
+@Injectable()
+export class UserService {
+  constructor(
+    @InjectModel(User.name)
+    private userModel: mongoose.Model<User>,
+  ) {}
 
-//   async editUser(
-//     userId: number,
-//     dto: EditUserDto,
-//   ) {
-//     const user = await this.prisma.user.update({
-//       where: {
-//         id: userId,
-//       },
-//       data: {
-//         ...dto,
-//       },
-//     });
+  async editUser(userId: string, data: EditUserDto) {
+    const user = await this.userModel.findByIdAndUpdate(userId, { $set: data }, { new: true }).exec();
 
-//     delete user.hash;
+    if (user) {
+      user.password = undefined;
+      return user.toObject();
+    }
 
-//     return user;
-//   }
-// }
+    throw new Error('User not found or update failed');
+  }
+}
