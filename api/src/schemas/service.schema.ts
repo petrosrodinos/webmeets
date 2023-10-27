@@ -1,36 +1,30 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
-export enum Role {
-  ADMIN = 'admin',
-  USER = 'user',
-  master = 'master',
-}
-
 @Schema({
   timestamps: true,
 })
-export class User {
+export class Service {
   @Prop({ type: Types.ObjectId, ref: 'Profile' })
   profileId: Types.ObjectId;
 
   @Prop()
-  firstname: string;
+  name: string;
 
   @Prop()
-  lastname: string;
+  description: string;
 
-  @Prop({ unique: true })
+  @Prop()
+  certificates: string[];
+
+  @Prop()
   email: string;
-
-  @Prop()
-  password: string;
 
   @Prop()
   phone: string;
 
   @Prop()
-  role: Role;
+  banner: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const ServiceSchema = SchemaFactory.createForClass(Service);

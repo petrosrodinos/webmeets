@@ -1,19 +1,17 @@
 import { ForbiddenException, Injectable, ConflictException } from '@nestjs/common';
 import { SignInDto, SignUpDto } from './dto';
 import * as argon from 'argon2';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { Model, Error } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
+import { CreateJwtService } from './jwt/jwt.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name)
     private userModel: Model<User>,
-    private jwt: JwtService,
-    private config: ConfigService,
+    private jwt: CreateJwtService,
   ) {}
 
   async signup(data: SignUpDto) {
@@ -34,9 +32,8 @@ export class AuthService {
       });
       await user.save();
 
-      return this.signToken({
+      return this.jwt.signToken({
         id: user.id,
-        email: user.email,
       });
     } catch (error) {
       if (error instanceof Error.ValidationError) {
@@ -61,22 +58,9 @@ export class AuthService {
       throw new ForbiddenException('Credentials incorrect');
     }
 
-    return this.signToken({
+    return this.jwt.signToken({
       id: user.id,
-      email: user.email,
+      profileId: user?.profileId || null,
     });
-  }
-
-  async signToken(payload: any): Promise<{ access_token: string }> {
-    const secret = this.config.get('JWT_SECRET');
-
-    const token = await this.jwt.signAsync(payload, {
-      expiresIn: '1d',
-      secret,
-    });
-
-    return {
-      access_token: token,
-    };
   }
 }
