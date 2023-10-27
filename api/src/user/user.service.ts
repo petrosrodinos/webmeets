@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EditUserDto } from './dto';
-import * as mongoose from 'mongoose';
+import { Model } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 export class UserService {
   constructor(
     @InjectModel(User.name)
-    private userModel: mongoose.Model<User>,
+    private userModel: Model<User>,
   ) {}
 
   async editUser(userId: string, data: EditUserDto) {

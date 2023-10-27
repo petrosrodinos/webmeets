@@ -3,16 +3,15 @@ import { SignInDto, SignUpDto } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import * as mongoose from 'mongoose';
+import { Model, Error } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Error } from 'mongoose';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name)
-    private userModel: mongoose.Model<User>,
+    private userModel: Model<User>,
     private jwt: JwtService,
     private config: ConfigService,
   ) {}
