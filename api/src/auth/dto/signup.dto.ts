@@ -28,4 +28,8 @@ export class SignUpDto {
   @IsString()
   @IsOptional()
   avatar: string;
+
+  @IsString()
+  @IsOptional()
+  profileId: string;
 }

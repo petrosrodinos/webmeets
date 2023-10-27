@@ -4,8 +4,7 @@ import { ProfileController } from './profile.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProfileSchema } from 'src/schemas/profile.schema';
 import { UserSchema } from 'src/schemas/user.schema';
-import { CreateJwtService } from 'src/auth/jwt/jwt.service';
-import { JwtService } from '@nestjs/jwt';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [
@@ -13,6 +12,6 @@ import { JwtService } from '@nestjs/jwt';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   controllers: [ProfileController],
-  providers: [ProfileService, CreateJwtService, JwtService],
+  providers: [ProfileService, UserService],
 })
 export class ProfileModule {}
