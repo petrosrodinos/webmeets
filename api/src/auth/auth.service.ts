@@ -4,14 +4,17 @@ import * as argon from 'argon2';
 import { Model, Error } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateJwtService } from './jwt/jwt.service';
+import { JwtService } from '@nestjs/jwt';
+
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name)
     private userModel: Model<User>,
-    private jwt: CreateJwtService,
+    private jwt: JwtService,
+    private config: ConfigService,
   ) {}
 
   async signup(data: SignUpDto) {
@@ -32,7 +35,7 @@ export class AuthService {
       });
       await user.save();
 
-      return this.jwt.signToken({
+      return this.signToken({
         id: user.id,
       });
     } catch (error) {
@@ -58,9 +61,23 @@ export class AuthService {
       throw new ForbiddenException('Credentials incorrect');
     }
 
-    return this.jwt.signToken({
+    return this.signToken({
       id: user.id,
       profileId: user?.profileId || null,
     });
+  }
+
+  async signToken(payload: any): Promise<{ access_token: string }> {
+    const secret = this.config.get('JWT_SECRET');
+    const expiration = this.config.get('JWT_EXPIRATION_TIME');
+
+    const token = await this.jwt.signAsync(payload, {
+      expiresIn: expiration,
+      secret,
+    });
+
+    return {
+      access_token: token,
+    };
   }
 }

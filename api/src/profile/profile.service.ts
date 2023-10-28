@@ -3,7 +3,6 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Profile } from 'src/schemas/profile.schema';
-import { User } from 'src/schemas/user.schema';
 import { Model, Error } from 'mongoose';
 
 @Injectable()

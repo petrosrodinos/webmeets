@@ -5,58 +5,57 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtGuard } from '../auth/guard';
 import { GetUser } from '../auth/decorator';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
-import { CreateJwtService } from 'src/auth/jwt/jwt.service';
+import { Profile } from 'src/schemas/profile.schema';
+import { UserService } from 'src/user/user.service';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller('profiles')
+@Controller('profile')
+@ApiTags('Profile')
 export class ProfileController {
   constructor(
+    @InjectModel(Profile.name)
+    private profileService: ProfileService,
     @InjectModel(User.name)
-    private userModel: Model<User>,
-    private readonly profileService: ProfileService,
-    private jwt: CreateJwtService,
+    private userService: UserService,
   ) {}
 
   @UseGuards(JwtGuard)
   @Post()
+  @ApiOkResponse({ type: Profile })
+  @ApiBearerAuth()
   async create(@GetUser('_id') userId: string, @Body() createProfileDto: CreateProfileDto) {
     const profile = await this.profileService.create(userId, createProfileDto);
-    const user = await this.userModel.findById(userId);
-    user.profileId = profile.id;
-    await user.save();
+    console.log('profile', profile);
+    // await this.userService.update(userId, { profileId: profile.id });
 
-    const token = await this.jwt.signToken({
-      id: user.id,
-      profileId: profile.id,
-    });
-
-    console.log('token', token);
-
-    return {
-      ...token,
-      profile,
-    };
+    return profile;
   }
 
   @Get()
+  @ApiOkResponse({ type: Profile, isArray: true })
   findAll() {
     return this.profileService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: Profile })
   findOne(@Param('id') id: string) {
     return this.profileService.findOne(id);
   }
 
   @UseGuards(JwtGuard)
   @Patch(':id')
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Profile })
   update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
     return this.profileService.update(id, updateProfileDto);
   }
 
   @UseGuards(JwtGuard)
   @Delete(':id')
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Profile })
   remove(@Param('id') id: string) {
     return this.profileService.remove(id);
   }

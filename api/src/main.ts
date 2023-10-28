@@ -14,11 +14,10 @@ async function bootstrap() {
     .setTitle('WebMeets API')
     .setDescription('The WebMeets API description')
     .setVersion('1.0')
-    .addTag('api')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api/docs', app, document);
   await app.listen(3333);
 }
 bootstrap();

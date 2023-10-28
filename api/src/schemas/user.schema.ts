@@ -15,7 +15,8 @@ export class User {
   @Prop({ type: Types.ObjectId, ref: 'Profile' })
   @ApiProperty({
     description: 'The id of the profile',
-    format: 'string',
+    type: 'string',
+    default: '653bfc52a89b4c7e9857b456',
   })
   profileId: Types.ObjectId;
 

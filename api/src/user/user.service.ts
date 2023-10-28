@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { EditUserDto } from './dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { UpdateUserDto } from './dto';
 import { Model } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,14 +11,29 @@ export class UserService {
     private userModel: Model<User>,
   ) {}
 
-  async editUser(userId: string, data: EditUserDto) {
-    const user = await this.userModel.findByIdAndUpdate(userId, { $set: data }, { new: true }).exec();
-
-    if (user) {
-      user.password = undefined;
-      return user.toObject();
+  async findOne(id: string) {
+    try {
+      const user = await this.userModel.findById(id);
+      if (!user) {
+        throw new NotFoundException('Could not find User.');
+      }
+      // delete user.password;
+      return user;
+    } catch (error) {
+      throw new NotFoundException(error.message);
     }
+  }
 
-    throw new Error('User not found or update failed');
+  async update(userId: string, data: UpdateUserDto) {
+    try {
+      const updatedUser = await this.userModel.findOneAndUpdate({ _id: userId }, { $set: data }, { new: true });
+      if (!updatedUser) {
+        throw new NotFoundException('Could not find User.');
+      }
+      delete updatedUser.password;
+      return updatedUser;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }
