@@ -5,11 +5,12 @@ import { Model, Error } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
-
 import { ConfigService } from '@nestjs/config';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 @Injectable()
 export class AuthService {
+  private s3Client = new S3Client({ region: this.config.get('AWS_S3_REGION') });
   constructor(
     @InjectModel(User.name)
     private userModel: Model<User>,
@@ -17,20 +18,34 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async signup(data: SignUpDto) {
-    const existingUser = await this.userModel.findOne({
-      email: data.email,
-    });
+  async signup(dto: SignUpDto, file: Buffer) {
+    // const existingUser = await this.userModel.findOne({
+    //   email: dto.email,
+    // });
 
-    if (existingUser) {
-      throw new ConflictException('Credentials taken');
+    // if (existingUser) {
+    //   throw new ConflictException('Credentials taken');
+    // }
+    let avatarUrl;
+    try {
+      const data = await this.s3Client.send(
+        new PutObjectCommand({
+          Bucket: this.config.get('AWS_FILES_BUCKET_NAME'),
+          Key: `${dto.email}-avatar.png`,
+          Body: file,
+        }),
+      );
+      console.log('avatar', data);
+      // avatarUrl = data.Location;
+    } catch (err) {
+      throw new Error(err.message);
     }
 
-    const hash = await argon.hash(data.password);
+    const hash = await argon.hash(dto.password);
 
     try {
       const user = new this.userModel({
-        ...data,
+        ...dto,
         password: hash,
       });
       await user.save();

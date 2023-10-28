@@ -25,9 +25,8 @@ export class SignUpDto {
   @IsNotEmpty()
   role: string;
 
-  @IsString()
   @IsOptional()
-  avatar: string;
+  avatar: any;
 
   @IsString()
   @IsOptional()
