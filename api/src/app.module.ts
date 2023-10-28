@@ -6,6 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ProfileModule } from './profile/profile.module';
 import { ServicesModule } from './services/services.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -13,13 +15,24 @@ import { AwsS3Module } from './aws-s3/aws-s3.module';
       envFilePath: '.env',
       isGlobal: true,
     }),
-
+    ThrottlerModule.forRoot([
+      {
+        ttl: parseInt(process.env.UPLOAD_RATE_TTL),
+        limit: parseInt(process.env.UPLOAD_RATE_LIMIT),
+      },
+    ]),
     MongooseModule.forRoot(process.env.MONGO_URL),
     AuthModule,
     UserModule,
     ProfileModule,
     ServicesModule,
     AwsS3Module,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class AppModule {}

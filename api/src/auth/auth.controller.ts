@@ -32,15 +32,15 @@ export class AuthController {
           // new MaxFileSizeValidator({
           //   maxSize: 1000,
           // }),
-          new FileTypeValidator({
-            fileType: 'image/jpeg',
-          }),
-          new FileTypeValidator({
-            fileType: 'image/png',
-          }),
-          new FileTypeValidator({
-            fileType: 'image/jpg',
-          }),
+          // new FileTypeValidator({
+          //   fileType: 'image/png',
+          // }),
+          // new FileTypeValidator({
+          //   fileType: 'image/jpeg',
+          // }),
+          // new FileTypeValidator({
+          //   fileType: 'image/jpg',
+          // }),
         ],
       }),
     )
