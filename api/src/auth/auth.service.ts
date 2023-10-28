@@ -7,15 +7,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
+import { CreateJwtService } from './jwt/jwt.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name)
     private userModel: Model<User>,
-    private jwt: JwtService,
+    // private jwt: JwtService,
     private config: ConfigService,
     private s3Service: S3Service,
+    private jwt: CreateJwtService,
   ) {}
 
   async signup(dto: SignUpDto, file: Express.Multer.File) {
@@ -40,15 +42,15 @@ export class AuthService {
       });
       await user.save();
 
-      const token = await this.signToken({
+      const token = await this.jwt.signToken({
         id: user.id,
       });
 
       delete user.password;
 
       return {
-        ...token,
-        ...user.toJSON(),
+        token,
+        user: user.toJSON(),
       };
     } catch (error) {
       if (error instanceof Error.ValidationError) {
@@ -73,23 +75,14 @@ export class AuthService {
       throw new ForbiddenException('Credentials incorrect');
     }
 
-    return this.signToken({
+    const token = await this.jwt.signToken({
       id: user.id,
       profileId: user?.profileId || null,
     });
-  }
-
-  async signToken(payload: any): Promise<{ access_token: string }> {
-    const secret = this.config.get('JWT_SECRET');
-    const expiration = this.config.get('JWT_EXPIRATION_TIME');
-
-    const token = await this.jwt.signAsync(payload, {
-      expiresIn: expiration,
-      secret,
-    });
 
     return {
-      access_token: token,
+      token: token,
+      user: user.toJSON(),
     };
   }
 }

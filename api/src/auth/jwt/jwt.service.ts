@@ -9,7 +9,7 @@ export class CreateJwtService {
     private config: ConfigService,
   ) {}
 
-  async signToken(payload: any): Promise<{ access_token: string }> {
+  async signToken(payload: any): Promise<string> {
     const secret = this.config.get('JWT_SECRET');
     const expiration = this.config.get('JWT_EXPIRATION_TIME');
 
@@ -18,8 +18,6 @@ export class CreateJwtService {
       secret,
     });
 
-    return {
-      access_token: token,
-    };
+    return token;
   }
 }
