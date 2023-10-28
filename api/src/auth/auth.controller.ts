@@ -4,7 +4,6 @@ import {
   FileTypeValidator,
   HttpCode,
   HttpStatus,
-  MaxFileSizeValidator,
   ParseFilePipe,
   Post,
   UploadedFile,
@@ -33,15 +32,21 @@ export class AuthController {
           // new MaxFileSizeValidator({
           //   maxSize: 1000,
           // }),
-          // new FileTypeValidator({
-          //   fileType: 'image/jpeg',
-          // }),
+          new FileTypeValidator({
+            fileType: 'image/jpeg',
+          }),
+          new FileTypeValidator({
+            fileType: 'image/png',
+          }),
+          new FileTypeValidator({
+            fileType: 'image/jpg',
+          }),
         ],
       }),
     )
     file: Express.Multer.File,
   ): Promise<any> {
-    return this.authService.signup(dto, file.buffer);
+    return this.authService.signup(dto, file);
   }
 
   @HttpCode(HttpStatus.OK)

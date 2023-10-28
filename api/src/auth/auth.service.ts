@@ -6,53 +6,50 @@ import { User } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { S3Service } from 'src/aws-s3/aws-s3.service';
 
 @Injectable()
 export class AuthService {
-  private s3Client = new S3Client({ region: this.config.get('AWS_S3_REGION') });
   constructor(
     @InjectModel(User.name)
     private userModel: Model<User>,
     private jwt: JwtService,
     private config: ConfigService,
+    private s3Service: S3Service,
   ) {}
 
-  async signup(dto: SignUpDto, file: Buffer) {
-    // const existingUser = await this.userModel.findOne({
-    //   email: dto.email,
-    // });
+  async signup(dto: SignUpDto, file: Express.Multer.File) {
+    const existingUser = await this.userModel.findOne({
+      email: dto.email,
+    });
 
-    // if (existingUser) {
-    //   throw new ConflictException('Credentials taken');
-    // }
-    let avatarUrl;
-    try {
-      const data = await this.s3Client.send(
-        new PutObjectCommand({
-          Bucket: this.config.get('AWS_FILES_BUCKET_NAME'),
-          Key: `${dto.email}-avatar.png`,
-          Body: file,
-        }),
-      );
-      console.log('avatar', data);
-      // avatarUrl = data.Location;
-    } catch (err) {
-      throw new Error(err.message);
+    if (existingUser) {
+      throw new ConflictException('Credentials taken');
     }
+
+    const fileName = `${dto.email}-${Date.now()}`;
+    let avatarUrl = await this.s3Service.uploadFile(file, fileName);
 
     const hash = await argon.hash(dto.password);
 
     try {
       const user = new this.userModel({
         ...dto,
+        avatar: avatarUrl,
         password: hash,
       });
       await user.save();
 
-      return this.signToken({
+      const token = await this.signToken({
         id: user.id,
       });
+
+      delete user.password;
+
+      return {
+        ...token,
+        ...user.toJSON(),
+      };
     } catch (error) {
       if (error instanceof Error.ValidationError) {
         throw new ForbiddenException(error.message);
