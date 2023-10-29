@@ -4,8 +4,6 @@ import * as argon from 'argon2';
 import { Model, Error } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
 import { CreateJwtService } from './jwt/jwt.service';
 

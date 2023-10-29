@@ -3,7 +3,7 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Profile } from 'src/schemas/profile.schema';
-import { Model, Error } from 'mongoose';
+import { Model, Error, Types } from 'mongoose';
 
 @Injectable()
 export class ProfileService {
@@ -12,7 +12,7 @@ export class ProfileService {
     private profileModel: Model<Profile>,
   ) {}
 
-  async create(userId: string, createProfileDto: CreateProfileDto) {
+  async create(userId: Types.ObjectId, createProfileDto: CreateProfileDto) {
     try {
       const profile = new this.profileModel({
         ...createProfileDto,

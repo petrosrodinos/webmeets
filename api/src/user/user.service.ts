@@ -25,7 +25,7 @@ export class UserService {
 
   async update(userId: string, data: UpdateUserDto) {
     try {
-      const updatedUser = await (await this.userModel.findOneAndUpdate({ _id: userId }, { $set: data }, { new: true })).toJSON();
+      const updatedUser = (await this.userModel.findOneAndUpdate({ _id: userId }, { $set: data }, { new: true })).toJSON();
       if (!updatedUser) {
         throw new NotFoundException('Could not find User.');
       }

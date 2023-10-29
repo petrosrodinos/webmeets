@@ -1,14 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtGuard } from '../auth/guard';
-import { GetUser } from '../auth/decorator';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/schemas/user.schema';
 import { Profile } from 'src/schemas/profile.schema';
 import { UserService } from 'src/user/user.service';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Types } from 'mongoose';
 
 @Controller('profile')
 @ApiTags('Profile')
@@ -24,10 +24,13 @@ export class ProfileController {
   @Post()
   @ApiOkResponse({ type: Profile })
   @ApiBearerAuth()
-  async create(@GetUser('_id') userId: string, @Body() createProfileDto: CreateProfileDto) {
+  async create(@Req() req: Express.Request, @Body() createProfileDto: CreateProfileDto) {
+    const userId = new Types.ObjectId(req.user.userId);
+
     const profile = await this.profileService.create(userId, createProfileDto);
-    console.log('profile', profile);
-    // await this.userService.update(userId, { profileId: profile.id });
+    // const profileId = profile[1]._id.toString();
+    // console.log(profileId);
+    // await this.userService.update(req.user.userId, { profileId });
 
     return profile;
   }
