@@ -14,8 +14,6 @@ export class AuthService {
   constructor(
     @InjectModel(User.name)
     private userModel: Model<User>,
-    // private jwt: JwtService,
-    private config: ConfigService,
     private s3Service: S3Service,
     private jwt: CreateJwtService,
   ) {}
@@ -43,7 +41,8 @@ export class AuthService {
       await user.save();
 
       const token = await this.jwt.signToken({
-        id: user.id,
+        userId: user.id,
+        role: user.role,
       });
 
       delete user.password;
@@ -76,8 +75,9 @@ export class AuthService {
     }
 
     const token = await this.jwt.signToken({
-      id: user.id,
+      userId: user.id,
       profileId: user?.profileId || null,
+      role: user.role,
     });
 
     return {

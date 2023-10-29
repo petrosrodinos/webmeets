@@ -13,11 +13,10 @@ export class UserService {
 
   async findOne(id: string) {
     try {
-      const user = await this.userModel.findById(id);
+      let user = await this.userModel.findById(id, { password: 0 });
       if (!user) {
         throw new NotFoundException('Could not find User.');
       }
-      // delete user.password;
       return user;
     } catch (error) {
       throw new NotFoundException(error.message);
@@ -26,7 +25,7 @@ export class UserService {
 
   async update(userId: string, data: UpdateUserDto) {
     try {
-      const updatedUser = await this.userModel.findOneAndUpdate({ _id: userId }, { $set: data }, { new: true });
+      const updatedUser = await (await this.userModel.findOneAndUpdate({ _id: userId }, { $set: data }, { new: true })).toJSON();
       if (!updatedUser) {
         throw new NotFoundException('Could not find User.');
       }
