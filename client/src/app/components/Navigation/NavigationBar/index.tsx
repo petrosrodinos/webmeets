@@ -13,8 +13,13 @@ import {
   FlexProps,
   Text,
   Box,
+  Button,
+  Stack,
+  useColorMode,
 } from '@chakra-ui/react';
 import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
+import { BsMoonFill, BsSun } from 'react-icons/bs';
+import { useRouter } from 'next/navigation';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -44,24 +49,18 @@ const AvatarMenuItems = [
   },
 ];
 
-const AvatarMenuItem = ({ name, onClick, path }: AvatarMenuItemProps) => {
-  return (
-    <MenuItem onClick={onClick}>
-      <HStack>
-        <Text fontSize="sm">{name}</Text>
-      </HStack>
-    </MenuItem>
-  );
-};
-
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const { colorMode, toggleColorMode } = useColorMode();
+  const router = useRouter();
   return (
     <Flex
+      // position="fixed"
+      // w="86vw"
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 4 }}
       height="20"
       alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue('gray.100', 'gray.900')}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent={{ base: 'space-between', md: 'flex-end' }}
@@ -81,6 +80,42 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
       <HStack spacing={{ base: '0', md: '6' }}>
         <IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} />
+
+        <IconButton
+          onClick={toggleColorMode}
+          size="lg"
+          variant="ghost"
+          aria-label="open menu"
+          icon={colorMode === 'light' ? <BsSun /> : <BsMoonFill />}
+        />
+
+        <Stack flex={{ base: 1, md: 0 }} justify={'flex-end'} direction={'row'} spacing={6}>
+          <Button
+            onClick={() => router.push('/auth/signin')}
+            as={'a'}
+            fontSize={'sm'}
+            fontWeight={400}
+            variant={'link'}
+            href={'#'}
+          >
+            Sign In
+          </Button>
+          <Button
+            onClick={() => router.push('/auth/signup')}
+            as={'a'}
+            display={{ base: 'none', md: 'inline-flex' }}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'white'}
+            bg={'pink.400'}
+            href={'#'}
+            _hover={{
+              bg: 'pink.300',
+            }}
+          >
+            Sign Up
+          </Button>
+        </Stack>
         <Flex alignItems={'center'}>
           <Menu>
             <MenuButton py={2} transition="all 0.3s" _focus={{ boxShadow: 'none' }}>
@@ -102,6 +137,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 </Box>
               </HStack>
             </MenuButton>
+
             <MenuList bg={useColorModeValue('white', 'gray.900')} borderColor={useColorModeValue('gray.200', 'gray.700')}>
               {AvatarMenuItems.map((item) => (
                 <AvatarMenuItem key={item.name} name={item.name} onClick={item.onClick} path={item.path} />
@@ -113,6 +149,16 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         </Flex>
       </HStack>
     </Flex>
+  );
+};
+
+const AvatarMenuItem = ({ name, onClick, path }: AvatarMenuItemProps) => {
+  return (
+    <MenuItem onClick={onClick}>
+      <HStack>
+        <Text fontSize="sm">{name}</Text>
+      </HStack>
+    </MenuItem>
   );
 };
 
