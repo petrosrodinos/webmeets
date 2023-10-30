@@ -21,10 +21,7 @@ export const signInUser = async (paylaod: any): Promise<any> => {
 
 export const signUpUser = async (paylaod: any): Promise<any> => {
   try {
-    const result = await axios.post(`${API_URL}auth/signup`, {
-      ...paylaod,
-      role: 'user',
-    });
+    const result = await axios.post(`${API_URL}auth/signup`, paylaod);
     return result.data;
   } catch (err: any) {
     console.log('err', err);

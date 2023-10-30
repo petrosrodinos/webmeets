@@ -8,9 +8,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import { signUpUser } from '@/services/auth';
 import { authStore } from '@/store/authStore';
+import { useRouter } from 'next/navigation';
 
 export default function SignUp() {
   const { logIn } = authStore((state) => state);
+  const router = useRouter();
+
   const {
     handleSubmit,
     register,
@@ -27,7 +30,7 @@ export default function SignUp() {
     signupMutation(
       {
         ...values,
-        phone: '123123123',
+        role: 'user',
       },
       {
         onSuccess: (data) => {
@@ -35,6 +38,7 @@ export default function SignUp() {
             ...data.user,
             token: data.token,
           });
+          router.push('/home');
         },
         onError: (error) => {
           console.log(error);
@@ -44,7 +48,7 @@ export default function SignUp() {
   }
 
   return (
-    <Flex minH={'100vh'} align={'center'} justify={'center'} bg={useColorModeValue('white', 'white')}>
+    <Flex>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>

@@ -50,6 +50,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       transition="3s ease"
       bg={useColorModeValue('gray.100', 'gray.900')}
       w={{ base: 'full', md: 60 }}
+      // width={'18vw'}
       pos="fixed"
       h="full"
       {...rest}
@@ -114,7 +115,10 @@ const Navigation: FC<NavigationProps> = ({ children }) => {
       </Drawer>
       <MobileNav onOpen={onOpen} />
       <Box
-      // ml={{ base: 0, md: 60 }} p="4"
+        width={'100%'}
+        minH={'92vh'}
+        bg={useColorModeValue('white', 'white')}
+        // ml={{ base: 0, md: 60 }} p="4"
       >
         {children}
       </Box>
