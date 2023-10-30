@@ -39,7 +39,7 @@ export class AuthService {
         avatar: avatarUrl,
         password: hash,
       });
-      await user.save();
+      (await user.save()).toJSON();
 
       const token = await this.jwt.signToken({
         userId: user.id,
@@ -50,7 +50,7 @@ export class AuthService {
 
       return {
         token,
-        user: user.toJSON(),
+        user: user,
       };
     } catch (error) {
       if (error instanceof Error.ValidationError) {
@@ -81,9 +81,11 @@ export class AuthService {
       role: user.role,
     });
 
+    const { password, ...rest } = user.toJSON();
+
     return {
       token: token,
-      user: user.toJSON(),
+      user: rest,
     };
   }
 }
