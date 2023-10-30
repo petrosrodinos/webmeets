@@ -16,7 +16,7 @@ export class AuthService {
     private jwt: CreateJwtService,
   ) {}
 
-  async signup(dto: SignUpDto, file: Express.Multer.File) {
+  async signup(dto: SignUpDto, file: Express.Multer.File | undefined) {
     const existingUser = await this.userModel.findOne({
       email: dto.email,
     });
@@ -25,8 +25,11 @@ export class AuthService {
       throw new ConflictException('Credentials taken');
     }
 
-    const fileName = `${dto.email}-${Date.now()}`;
-    let avatarUrl = await this.s3Service.uploadFile(file, fileName);
+    let avatarUrl = undefined;
+    if (file) {
+      const fileName = `${dto.email}-${Date.now()}`;
+      avatarUrl = await this.s3Service.uploadFile(file, fileName);
+    }
 
     const hash = await argon.hash(dto.password);
 

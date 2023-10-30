@@ -1,14 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  output: 'export',
   reactStrictMode: true,
   swcMinify: true,
   images: {
     unoptimized: true,
   },
-  // experimental: {
-
-  // },
+  env: {
+    API_URL: process.env.API_URL,
+  },
 };
 
 module.exports = nextConfig;

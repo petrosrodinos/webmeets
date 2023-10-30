@@ -28,6 +28,7 @@ export class AuthController {
     @Body() dto: SignUpDto,
     @UploadedFile(
       new ParseFilePipe({
+        fileIsRequired: false,
         validators: [
           // new MaxFileSizeValidator({
           //   maxSize: 1000,
@@ -44,7 +45,7 @@ export class AuthController {
         ],
       }),
     )
-    file: Express.Multer.File,
+    file: Express.Multer.File | undefined,
   ): Promise<any> {
     return this.authService.signup(dto, file);
   }
