@@ -17,6 +17,7 @@ import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu, FiBell, Fi
 import { IconType } from 'react-icons';
 import { FC } from 'react';
 import MobileNav from './NavigationBar';
+import Link from 'next/link';
 
 interface NavigationProps {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ interface NavItemProps extends FlexProps {
 
 interface LinkItemProps {
   name: string;
+  path: string;
   icon: IconType;
 }
 
@@ -37,11 +39,12 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
+  { name: 'Home', path: '/home', icon: FiHome },
+  { name: 'Meets', path: '/meets', icon: FiTrendingUp },
+  { name: 'Bookings', path: '/bookings', icon: FiCompass },
+  { name: 'DashBoard', path: '/dashboard', icon: FiCompass },
+  { name: 'Favourites', path: '/', icon: FiStar },
+  { name: 'Settings', path: '/', icon: FiSettings },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -63,7 +66,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon}>
-          {link.name}
+          <Link href={link.path}>{link.name}</Link>
         </NavItem>
       ))}
     </Box>
