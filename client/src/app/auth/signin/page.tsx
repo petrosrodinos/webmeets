@@ -4,7 +4,7 @@ import Input from '@/app/components/ui/Input';
 import { signInUser } from '@/services/auth';
 import { authStore } from '@/store/authStore';
 import { SignInSchema } from '@/validation-schemas/auth';
-import { Flex, Box, Checkbox, Stack, Button, Heading, Text, useColorModeValue, useToast } from '@chakra-ui/react';
+import { Flex, Box, Checkbox, Stack, Button, Heading, Text, useColorModeValue, useToast, Link } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
@@ -68,6 +68,7 @@ export default function SignIn() {
                   <Checkbox>Remember me</Checkbox>
                   <Text color={'blue.400'}>Forgot password?</Text>
                 </Stack>
+
                 <Button
                   type="submit"
                   isLoading={isLoading}
@@ -79,6 +80,14 @@ export default function SignIn() {
                 >
                   Sign in
                 </Button>
+                <Stack>
+                  <Text align={'center'}>
+                    Already a user?{' '}
+                    <Link href="/auth/signin" color={'blue.400'}>
+                      Login
+                    </Link>
+                  </Text>
+                </Stack>
               </Stack>
             </Stack>
           </form>

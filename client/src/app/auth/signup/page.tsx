@@ -42,7 +42,7 @@ export default function SignUp() {
             ...data.user,
             token: data.token,
           });
-          // router.push('/home');
+          router.push('/home');
         },
         onError: (error: any) => {
           if (error.statusCode == 409) {
