@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -20,10 +20,11 @@ export class ServicesController {
   @Post()
   @ApiBearerAuth()
   @ApiOkResponse({ type: Service })
-  async create(@GetUser('profileId') profileId: string, @Body() createServiceDto: CreateServiceDto) {
+  async create(@Req() req: Express.Request, @Body() createServiceDto: CreateServiceDto) {
+    const profileId = req.user.profileId;
     let profileid = profileId;
     if (!profileId) {
-      const user = await this.userService.findOne(profileId);
+      const user = await this.userService.findUserByField(profileId);
       profileid = user.profileId.toString();
     }
     return this.servicesService.create(profileid, createServiceDto);
@@ -38,7 +39,7 @@ export class ServicesController {
   @Get(':id')
   @ApiOkResponse({ type: Service })
   findOne(@Param('id') id: string) {
-    return this.servicesService.findOne(+id);
+    return this.servicesService.findOne(id);
   }
 
   @UseGuards(JwtGuard)
@@ -46,13 +47,13 @@ export class ServicesController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: Service })
   update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
-    return this.servicesService.update(+id, updateServiceDto);
+    return this.servicesService.update(id, updateServiceDto);
   }
 
   @UseGuards(JwtGuard)
   @Delete(':id')
   @ApiBearerAuth()
   remove(@Param('id') id: string) {
-    return this.servicesService.remove(+id);
+    return this.servicesService.remove(id);
   }
 }

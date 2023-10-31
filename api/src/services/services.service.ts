@@ -30,18 +30,47 @@ export class ServicesService {
   }
 
   findAll() {
-    return `This action returns all services`;
+    try {
+      return this.serviceModel.find().exec();
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} service`;
+  async findOne(id: string) {
+    try {
+      const service = await this.serviceModel.findById(id).exec();
+      if (!service) {
+        throw new NotFoundException('Could not find service.');
+      }
+
+      return service;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
-  update(id: number, updateServiceDto: UpdateServiceDto) {
-    return `This action updates a #${id} service`;
+  async update(id: string, updateServiceDto: UpdateServiceDto) {
+    try {
+      const updatedService = await this.serviceModel.findOneAndUpdate({ _id: id }, { $set: updateServiceDto }, { new: true });
+      if (!updatedService) {
+        throw new NotFoundException('Could not find service.');
+      }
+      return updatedService;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} service`;
+  async remove(id: string) {
+    try {
+      const deletedService = await this.serviceModel.findOneAndDelete({ _id: id });
+      if (!deletedService) {
+        throw new NotFoundException('Could not find service.');
+      }
+      return deletedService;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }

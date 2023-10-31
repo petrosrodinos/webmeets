@@ -67,11 +67,11 @@ export class ProfileService {
 
   async remove(id: string) {
     try {
-      const result = await this.profileModel.deleteOne({ _id: id });
-      if (result.deletedCount === 0) {
+      const deletedProfile = await this.profileModel.findOneAndDelete({ _id: id });
+      if (!deletedProfile) {
         throw new NotFoundException('Could not find profile.');
       }
-      return result;
+      return deletedProfile;
     } catch (error) {
       throw new NotFoundException(error.message);
     }

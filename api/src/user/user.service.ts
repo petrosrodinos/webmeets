@@ -35,4 +35,16 @@ export class UserService {
       throw new NotFoundException(error.message);
     }
   }
+
+  async findUserByField(field: string) {
+    try {
+      let user = await this.userModel.findOne({ field });
+      if (!user) {
+        throw new NotFoundException('Could not find User.');
+      }
+      return user;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 }
