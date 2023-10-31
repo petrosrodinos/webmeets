@@ -13,11 +13,10 @@ import {
   BoxProps,
   FlexProps,
 } from '@chakra-ui/react';
-import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
+import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { FC } from 'react';
-import MobileNav from './NavigationBar';
-import Link from 'next/link';
+import NavigationBar from './NavigationBar';
 
 interface NavigationProps {
   children: React.ReactNode;
@@ -25,6 +24,7 @@ interface NavigationProps {
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
+  path: string;
   children: React.ReactNode;
 }
 
@@ -65,17 +65,17 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          <Link href={link.path}>{link.name}</Link>
+        <NavItem path={link.path} key={link.name} icon={link.icon}>
+          <p>{link.name}</p>
         </NavItem>
       ))}
     </Box>
   );
 };
 
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, path, children, ...rest }: NavItemProps) => {
   return (
-    <Box as="a" href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Box as="a" href={path} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
         p="4"
@@ -116,7 +116,7 @@ const Navigation: FC<NavigationProps> = ({ children }) => {
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      <MobileNav onOpen={onOpen} />
+      <NavigationBar onOpen={onOpen} />
       <Box
         width={'100%'}
         minH={'92vh'}
