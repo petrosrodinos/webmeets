@@ -4,7 +4,7 @@ import Input from '@/app/components/ui/Input';
 import { signInUser } from '@/services/auth';
 import { authStore } from '@/store/authStore';
 import { SignInSchema } from '@/validation-schemas/auth';
-import { Flex, Box, Checkbox, Stack, Button, Heading, Text, useColorModeValue } from '@chakra-ui/react';
+import { Flex, Box, Checkbox, Stack, Button, Heading, Text, useColorModeValue, useToast } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 
 export default function SignIn() {
   const router = useRouter();
+  const toast = useToast();
   const { logIn } = authStore((state) => state);
   const {
     handleSubmit,
@@ -34,8 +35,16 @@ export default function SignIn() {
         });
         router.push('/home');
       },
-      onError: (error) => {
-        console.log(error);
+      onError: (error: any) => {
+        if (error.statusCode == 403) {
+          toast({
+            title: error.message,
+            description: 'Please check your credentials',
+            position: 'top',
+            isClosable: true,
+            status: 'error',
+          });
+        }
       },
     });
   }

@@ -14,8 +14,7 @@ export const signInUser = async (paylaod: any): Promise<any> => {
     const result = await axios.post(`${API_URL}auth/signin`, paylaod);
     return result.data;
   } catch (err: any) {
-    console.log('err', err);
-    throw err?.response?.data?.message;
+    throw err?.response?.data;
   }
 };
 
@@ -24,7 +23,6 @@ export const signUpUser = async (paylaod: any): Promise<any> => {
     const result = await axios.post(`${API_URL}auth/signup`, paylaod);
     return result.data;
   } catch (err: any) {
-    console.log('err', err);
-    throw err?.response?.data?.message;
+    throw err?.response?.data;
   }
 };

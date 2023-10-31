@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex, Box, HStack, Stack, Button, Heading, Text, useColorModeValue, Link } from '@chakra-ui/react';
+import { Flex, Box, HStack, Stack, Button, Heading, Text, useColorModeValue, Link, useToast } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Input from '../../components/ui/Input';
 import { SignupSchema } from '@/validation-schemas/auth';
@@ -11,6 +11,7 @@ import { authStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 
 export default function SignUp() {
+  const toast = useToast();
   const { logIn } = authStore((state) => state);
   const router = useRouter();
 
@@ -40,8 +41,16 @@ export default function SignUp() {
           });
           router.push('/home');
         },
-        onError: (error) => {
-          console.log(error);
+        onError: (error: any) => {
+          if (error.statusCode == 409) {
+            toast({
+              title: error.message,
+              description: 'Email or phone number already exists',
+              position: 'top',
+              isClosable: true,
+              status: 'error',
+            });
+          }
         },
       },
     );
