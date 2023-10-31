@@ -9,6 +9,7 @@ import { useMutation } from 'react-query';
 import { signUpUser } from '@/services/auth';
 import { authStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
+import FileUpload from '@/app/components/ui/FilePicker';
 
 export default function SignUp() {
   const toast = useToast();
@@ -19,6 +20,7 @@ export default function SignUp() {
     handleSubmit,
     register,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(SignupSchema),
   });
@@ -28,6 +30,7 @@ export default function SignUp() {
   });
 
   function onSubmit(values: any) {
+    // return;
     signupMutation(
       {
         ...values,
@@ -39,7 +42,7 @@ export default function SignUp() {
             ...data.user,
             token: data.token,
           });
-          router.push('/home');
+          // router.push('/home');
         },
         onError: (error: any) => {
           if (error.statusCode == 409) {
@@ -55,6 +58,10 @@ export default function SignUp() {
       },
     );
   }
+
+  const handleImageChange = (file: any) => {
+    setValue('avatar', file);
+  };
 
   return (
     <Flex>
@@ -83,6 +90,9 @@ export default function SignUp() {
               <Input label="Email address" error={errors.email?.message} register={register('email')} />
 
               <Input error={errors.password?.message} label="Password" isPassword={true} register={register('password')} />
+
+              <FileUpload onChange={handleImageChange} label="Avatar" name="profilePicture" />
+
               <Stack spacing={10} pt={2}>
                 <Button
                   isLoading={isLoading}
