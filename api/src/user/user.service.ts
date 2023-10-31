@@ -13,7 +13,7 @@ export class UserService {
 
   async findOne(id: string) {
     try {
-      let user = await this.userModel.findById(id, { password: 0 });
+      let user = (await this.userModel.findById(id, { password: 0 })).populate('profileId');
       if (!user) {
         throw new NotFoundException('Could not find User.');
       }
