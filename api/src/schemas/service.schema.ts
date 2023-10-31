@@ -8,6 +8,9 @@ export class Service {
   @Prop({ type: Types.ObjectId, ref: 'Profile' })
   profileId: Types.ObjectId;
 
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  userId: Types.ObjectId;
+
   @Prop()
   name: string;
 

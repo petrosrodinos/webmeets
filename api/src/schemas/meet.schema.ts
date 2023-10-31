@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 @Schema({
   timestamps: true,
 })
-export class Profile {
+export class Meet {
   @Prop({ type: Types.ObjectId, ref: 'User' })
   userId: Types.ObjectId;
 
@@ -38,14 +38,18 @@ export class Profile {
   @Prop()
   duration: number;
 
-  @Prop()
+  @Prop({
+    default: 100,
+  })
   maxParticipants: number;
 
   @Prop()
   price: number;
 
-  @Prop()
+  @Prop({
+    default: true,
+  })
   isOnline: boolean;
 }
 
-export const ProfileSchema = SchemaFactory.createForClass(Profile);
+export const MeetSchema = SchemaFactory.createForClass(Meet);

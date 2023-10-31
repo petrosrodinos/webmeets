@@ -21,13 +21,13 @@ export class ServicesController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: Service })
   async create(@Req() req: Express.Request, @Body() createServiceDto: CreateServiceDto) {
-    const profileId = req.user.profileId;
+    const { userId, profileId } = req.user;
     let profileid = profileId;
     if (!profileId) {
       const user = await this.userService.findUserByField(profileId);
       profileid = user.profileId.toString();
     }
-    return this.servicesService.create(profileid, createServiceDto);
+    return this.servicesService.create(userId, profileid, createServiceDto);
   }
 
   @Get()

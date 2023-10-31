@@ -12,10 +12,11 @@ export class ServicesService {
     private serviceModel: Model<Service>,
   ) {}
 
-  async create(profileId: string, createServiceDto: CreateServiceDto) {
+  async create(userId: string, profileId: string, createServiceDto: CreateServiceDto) {
     try {
       const service = new this.serviceModel({
         ...createServiceDto,
+        userId,
         profileId,
       });
       await service.save();
@@ -29,9 +30,13 @@ export class ServicesService {
     }
   }
 
-  findAll() {
+  async findAll() {
     try {
-      return this.serviceModel.find().exec();
+      const services = await this.serviceModel.find().populate('userId profileId', '-password -email -phone');
+      if (!services || services.length === 0) {
+        throw new NotFoundException('Could not find services.');
+      }
+      return services;
     } catch (error) {
       throw new NotFoundException(error.message);
     }
@@ -39,7 +44,7 @@ export class ServicesService {
 
   async findOne(id: string) {
     try {
-      const service = await this.serviceModel.findById(id).exec();
+      const service = await this.serviceModel.findById(id).populate('userId profileId', '-password -email -phone').exec();
       if (!service) {
         throw new NotFoundException('Could not find service.');
       }

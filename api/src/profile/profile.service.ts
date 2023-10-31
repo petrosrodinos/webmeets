@@ -32,7 +32,7 @@ export class ProfileService {
   async findAll() {
     try {
       const profiles = await this.profileModel.find().populate('userId', '-password -email -phone');
-      if (!profiles) {
+      if (!profiles || profiles.length === 0) {
         throw new NotFoundException('Could not find profiles.');
       }
       return profiles;
