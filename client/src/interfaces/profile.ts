@@ -1,8 +1,8 @@
 export interface Profile {
   phone: string;
   email: string;
-  avatar: string;
-  banner: string;
+  avatar: File;
+  banner: File;
   bio: string;
   city?: string;
   country?: string;

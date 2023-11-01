@@ -11,7 +11,12 @@ const getConfig = () => {
 
 export const createProfile = async (payload: Profile) => {
   try {
-    const result = await axios.post(`${API_URL}profile`, payload);
+    const result = await axios.post(`${API_URL}profile`, payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${getAuthState().token}`,
+      },
+    });
     return result.data;
   } catch (err: any) {
     throw err?.response?.data;

@@ -44,7 +44,7 @@ export default function SignUp() {
 
   function onSubmit(values: any) {
     console.log(values);
-    return;
+    // return;
     createProfileMutation(values, {
       onSuccess: () => {
         toast({
