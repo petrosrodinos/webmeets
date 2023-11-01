@@ -7,6 +7,7 @@ interface AuthState {
   username: string;
   role: string;
   avatar: string;
+  profileId: string;
   logOut: () => void;
   logIn: (payload: any) => void;
   updateProfile: (payload: any) => void;
@@ -17,6 +18,7 @@ const initialStateValues = {
   token: '',
   username: '',
   role: '',
+  profileId: '',
   avatar: '',
 };
 

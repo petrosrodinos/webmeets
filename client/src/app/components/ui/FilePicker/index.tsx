@@ -19,19 +19,30 @@ interface FileUploadProps {
   label?: any;
   isRequired?: boolean;
   error?: string;
-  onChange?: any;
+  onChange?: ({ name, file }: { name: string; file: File }) => void;
 }
 
-const FileUpload: FC<FileUploadProps> = ({ onChange, placeholder, acceptedFileTypes, error, label, isRequired = false }) => {
+const FileUpload: FC<FileUploadProps> = ({
+  onChange,
+  placeholder,
+  name,
+  acceptedFileTypes,
+  error,
+  label,
+  isRequired = false,
+}) => {
   const inputRef: any = useRef();
   const [imagePreview, setImagePreview] = useState<any>(null);
 
   const handleChange = (e: any) => {
-    const file = e.target.files[0];
+    const file: File = e.target.files[0];
     if (!file) {
       return;
     }
-    onChange(file);
+    onChange?.({
+      name,
+      file,
+    });
     const reader = new FileReader();
     reader.readAsDataURL(file);
 

@@ -51,14 +51,14 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Meets', path: '/meets', icon: FiTrendingUp },
   { name: 'Bookings', path: '/bookings', icon: FiCompass },
   { name: 'DashBoard', path: '/dashboard', icon: FiCompass },
-  { name: 'Settings', path: '/settings', icon: FiSettings },
+  { name: 'Profile', path: '/profile', icon: FiSettings },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue('gray.100', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
@@ -117,7 +117,7 @@ const SidebarWithHeader = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box minH="100vh" bg={useColorModeValue('white', 'gray.900')}>
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} returnFocusOnClose={false} onOverlayClick={onClose} size="xs">
         <DrawerContent>
@@ -125,7 +125,7 @@ const SidebarWithHeader = (props: any) => {
         </DrawerContent>
       </Drawer>
       <NavigationBar onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Box as="main" ml={{ base: 0, md: 60 }} p="4">
         {props.children}
       </Box>
     </Box>

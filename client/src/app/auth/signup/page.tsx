@@ -42,7 +42,11 @@ export default function SignUp() {
             ...data.user,
             token: data.token,
           });
-          router.push('/home');
+          if (data.user.role === 'admin') {
+            router.push('/settings');
+          } else {
+            router.push('/home');
+          }
         },
         onError: (error: any) => {
           if (error.statusCode == 409) {
@@ -59,8 +63,8 @@ export default function SignUp() {
     );
   }
 
-  const handleImageChange = (file: any) => {
-    setValue('avatar', file);
+  const handleImageChange = (data: any) => {
+    setValue('avatar', data.file);
   };
 
   return (

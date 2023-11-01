@@ -1,16 +1,8 @@
 import { API_URL } from '@/constants/api';
 import axios from 'axios';
-import { getAuthState } from '../store/authStore';
-import { SignInSchema, SignupSchema } from '@/validation-schemas/auth';
-// import { UserLogin, NewUser, UserToUpdate } from "../interfaces/typing";
+import { SignIn, SignUp } from '@/interfaces/auth';
 
-const getConfig = () => {
-  return {
-    headers: { Authorization: `Bearer ${getAuthState().token}` },
-  };
-};
-
-export const signInUser = async (payload: typeof SignInSchema): Promise<any> => {
+export const signInUser = async (payload: SignIn): Promise<any> => {
   try {
     const result = await axios.post(`${API_URL}auth/signin`, payload);
     return result.data;
@@ -19,7 +11,7 @@ export const signInUser = async (payload: typeof SignInSchema): Promise<any> => 
   }
 };
 
-export const signUpUser = async (paylaod: typeof SignupSchema): Promise<any> => {
+export const signUpUser = async (paylaod: SignUp): Promise<any> => {
   try {
     const result = await axios.post(`${API_URL}auth/signup`, paylaod, {
       headers: {
