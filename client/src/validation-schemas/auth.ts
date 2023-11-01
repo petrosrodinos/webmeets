@@ -12,4 +12,5 @@ export const SignupSchema = yup.object().shape({
   lastname: yup.string().required(),
   phone: yup.string().required(),
   avatar: yup.mixed(),
+  isBusiness: yup.boolean().required(),
 });

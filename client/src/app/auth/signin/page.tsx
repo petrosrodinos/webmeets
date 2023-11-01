@@ -50,7 +50,7 @@ export default function SignIn() {
   }
   return (
     <Flex width="100%">
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+      <Stack spacing={8} mx={'auto'} maxW={'xl'} py={12} px={6}>
         <Stack>
           <Heading fontSize={'4xl'}>Sign in to your account</Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
@@ -82,9 +82,9 @@ export default function SignIn() {
                 </Button>
                 <Stack>
                   <Text align={'center'}>
-                    Already a user?{' '}
-                    <Link href="/auth/signin" color={'blue.400'}>
-                      Login
+                    Don't have an account?{' '}
+                    <Link href="/auth/signup" color={'blue.400'}>
+                      Sign up
                     </Link>
                   </Text>
                 </Stack>

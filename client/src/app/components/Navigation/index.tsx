@@ -1,9 +1,13 @@
 'use client';
 
 import {
+  IconButton,
+  Avatar,
   Box,
   CloseButton,
   Flex,
+  HStack,
+  VStack,
   Icon,
   useColorModeValue,
   Text,
@@ -12,19 +16,17 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
 } from '@chakra-ui/react';
-import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings } from 'react-icons/fi';
+import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
 import { IconType } from 'react-icons';
-import { FC } from 'react';
 import NavigationBar from './NavigationBar';
 
 interface NavigationProps {
-  children: React.ReactNode;
-}
-
-interface NavItemProps extends FlexProps {
-  icon: IconType;
-  path: string;
   children: React.ReactNode;
 }
 
@@ -32,6 +34,12 @@ interface LinkItemProps {
   name: string;
   path: string;
   icon: IconType;
+}
+
+interface NavItemProps extends FlexProps {
+  icon: IconType;
+  path: string;
+  children: React.ReactNode;
 }
 
 interface SidebarProps extends BoxProps {
@@ -43,17 +51,17 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Meets', path: '/meets', icon: FiTrendingUp },
   { name: 'Bookings', path: '/bookings', icon: FiCompass },
   { name: 'DashBoard', path: '/dashboard', icon: FiCompass },
-  { name: 'Favourites', path: '/', icon: FiStar },
-  { name: 'Settings', path: '/', icon: FiSettings },
+  { name: 'Settings', path: '/settings', icon: FiSettings },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue('gray.100', 'gray.900')}
+      bg={useColorModeValue('white', 'gray.900')}
+      borderRight="1px"
+      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
-      // width={'18vw'}
       pos="fixed"
       h="full"
       {...rest}
@@ -65,15 +73,15 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem path={link.path} key={link.name} icon={link.icon}>
-          <p>{link.name}</p>
+        <NavItem key={link.name} path={link.path} icon={link.icon}>
+          {link.name}
         </NavItem>
       ))}
     </Box>
   );
 };
 
-const NavItem = ({ icon, path, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
   return (
     <Box as="a" href={path} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
@@ -105,7 +113,7 @@ const NavItem = ({ icon, path, children, ...rest }: NavItemProps) => {
   );
 };
 
-const Navigation: FC<NavigationProps> = ({ children }) => {
+const SidebarWithHeader = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -117,16 +125,11 @@ const Navigation: FC<NavigationProps> = ({ children }) => {
         </DrawerContent>
       </Drawer>
       <NavigationBar onOpen={onOpen} />
-      <Box
-        width={'100%'}
-        minH={'92vh'}
-        bg={useColorModeValue('white', 'white')}
-        // ml={{ base: 0, md: 60 }} p="4"
-      >
-        {children}
+      <Box ml={{ base: 0, md: 60 }} p="4">
+        {props.children}
       </Box>
     </Box>
   );
 };
 
-export default Navigation;
+export default SidebarWithHeader;

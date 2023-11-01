@@ -62,12 +62,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   return (
     <Flex
       // position="fixed"
-      // w="86vw"
+      // w="83%"
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 4 }}
       height="8vh"
       alignItems="center"
-      bg={useColorModeValue('gray.100', 'gray.900')}
+      bg={useColorModeValue('white', 'gray.900')}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent={{ base: 'space-between', md: 'flex-end' }}

@@ -10,6 +10,7 @@ import { signUpUser } from '@/services/auth';
 import { authStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import FileUpload from '@/app/components/ui/FilePicker';
+import { Checkbox } from '@chakra-ui/react';
 
 export default function SignUp() {
   const toast = useToast();
@@ -30,11 +31,10 @@ export default function SignUp() {
   });
 
   function onSubmit(values: any) {
-    // return;
     signupMutation(
       {
         ...values,
-        role: 'user',
+        role: values.isBusiness ? 'admin' : 'user',
       },
       {
         onSuccess: (data) => {
@@ -65,7 +65,7 @@ export default function SignUp() {
 
   return (
     <Flex>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+      <Stack spacing={8} mx={'auto'} maxW={'xl'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
             Sign up
@@ -85,13 +85,20 @@ export default function SignUp() {
                   <Input label="Last Name" error={errors.lastname?.message} register={register('lastname')} />
                 </Box>
               </HStack>
-              <Input label="Phone Number" error={errors.phone?.message} register={register('phone')} />
-
-              <Input label="Email address" error={errors.email?.message} register={register('email')} />
+              <HStack>
+                <Box>
+                  <Input label="Phone Number" error={errors.phone?.message} register={register('phone')} />
+                </Box>
+                <Box>
+                  <Input label="Email address" error={errors.email?.message} register={register('email')} />
+                </Box>
+              </HStack>
 
               <Input error={errors.password?.message} label="Password" isPassword={true} register={register('password')} />
 
               <FileUpload onChange={handleImageChange} label="Avatar" name="profilePicture" />
+
+              <Checkbox {...register('isBusiness')}>I have a business</Checkbox>
 
               <Stack spacing={10} pt={2}>
                 <Button
