@@ -3,19 +3,24 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Profile } from 'src/schemas/profile.schema';
-import { Model, Error, Types } from 'mongoose';
+import { Model, Error } from 'mongoose';
+import { S3Service } from 'src/aws-s3/aws-s3.service';
 
 @Injectable()
 export class ProfileService {
   constructor(
     @InjectModel(Profile.name)
     private profileModel: Model<Profile>,
+    private s3Service: S3Service,
   ) {}
 
-  async create(userId: Types.ObjectId, createProfileDto: CreateProfileDto) {
+  async create(userId: string, files: Express.Multer.File[], createProfileDto: CreateProfileDto) {
     try {
+      let fileUrls = await this.s3Service.uploadFiles(files);
+
       const profile = new this.profileModel({
         ...createProfileDto,
+        ...fileUrls,
         userId,
       });
       await profile.save();

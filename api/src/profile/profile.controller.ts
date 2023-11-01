@@ -1,12 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  UseInterceptors,
+  Get,
+  Post,
+  UploadedFiles,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtGuard } from '../auth/guard';
 import { Profile } from 'src/schemas/profile.schema';
 import { UserService } from 'src/user/user.service';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { Types } from 'mongoose';
 import { ProfileService } from './profile.service';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('profile')
 @ApiTags('Profile')
@@ -18,11 +30,16 @@ export class ProfileController {
 
   @UseGuards(JwtGuard)
   @Post()
+  @UseInterceptors(AnyFilesInterceptor())
   @ApiOkResponse({ type: Profile })
   @ApiBearerAuth()
-  async create(@Req() req: Express.Request, @Body() createProfileDto: CreateProfileDto) {
-    const userId = new Types.ObjectId(req.user.userId);
-    const profile = await this.profileService.create(userId, createProfileDto);
+  async create(
+    @Req() req: Express.Request,
+    @Body() createProfileDto: CreateProfileDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    const userId = req.user.userId;
+    const profile = await this.profileService.create(userId, files, createProfileDto);
     await this.userService.update(req.user.userId, { profileId: profile._id.toString() });
 
     return profile;

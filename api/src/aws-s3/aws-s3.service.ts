@@ -36,4 +36,14 @@ export class S3Service {
       throw err;
     }
   }
+
+  async uploadFiles(files: Express.Multer.File[]): Promise<{ [key: string]: string }> {
+    const fileUrls: { [key: string]: string } = {};
+    for (const file of files) {
+      const fileName = `${file.fieldname}-${Date.now()}`;
+      const fileUrl = await this.uploadFile(file, fileName);
+      fileUrls[file.fieldname] = fileUrl;
+    }
+    return fileUrls;
+  }
 }

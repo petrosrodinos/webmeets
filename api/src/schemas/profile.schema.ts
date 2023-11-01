@@ -22,6 +22,18 @@ export class Profile {
 
   @Prop()
   avatar: string;
+
+  @Prop()
+  country: string;
+
+  @Prop()
+  address: string;
+
+  @Prop()
+  area: string;
+
+  @Prop()
+  city: string;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);
