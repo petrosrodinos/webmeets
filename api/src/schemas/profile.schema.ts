@@ -12,6 +12,9 @@ export class Profile {
   phone: string;
 
   @Prop()
+  email: string;
+
+  @Prop()
   bio: string;
 
   @Prop()

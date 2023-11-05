@@ -1,13 +1,9 @@
 'use client';
 
 import {
-  IconButton,
-  Avatar,
   Box,
   CloseButton,
   Flex,
-  HStack,
-  VStack,
   Icon,
   useColorModeValue,
   Text,
@@ -16,19 +12,11 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
 } from '@chakra-ui/react';
 import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import NavigationBar from './NavigationBar';
-
-interface NavigationProps {
-  children: React.ReactNode;
-}
+import { useState } from 'react';
 
 interface LinkItemProps {
   name: string;
@@ -50,7 +38,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', path: '/home', icon: FiHome },
   { name: 'Meets', path: '/meets', icon: FiTrendingUp },
   { name: 'Bookings', path: '/bookings', icon: FiCompass },
-  { name: 'DashBoard', path: '/dashboard', icon: FiCompass },
+  { name: 'Services', path: '/services', icon: FiCompass },
   { name: 'Profile', path: '/profile', icon: FiSettings },
 ];
 
@@ -92,9 +80,10 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: 'cyan.300',
           color: 'white',
         }}
+        bg={path == window?.location?.pathname ? 'cyan.400' : 'transparent'}
         {...rest}
       >
         {icon && (

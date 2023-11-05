@@ -6,6 +6,10 @@ export class CreateProfileDto {
   phone: string;
 
   @IsString()
+  @IsOptional()
+  email: string;
+
+  @IsString()
   bio: string;
 
   @IsOptional()

@@ -8,7 +8,7 @@ export class CreateServiceDto {
   description: string;
 
   @IsArray()
-  category: string;
+  categories: string;
 
   @IsEmail()
   @IsOptional()

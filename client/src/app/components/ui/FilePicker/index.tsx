@@ -68,7 +68,7 @@ const FileUpload: FC<FileUploadProps> = ({
       <FormErrorMessage>{error}</FormErrorMessage>
       <br />
       {imagePreview && (
-        <Center>
+        <Center style={{ cursor: 'pointer' }}>
           {previewType === 'avatar' ? (
             <Avatar onClick={openFilePicker} size="lg" name="Selected image" src={imagePreview} />
           ) : (

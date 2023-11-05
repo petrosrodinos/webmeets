@@ -23,10 +23,14 @@ import { ProfileSchema } from '@/validation-schemas/profile';
 import { createProfile } from '@/services/profile';
 import { useState } from 'react';
 import TextArea from '../components/ui/TextArea';
+import Modal from '../components/ui/Modal';
+import { useRouter } from 'next/navigation';
 
 export default function SignUp() {
   const toast = useToast();
   const [isOnSite, setIsOnSite] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const {
     handleSubmit,
@@ -48,15 +52,12 @@ export default function SignUp() {
         delete values[name];
       });
     }
+    setIsModalOpen(true);
+
+    return;
     createProfileMutation(values, {
       onSuccess: () => {
-        toast({
-          title: 'Profile created.',
-          description: "We've created your profile for you.",
-          position: 'top',
-          isClosable: true,
-          status: 'success',
-        });
+        setIsModalOpen(true);
       },
       onError: (error: any) => {
         if (error.statusCode == 409) {
@@ -88,8 +89,22 @@ export default function SignUp() {
     setIsOnSite(e.target.checked);
   };
 
+  const handleActionClick = () => {
+    setIsModalOpen(false);
+    router.push('/services');
+  };
+
   return (
     <>
+      <Modal
+        title="Your business profile is created!"
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        actionTitle="Create your services"
+        onAction={handleActionClick}
+      >
+        <Text>Now you can create your services and meets.</Text>
+      </Modal>
       <Flex>
         <Stack mx={'auto'} width={'lg'} py={12}>
           <Stack align={'center'}>

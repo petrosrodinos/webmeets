@@ -23,28 +23,28 @@ interface AdditionalProps {
 
 type InputProps = ChakraInputProps & AdditionalProps;
 
-const Input: FC<InputProps> = ({ label, required = true, isPassword, register, error, props }) => {
+const Input: FC<InputProps> = ({ label, required = false, isPassword, register, error, props, ...rest }) => {
   const SelectedInput = isPassword ? PasswordInput : NormalInput;
 
   return (
     <FormControl isInvalid={!!error} isRequired={required}>
       {label && <FormLabel>{label}</FormLabel>}
-      {<SelectedInput register={register} {...props} />}
+      {<SelectedInput register={register} {...props} {...rest} />}
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );
 };
 
-const NormalInput: FC<InputProps> = ({ props, register }) => {
-  return <ChakraInput {...props} {...register} />;
+const NormalInput: FC<InputProps> = ({ props, register, ...rest }) => {
+  return <ChakraInput {...props} {...register} {...rest} />;
 };
 
-const PasswordInput: FC<InputProps> = ({ props, register }) => {
+const PasswordInput: FC<InputProps> = ({ props, register, ...rest }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <InputGroup>
-      <ChakraInput type={showPassword ? 'text' : 'password'} {...register} {...props} />
+      <ChakraInput type={showPassword ? 'text' : 'password'} {...register} {...props} {...rest} />
       <InputRightElement h={'full'}>
         <Button variant={'ghost'} onClick={() => setShowPassword((prev) => !prev)}>
           {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
