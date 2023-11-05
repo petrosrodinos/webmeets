@@ -6,14 +6,16 @@ type TextAreaProps = {
   label?: string;
   error?: string;
   required?: boolean;
+  props?: ChakraTextareaProps;
+  register?: any;
 } & ChakraTextareaProps;
 
-const TextArea: FC<TextAreaProps> = ({ placeholder, error, required, label, ...rest }) => {
+const TextArea: FC<TextAreaProps> = ({ placeholder, register, error, required, label, props, ...rest }) => {
   return (
     <>
       <FormControl isInvalid={!!error} isRequired={required}>
         {label && <FormLabel>{label}</FormLabel>}
-        <Textarea placeholder={placeholder} {...rest} />
+        <Textarea {...register} placeholder={placeholder} {...props} {...rest} />
         <FormErrorMessage>{error}</FormErrorMessage>
       </FormControl>
     </>

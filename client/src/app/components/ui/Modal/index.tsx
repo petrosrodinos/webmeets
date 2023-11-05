@@ -23,7 +23,7 @@ const Modal: FC<ModalProps> = ({ isOpen, title, children, actionTitle, onClose, 
   return (
     <ChakraModal isOpen={isOpen} onClose={onClose} {...rest}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent maxH="800px" overflow="auto">
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>{children}</ModalBody>

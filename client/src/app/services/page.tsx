@@ -34,14 +34,8 @@ const Services = () => {
         <ServiceCard />
         <ServiceCard />
       </SimpleGrid>
-      <Modal
-        title="Create a service"
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        actionTitle="Create"
-        onAction={handleActionClick}
-      >
-        {<CreateService />}
+      <Modal title="Create a service" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} actionTitle="Create">
+        <CreateService />
       </Modal>
     </>
   );

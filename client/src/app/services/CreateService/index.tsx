@@ -1,38 +1,26 @@
 'use client';
 
-import {
-  Flex,
-  Box,
-  Stack,
-  Button,
-  Heading,
-  Text,
-  useColorModeValue,
-  useToast,
-  Switch,
-  FormLabel,
-  Select,
-  VStack,
-} from '@chakra-ui/react';
+import { Flex, Stack, Button, useToast, VStack, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Input from '../../components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import FileUpload from '@/app/components/ui/FilePicker';
-import { ProfileSchema } from '@/validation-schemas/profile';
-import { createProfile } from '@/services/profile';
 import { useState } from 'react';
 import TextArea from '../../components/ui/TextArea';
-import Modal from '../../components/ui/Modal';
 import { useRouter } from 'next/navigation';
 import { ServiceSchema } from '@/validation-schemas/service';
-import Tag from '@/app/components/ui/Tag';
 import TagSelector from '@/app/components/ui/TagSelector';
 import { SERVICE_CATEGORIES } from '@/constants/serviceCategories';
+import { createService } from '@/services/service';
+import { FC } from 'react';
+import Modal from '@/app/components/ui/Modal';
 
-export default function CreateService() {
+interface CreateServiceProps {}
+
+const CreateService: FC<CreateServiceProps> = () => {
   const toast = useToast();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [createdServiceId, setCreatedServiceId] = useState<string | null>(null);
   const router = useRouter();
 
   const {
@@ -45,16 +33,15 @@ export default function CreateService() {
   });
 
   const { mutate: createServiceMutation, isLoading } = useMutation((user: any) => {
-    return createProfile(user);
+    return createService(user);
   });
 
   function onSubmit(values: any) {
     console.log(values);
 
-    return;
     createServiceMutation(values, {
-      onSuccess: () => {
-        setIsModalOpen(true);
+      onSuccess: (data) => {
+        setCreatedServiceId(data._id);
       },
       onError: (error: any) => {
         toast({
@@ -76,8 +63,22 @@ export default function CreateService() {
     setValue(name, items);
   };
 
+  const handleActionClick = () => {
+    setCreatedServiceId(null);
+    router.push(`/services/${createdServiceId}`);
+  };
+
   return (
     <>
+      <Modal
+        title="Your service is created"
+        isOpen={!!createdServiceId}
+        onClose={() => setCreatedServiceId(null)}
+        actionTitle="Create"
+        onAction={handleActionClick}
+      >
+        <Text>Now you can create meets for this service.</Text>
+      </Modal>
       <Flex>
         <Stack mx={'auto'} width={'xl'}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -86,11 +87,11 @@ export default function CreateService() {
                 <Input placeholder="Enter service name" label="Name" error={errors.name?.message} register={register('name')} />
                 <TextArea
                   error={errors.description?.message}
-                  label="Bio"
-                  {...register('description')}
+                  label="Description"
+                  register={register('description')}
                   placeholder="Add your service description here"
                 />
-                <TagSelector label="Select categories" name="categories" items={SERVICE_CATEGORIES} onChange={handleTagChange} />
+                <TagSelector label="Select category" name="categories" items={SERVICE_CATEGORIES} onChange={handleTagChange} />
                 <FileUpload
                   placeholder="Select a banner"
                   previewType="banner"
@@ -106,10 +107,25 @@ export default function CreateService() {
                   name="certificate"
                 />
               </VStack>
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                loadingText="Creating..."
+                size="lg"
+                bg={'blue.400'}
+                color={'white'}
+                _hover={{
+                  bg: 'blue.500',
+                }}
+              >
+                Create
+              </Button>
             </Stack>
           </form>
         </Stack>
       </Flex>
     </>
   );
-}
+};
+
+export default CreateService;
