@@ -19,6 +19,7 @@ interface FileUploadProps {
   label?: any;
   isRequired?: boolean;
   error?: string;
+  previewType?: 'avatar' | 'banner';
   onChange?: ({ name, file }: { name: string; file: File }) => void;
 }
 
@@ -30,6 +31,7 @@ const FileUpload: FC<FileUploadProps> = ({
   error,
   label,
   isRequired = false,
+  previewType = 'avatar',
 }) => {
   const inputRef: any = useRef();
   const [imagePreview, setImagePreview] = useState<any>(null);
@@ -67,7 +69,11 @@ const FileUpload: FC<FileUploadProps> = ({
       <br />
       {imagePreview && (
         <Center>
-          <Avatar onClick={openFilePicker} size="lg" name="Selected avatar" src={imagePreview} />
+          {previewType === 'avatar' ? (
+            <Avatar onClick={openFilePicker} size="lg" name="Selected image" src={imagePreview} />
+          ) : (
+            <img onClick={openFilePicker} src={imagePreview} alt="Selected image" />
+          )}
         </Center>
       )}
     </FormControl>

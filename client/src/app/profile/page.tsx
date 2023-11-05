@@ -3,18 +3,16 @@
 import {
   Flex,
   Box,
-  HStack,
   Stack,
   Button,
   Heading,
   Text,
   useColorModeValue,
-  Link,
   useToast,
-  Textarea,
   Switch,
   FormLabel,
   Select,
+  VStack,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Input from '../components/ui/Input';
@@ -24,6 +22,7 @@ import FileUpload from '@/app/components/ui/FilePicker';
 import { ProfileSchema } from '@/validation-schemas/profile';
 import { createProfile } from '@/services/profile';
 import { useState } from 'react';
+import TextArea from '../components/ui/TextArea';
 
 export default function SignUp() {
   const toast = useToast();
@@ -44,7 +43,11 @@ export default function SignUp() {
 
   function onSubmit(values: any) {
     console.log(values);
-    // return;
+    if (!isOnSite) {
+      ['phone', 'city', 'area', 'address', 'postalCode'].forEach((name: any) => {
+        delete values[name];
+      });
+    }
     createProfileMutation(values, {
       onSuccess: () => {
         toast({
@@ -83,15 +86,12 @@ export default function SignUp() {
 
   const handleChange = (e: any) => {
     setIsOnSite(e.target.checked);
-    ['city', 'area', 'address'].forEach((name: any) => {
-      setValue(name, '');
-    });
   };
 
   return (
     <>
       <Flex>
-        <Stack spacing={8} mx={'auto'} maxW={'xl'} py={12} px={6}>
+        <Stack mx={'auto'} width={'lg'} py={12}>
           <Stack align={'center'}>
             <Heading fontSize={'4xl'} textAlign={'center'}>
               Create Your Profile
@@ -103,43 +103,30 @@ export default function SignUp() {
           <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={8}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={4}>
-                <HStack>
-                  <Box>
-                    <Input label="Phone Number" error={errors.phone?.message} register={register('phone')} />
-                  </Box>
-                  <Box>
-                    <Input label="Email address" error={errors.email?.message} register={register('email')} />
-                  </Box>
-                </HStack>
-
                 <Select {...register('country')} placeholder="Country">
                   <option value="greece">Greece</option>
                   <option value="italy">Italy</option>
                   <option value="spain">Spain</option>
                 </Select>
 
-                <Textarea {...register('bio')} placeholder="Add your business bio here" />
-
+                <TextArea error={errors.bio?.message} label="Bio" {...register('bio')} placeholder="Add your business bio here" />
                 <FileUpload onChange={handleImageChange} label="Avatar" name="avatar" />
 
-                <FileUpload onChange={handleImageChange} label="Banner" name="banner" />
+                <FileUpload previewType="banner" onChange={handleImageChange} label="Banner" name="banner" />
 
-                <FormLabel>I have on site business</FormLabel>
-                <Switch onChange={handleChange} colorScheme="teal" size="lg" />
+                <FormLabel>I have a physical business</FormLabel>
+                <Switch {...register('isOnline')} onChange={handleChange} colorScheme="teal" size="lg" />
 
                 {isOnSite && (
-                  <HStack>
-                    <Box>
-                      <Input label="City" error={errors.city?.message} register={register('city')} />
-                    </Box>
-                    <Box>
-                      <Input label="Area" error={errors.area?.message} register={register('area')} />
-                    </Box>
+                  <VStack>
+                    <Input label="Phone Number" error={errors.phone?.message} register={register('phone')} />
+                    <Input label="City" error={errors.city?.message} register={register('city')} />
+                    <Input label="Area" error={errors.area?.message} register={register('area')} />
 
-                    <Box>
-                      <Input label="Address" error={errors.address?.message} register={register('address')} />
-                    </Box>
-                  </HStack>
+                    <Input label="Address" error={errors.address?.message} register={register('address')} />
+
+                    <Input label="Postal Code" error={errors.postalCode?.message} register={register('postalCode')} />
+                  </VStack>
                 )}
 
                 <Button

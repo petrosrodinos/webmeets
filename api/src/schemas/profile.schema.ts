@@ -9,9 +9,6 @@ export class Profile {
   userId: Types.ObjectId;
 
   @Prop()
-  email: string;
-
-  @Prop()
   phone: string;
 
   @Prop()
@@ -34,6 +31,14 @@ export class Profile {
 
   @Prop()
   city: string;
+
+  @Prop()
+  postalCode: string;
+
+  @Prop({
+    default: false,
+  })
+  isOnline: boolean;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

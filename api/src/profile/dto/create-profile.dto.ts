@@ -1,10 +1,6 @@
-import { IsOptional, IsString, IsEmail, IsBase64 } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class CreateProfileDto {
-  @IsEmail()
-  @IsOptional()
-  email: string;
-
   @IsString()
   @IsOptional()
   phone: string;
@@ -17,6 +13,9 @@ export class CreateProfileDto {
 
   @IsOptional()
   avatar: Express.Multer.File;
+
+  @IsBoolean()
+  isOnline: boolean;
 
   @IsString()
   country: string;
@@ -32,4 +31,8 @@ export class CreateProfileDto {
   @IsString()
   @IsOptional()
   city: string;
+
+  @IsString()
+  @IsOptional()
+  postalCode: string;
 }

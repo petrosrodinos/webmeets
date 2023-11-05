@@ -57,6 +57,14 @@ export default function SignUp() {
               isClosable: true,
               status: 'error',
             });
+          } else {
+            toast({
+              title: error.message,
+              description: 'Please try again later',
+              position: 'top',
+              isClosable: true,
+              status: 'error',
+            });
           }
         },
       },
