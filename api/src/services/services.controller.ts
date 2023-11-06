@@ -38,7 +38,6 @@ export class ServicesController {
     @Body() createServiceDto: CreateServiceDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    console.log('createServiceDto', createServiceDto);
     const { userId, profileId } = req.user;
     let profileid = profileId;
     if (!profileId) {
