@@ -27,7 +27,7 @@ const FileUpload: FC<FileUploadProps> = ({
   onChange,
   placeholder,
   name,
-  acceptedFileTypes,
+  acceptedFileTypes = 'image/*, .pdf, .doc, .docx',
   error,
   label,
   isRequired = false,
