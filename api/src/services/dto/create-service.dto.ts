@@ -19,8 +19,9 @@ export class CreateServiceDto {
   phone: string;
 
   @IsArray()
-  certificates: string[];
+  @IsOptional()
+  certificates: Express.Multer.File[];
 
-  @IsString()
-  banner: string;
+  @IsOptional()
+  banner: Express.Multer.File;
 }

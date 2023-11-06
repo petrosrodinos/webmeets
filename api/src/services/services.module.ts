@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ServiceSchema } from 'src/schemas/service.schema';
 import { UserService } from 'src/user/user.service';
 import { UserSchema } from 'src/schemas/user.schema';
+import { S3Service } from 'src/aws-s3/aws-s3.service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { UserSchema } from 'src/schemas/user.schema';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   controllers: [ServicesController],
-  providers: [ServicesService, UserService],
+  providers: [ServicesService, UserService, S3Service],
 })
 export class ServicesModule {}

@@ -1,12 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+  UseInterceptors,
+  UploadedFiles,
+} from '@nestjs/common';
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { JwtGuard } from '../auth/guard';
-import { GetUser } from '../auth/decorator';
 import { UserService } from 'src/user/user.service';
 import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Service } from 'src/schemas/service.schema';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('service')
 @ApiTags('Service')
@@ -18,16 +30,22 @@ export class ServicesController {
 
   @UseGuards(JwtGuard)
   @Post()
+  @UseInterceptors(AnyFilesInterceptor())
   @ApiBearerAuth()
   @ApiOkResponse({ type: Service })
-  async create(@Req() req: Express.Request, @Body() createServiceDto: CreateServiceDto) {
+  async create(
+    @Req() req: Express.Request,
+    @Body() createServiceDto: CreateServiceDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    console.log('createServiceDto', createServiceDto);
     const { userId, profileId } = req.user;
     let profileid = profileId;
     if (!profileId) {
       const user = await this.userService.findUserByField(profileId);
       profileid = user.profileId.toString();
     }
-    return this.servicesService.create(userId, profileid, createServiceDto);
+    return this.servicesService.create(userId, profileid, createServiceDto, files);
   }
 
   @Get()

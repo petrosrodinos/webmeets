@@ -4,18 +4,23 @@ import { UpdateServiceDto } from './dto/update-service.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Service } from 'src/schemas/service.schema';
 import { Model, Error } from 'mongoose';
+import { S3Service } from 'src/aws-s3/aws-s3.service';
 
 @Injectable()
 export class ServicesService {
   constructor(
     @InjectModel(Service.name)
     private serviceModel: Model<Service>,
+    private s3Service: S3Service,
   ) {}
 
-  async create(userId: string, profileId: string, createServiceDto: CreateServiceDto) {
+  async create(userId: string, profileId: string, createServiceDto: CreateServiceDto, files: Express.Multer.File[]) {
     try {
+      let fileUrls = await this.s3Service.uploadFiles(files);
+
       const service = new this.serviceModel({
         ...createServiceDto,
+        ...fileUrls,
         userId,
         profileId,
       });
