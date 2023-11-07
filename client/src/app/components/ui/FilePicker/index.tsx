@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Input,
   FormControl,
@@ -11,6 +13,9 @@ import {
 } from '@chakra-ui/react';
 import { FiFile } from 'react-icons/fi';
 import { useRef, FC, useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/Page/TextLayer.css';
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 interface FileUploadProps {
   name: string;
@@ -35,6 +40,13 @@ const FileUpload: FC<FileUploadProps> = ({
 }) => {
   const inputRef: any = useRef();
   const [imagePreview, setImagePreview] = useState<any>(null);
+  const [fileUrl, setFileUrl] = useState<string>('');
+  const [numPages, setNumPages] = useState<number>();
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+    setNumPages(numPages);
+  }
 
   const handleChange = (e: any) => {
     const file: File = e.target.files[0];
@@ -51,6 +63,9 @@ const FileUpload: FC<FileUploadProps> = ({
     reader.onloadend = () => {
       setImagePreview(reader.result);
     };
+
+    let url = URL.createObjectURL(file);
+    setFileUrl(url);
   };
 
   const openFilePicker = () => {
@@ -68,6 +83,14 @@ const FileUpload: FC<FileUploadProps> = ({
       <FormErrorMessage>{error}</FormErrorMessage>
       <br />
       {imagePreview && (
+        <div>
+          <Document file={imagePreview} onLoadSuccess={onDocumentLoadSuccess}>
+            <Page renderAnnotationLayer={false} width={300} pageNumber={3} />
+          </Document>
+        </div>
+      )}
+
+      {/* {imagePreview && (
         <Center style={{ cursor: 'pointer' }}>
           {previewType === 'avatar' ? (
             <Avatar onClick={openFilePicker} size="lg" name="Selected image" src={imagePreview} />
@@ -75,7 +98,7 @@ const FileUpload: FC<FileUploadProps> = ({
             <img onClick={openFilePicker} src={imagePreview} alt="Selected image" />
           )}
         </Center>
-      )}
+      )} */}
     </FormControl>
   );
 };
