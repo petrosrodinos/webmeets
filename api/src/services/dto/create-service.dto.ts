@@ -20,7 +20,10 @@ export class CreateServiceDto {
 
   @IsArray()
   @IsOptional()
-  certificates: Express.Multer.File[];
+  certificates: {
+    name: string;
+    file: Express.Multer.File;
+  }[];
 
   @IsOptional()
   banner: Express.Multer.File;
