@@ -16,3 +16,12 @@ export const createService = async (payload: Service) => {
     throw err?.response?.data;
   }
 };
+
+export const getServices = async () => {
+  try {
+    const result = await axios.get(`${API_URL}service`);
+    return result.data;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};

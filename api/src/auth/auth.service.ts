@@ -27,8 +27,7 @@ export class AuthService {
 
     let avatarUrl = undefined;
     if (file) {
-      const fileName = `${dto.email}-${Date.now()}`;
-      avatarUrl = await this.s3Service.uploadFile(file, fileName);
+      avatarUrl = await this.s3Service.uploadFile(file);
     }
 
     const hash = await argon.hash(dto.password);

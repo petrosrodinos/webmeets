@@ -18,7 +18,7 @@ import { JwtGuard } from '../auth/guard';
 import { UserService } from 'src/user/user.service';
 import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Service } from 'src/schemas/service.schema';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('service')
 @ApiTags('Service')
@@ -31,6 +31,9 @@ export class ServicesController {
   @UseGuards(JwtGuard)
   @Post()
   @UseInterceptors(AnyFilesInterceptor())
+  // @UseInterceptors(FileInterceptor('banner'))
+  // @UseInterceptors(FilesInterceptor('certificates'))
+  // @UseInterceptors(FileInterceptor('banner'), FilesInterceptor('certificates'))
   @ApiBearerAuth()
   @ApiOkResponse({ type: Service })
   async create(
@@ -40,10 +43,11 @@ export class ServicesController {
   ) {
     const { userId, profileId } = req.user;
     let profileid = profileId;
-    if (!profileId) {
-      const user = await this.userService.findUserByField(profileId);
-      profileid = user.profileId.toString();
+    if (!profileid) {
+      const user = await this.userService.findOne(userId);
+      profileid = user.profileId._id.toString();
     }
+
     return this.servicesService.create(userId, profileid, createServiceDto, files);
   }
 

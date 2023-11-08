@@ -16,11 +16,18 @@ export class ServicesService {
 
   async create(userId: string, profileId: string, createServiceDto: CreateServiceDto, files: Express.Multer.File[]) {
     try {
-      let fileUrls = await this.s3Service.uploadFiles(files);
+      const bannerFile = files.find((file) => file.fieldname === 'banner');
+
+      const bannerUrl = await this.s3Service.uploadFile(bannerFile);
+
+      const certificatesFiles = files.filter((file) => file.fieldname.includes('certificates'));
+
+      const certificatesUrls = await this.s3Service.uploadFiles(certificatesFiles);
 
       const service = new this.serviceModel({
         ...createServiceDto,
-        ...fileUrls,
+        certificates: Object.values(certificatesUrls),
+        banner: bannerUrl,
         userId,
         profileId,
       });

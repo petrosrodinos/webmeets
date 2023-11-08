@@ -20,7 +20,7 @@ export class Service {
   @Prop()
   categories: string[];
 
-  @Prop()
+  @Prop([String])
   certificates: string[];
 
   @Prop()

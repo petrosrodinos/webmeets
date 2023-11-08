@@ -4,8 +4,9 @@ import Modal from '../components/ui/Modal';
 import { useState } from 'react';
 import CreateService from './CreateService';
 import ServiceCard from '../components/ui/ServiceCard';
-import { Alert, AlertIcon, Button, SimpleGrid, Text } from '@chakra-ui/react';
+import { Button, SimpleGrid, Text } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
+import { useQuery } from 'react-query';
 
 const Services = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
