@@ -39,6 +39,8 @@ const CreateService: FC<CreateServiceProps> = () => {
   function onSubmit(values: any) {
     console.log(values);
 
+    return;
+
     createServiceMutation(values, {
       onSuccess: (data) => {
         setCreatedServiceId(data._id);

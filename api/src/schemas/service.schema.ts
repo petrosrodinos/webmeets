@@ -18,7 +18,7 @@ export class Service {
   description: string;
 
   @Prop()
-  categories: string[];
+  category: string;
 
   @Prop({
     certificates: [

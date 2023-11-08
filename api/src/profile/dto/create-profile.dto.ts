@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class CreateProfileDto {
   @IsString()
@@ -11,6 +11,9 @@ export class CreateProfileDto {
 
   @IsString()
   bio: string;
+
+  @IsArray()
+  categories: string;
 
   @IsOptional()
   banner: Express.Multer.File;

@@ -18,6 +18,9 @@ export class Profile {
   bio: string;
 
   @Prop()
+  categories: string[];
+
+  @Prop()
   banner: string;
 
   @Prop()
