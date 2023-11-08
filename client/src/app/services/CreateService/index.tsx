@@ -98,13 +98,15 @@ const CreateService: FC<CreateServiceProps> = () => {
                   onChange={handleFileChange}
                   label="Banner"
                   name="banner"
+                  accept="image/*"
                 />
                 <FileUpload
                   placeholder="Add certificate"
-                  previewType="banner"
+                  previewType="pdf"
                   onChange={handleFileChange}
                   label="Certificate"
                   name="certificate"
+                  accept=".pdf"
                 />
               </VStack>
               <Button

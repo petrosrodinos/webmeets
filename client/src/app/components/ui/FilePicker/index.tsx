@@ -13,40 +13,32 @@ import {
 } from '@chakra-ui/react';
 import { FiFile } from 'react-icons/fi';
 import { useRef, FC, useState } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/TextLayer.css';
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+import DocumentPreview from './DocumentPreview';
 
 interface FileUploadProps {
   name: string;
   placeholder?: string;
-  acceptedFileTypes?: string;
+  accept?: 'image/*' | '.pdf' | '.doc' | '.docx';
   label?: any;
   isRequired?: boolean;
   error?: string;
-  previewType?: 'avatar' | 'banner';
-  onChange?: ({ name, file }: { name: string; file: File }) => void;
+  previewType?: 'avatar' | 'banner' | 'pdf';
+  onChange: ({ name, file }: { name: string; file: File }) => void;
 }
 
 const FileUpload: FC<FileUploadProps> = ({
   onChange,
-  placeholder,
+  placeholder = 'Select a file ...',
   name,
-  acceptedFileTypes = 'image/*, .pdf, .doc, .docx',
+  accept = 'image/*, .pdf, .doc, .docx',
   error,
   label,
   isRequired = false,
   previewType = 'avatar',
 }) => {
   const inputRef: any = useRef();
-  const [imagePreview, setImagePreview] = useState<any>(null);
-  const [fileUrl, setFileUrl] = useState<string>('');
-  const [numPages, setNumPages] = useState<number>();
-  const [pageNumber, setPageNumber] = useState<number>(1);
-
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-    setNumPages(numPages);
-  }
+  const [filePreview, setFilePreview] = useState<any>(null);
+  const [fileName, setFileName] = useState<string>('');
 
   const handleChange = (e: any) => {
     const file: File = e.target.files[0];
@@ -61,15 +53,23 @@ const FileUpload: FC<FileUploadProps> = ({
     reader.readAsDataURL(file);
 
     reader.onloadend = () => {
-      setImagePreview(reader.result);
+      setFilePreview(reader.result);
+      //set name
+      setFileName(file.name);
     };
 
-    let url = URL.createObjectURL(file);
-    setFileUrl(url);
+    // let url = URL.createObjectURL(file);
+    // setFileUrl(url);
   };
 
   const openFilePicker = () => {
     inputRef?.current?.click?.();
+  };
+
+  const previewTypes = {
+    avatar: <Avatar style={{ cursor: 'pointer' }} size="lg" name="Selected image" src={filePreview} />,
+    banner: <img style={{ cursor: 'pointer' }} src={filePreview} alt="Selected image" />,
+    pdf: <DocumentPreview imagePreview={filePreview} />,
   };
 
   return (
@@ -77,28 +77,13 @@ const FileUpload: FC<FileUploadProps> = ({
       {label && <FormLabel>{label}</FormLabel>}
       <InputGroup>
         <InputLeftElement pointerEvents="none" children={<Icon as={FiFile} />} />
-        <input onChange={handleChange} type="file" accept={acceptedFileTypes} ref={inputRef} style={{ display: 'none' }}></input>
-        <Input placeholder={placeholder || 'Select a file ...'} onClick={openFilePicker} />
+        <input onChange={handleChange} type="file" accept={accept} ref={inputRef} style={{ display: 'none' }}></input>
+        <Input defaultValue={fileName} placeholder={placeholder} onClick={openFilePicker} />
       </InputGroup>
       <FormErrorMessage>{error}</FormErrorMessage>
       <br />
-      {imagePreview && (
-        <div>
-          <Document file={imagePreview} onLoadSuccess={onDocumentLoadSuccess}>
-            <Page renderAnnotationLayer={false} width={300} pageNumber={3} />
-          </Document>
-        </div>
-      )}
 
-      {/* {imagePreview && (
-        <Center style={{ cursor: 'pointer' }}>
-          {previewType === 'avatar' ? (
-            <Avatar onClick={openFilePicker} size="lg" name="Selected image" src={imagePreview} />
-          ) : (
-            <img onClick={openFilePicker} src={imagePreview} alt="Selected image" />
-          )}
-        </Center>
-      )} */}
+      {filePreview && <Center>{previewTypes[previewType]}</Center>}
     </FormControl>
   );
 };
