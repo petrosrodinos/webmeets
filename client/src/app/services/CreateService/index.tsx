@@ -10,8 +10,6 @@ import { useState } from 'react';
 import TextArea from '../../components/ui/TextArea';
 import { useRouter } from 'next/navigation';
 import { ServiceSchema } from '@/validation-schemas/service';
-import TagSelector from '@/app/components/ui/TagSelector';
-import { SERVICE_CATEGORIES } from '@/constants/serviceCategories';
 import { createService } from '@/services/service';
 import { FC } from 'react';
 import Modal from '@/app/components/ui/Modal';
@@ -93,7 +91,6 @@ const CreateService: FC<CreateServiceProps> = () => {
                   register={register('description')}
                   placeholder="Add your service description here"
                 />
-                <TagSelector label="Select category" name="categories" items={SERVICE_CATEGORIES} onChange={handleTagChange} />
                 <FileUpload
                   placeholder="Select a banner"
                   previewType="banner"

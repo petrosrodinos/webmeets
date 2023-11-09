@@ -11,8 +11,8 @@ import {
   useToast,
   Switch,
   FormLabel,
-  Select,
   VStack,
+  // Select,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Input from '../components/ui/Input';
@@ -25,8 +25,12 @@ import { useState } from 'react';
 import TextArea from '../components/ui/TextArea';
 import Modal from '../components/ui/Modal';
 import { useRouter } from 'next/navigation';
+import TagSelector from '../components/ui/TagSelector';
+import { SERVICE_CATEGORIES_ARRAY } from '@/constants/serviceCategories';
+import Select from '../components/ui/Select';
+import { COUNTRIES } from '@/constants/countries';
 
-export default function SignUp() {
+export default function Profile() {
   const toast = useToast();
   const [isOnSite, setIsOnSite] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,9 +56,6 @@ export default function SignUp() {
         delete values[name];
       });
     }
-    setIsModalOpen(true);
-
-    return;
     createProfileMutation(values, {
       onSuccess: () => {
         setIsModalOpen(true);
@@ -89,6 +90,10 @@ export default function SignUp() {
     setIsOnSite(e.target.checked);
   };
 
+  const handleTagChange = (name: any, items: string[]) => {
+    setValue(name, items);
+  };
+
   const handleActionClick = () => {
     setIsModalOpen(false);
     router.push('/services');
@@ -106,7 +111,7 @@ export default function SignUp() {
         <Text>Now you can create your services and meets.</Text>
       </Modal>
       <Flex>
-        <Stack mx={'auto'} width={'lg'} py={12}>
+        <Stack mx={'auto'} width={'lg'}>
           <Stack align={'center'}>
             <Heading fontSize={'4xl'} textAlign={'center'}>
               Create Your Profile
@@ -118,16 +123,24 @@ export default function SignUp() {
           <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={8}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={4}>
-                <Select {...register('country')} placeholder="Country">
-                  <option value="greece">Greece</option>
-                  <option value="italy">Italy</option>
-                  <option value="spain">Spain</option>
-                </Select>
+                <Select register={register('country')} options={COUNTRIES} label="Country" placeholder="Select country" />
 
-                <TextArea error={errors.bio?.message} label="Bio" {...register('bio')} placeholder="Add your business bio here" />
-                <FileUpload onChange={handleImageChange} label="Avatar" name="avatar" />
+                <TagSelector
+                  label="Select categories"
+                  name="categories"
+                  items={SERVICE_CATEGORIES_ARRAY}
+                  onChange={handleTagChange}
+                />
 
-                <FileUpload previewType="banner" onChange={handleImageChange} label="Banner" name="banner" />
+                <TextArea
+                  error={errors.bio?.message}
+                  label="Bio"
+                  register={register('bio')}
+                  placeholder="Add your business bio here"
+                />
+                <FileUpload accept="image/*" onChange={handleImageChange} label="Avatar" name="avatar" />
+
+                <FileUpload accept="image/*" previewType="banner" onChange={handleImageChange} label="Banner" name="banner" />
 
                 <FormLabel>I have a physical business</FormLabel>
                 <Switch {...register('isOnline')} onChange={handleChange} colorScheme="teal" size="lg" />

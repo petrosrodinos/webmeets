@@ -21,8 +21,8 @@ export class CreateProfileDto {
   @IsOptional()
   avatar: Express.Multer.File;
 
-  @IsBoolean()
-  @IsOptional()
+  @IsString()
+  // @IsOptional()
   isOnline: boolean;
 
   @IsString()

@@ -1,7 +1,6 @@
 import { FC, useState } from 'react';
 import { FormControl, FormLabel, Select, SimpleGrid } from '@chakra-ui/react';
 import Tag from '../Tag';
-import { SERVICE_CATEGORIES } from '@/constants/serviceCategories';
 
 interface TagSelectorProps {
   name: string;

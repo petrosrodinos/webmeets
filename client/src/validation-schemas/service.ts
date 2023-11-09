@@ -4,6 +4,6 @@ export const ServiceSchema = yup.object().shape({
   name: yup.string(),
   description: yup.string(),
   banner: yup.mixed(),
-  certificates: yup.array().of(yup.mixed().optional()),
+  certificate: yup.string(),
   categories: yup.array().of(yup.string()),
 });

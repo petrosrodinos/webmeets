@@ -83,7 +83,7 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
           bg: 'cyan.300',
           color: 'white',
         }}
-        bg={path == window?.location?.pathname ? 'cyan.400' : 'transparent'}
+        // bg={path == window?.location?.pathname ? 'cyan.400' : 'transparent'}
         {...rest}
       >
         {icon && (
