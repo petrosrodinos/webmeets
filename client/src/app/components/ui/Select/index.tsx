@@ -1,10 +1,6 @@
+import { OptionItem } from '@/interfaces/components';
 import { FormControl, FormErrorMessage, FormLabel, Select as ChakraSelect } from '@chakra-ui/react';
 import { FC } from 'react';
-
-export interface OptionItem {
-  label: string;
-  value: string;
-}
 
 type SelectProps = {
   placeholder?: string;

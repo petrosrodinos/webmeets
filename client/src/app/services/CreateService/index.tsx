@@ -11,8 +11,12 @@ import TextArea from '../../components/ui/TextArea';
 import { useRouter } from 'next/navigation';
 import { ServiceSchema } from '@/validation-schemas/service';
 import { createService } from '@/services/service';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import Modal from '@/app/components/ui/Modal';
+import Select from '@/app/components/ui/Select';
+import { SERVICE_CATEGORIES } from '@/constants/optionsData';
+import MultiFilePicker from '@/app/components/ui/CertificatesPicker';
+import { MultiFilePickerItemData } from '@/interfaces/components';
 
 interface CreateServiceProps {}
 
@@ -29,6 +33,10 @@ const CreateService: FC<CreateServiceProps> = () => {
   } = useForm({
     resolver: yupResolver(ServiceSchema),
   });
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
 
   const { mutate: createServiceMutation, isLoading } = useMutation((user: any) => {
     return createService(user);
@@ -55,12 +63,12 @@ const CreateService: FC<CreateServiceProps> = () => {
     });
   }
 
-  const handleFileChange = ({ file, name }: { file: File; name: any }) => {
+  const handleBannerChange = ({ file, name }: { file: File; name: any }) => {
     setValue(name, file);
   };
 
-  const handleTagChange = (name: any, items: string[]) => {
-    setValue(name, items);
+  const handleCertificatesSelect = (data: MultiFilePickerItemData[]) => {
+    setValue('certificates', data);
   };
 
   const handleActionClick = () => {
@@ -85,6 +93,13 @@ const CreateService: FC<CreateServiceProps> = () => {
             <Stack spacing={4}>
               <VStack>
                 <Input placeholder="Enter service name" label="Name" error={errors.name?.message} register={register('name')} />
+                <Select
+                  error={errors.category?.message}
+                  placeholder="Category"
+                  options={SERVICE_CATEGORIES}
+                  label="Category"
+                  register={register('category')}
+                />
                 <TextArea
                   error={errors.description?.message}
                   label="Description"
@@ -94,18 +109,18 @@ const CreateService: FC<CreateServiceProps> = () => {
                 <FileUpload
                   placeholder="Select a banner"
                   previewType="banner"
-                  onChange={handleFileChange}
+                  onChange={handleBannerChange}
                   label="Banner"
                   name="banner"
                   accept="image/*"
                 />
-                <FileUpload
-                  placeholder="Add certificate"
-                  previewType="pdf"
-                  onChange={handleFileChange}
-                  label="Certificate"
-                  name="certificate"
+                <MultiFilePicker
+                  itemName="Certificate"
+                  inputLabel="Name"
+                  label="Add your Certificates"
                   accept=".pdf"
+                  previewType="pdf"
+                  onChange={handleCertificatesSelect}
                 />
               </VStack>
               <Button

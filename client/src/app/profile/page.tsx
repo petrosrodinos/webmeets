@@ -12,7 +12,6 @@ import {
   Switch,
   FormLabel,
   VStack,
-  // Select,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Input from '../components/ui/Input';
@@ -26,9 +25,9 @@ import TextArea from '../components/ui/TextArea';
 import Modal from '../components/ui/Modal';
 import { useRouter } from 'next/navigation';
 import TagSelector from '../components/ui/TagSelector';
-import { SERVICE_CATEGORIES_ARRAY } from '@/constants/serviceCategories';
+import { SERVICE_CATEGORIES_ARRAY } from '@/constants/optionsData';
 import Select from '../components/ui/Select';
-import { COUNTRIES } from '@/constants/countries';
+import { COUNTRIES } from '@/constants/optionsData';
 
 export default function Profile() {
   const toast = useToast();

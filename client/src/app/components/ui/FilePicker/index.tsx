@@ -12,18 +12,20 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { FiFile } from 'react-icons/fi';
-import { useRef, FC, useState } from 'react';
+import { useRef, FC, useState, useEffect } from 'react';
 import DocumentPreview from './DocumentPreview';
+import { FilePicker, FilePickerAccept, PreviewType } from '@/interfaces/components';
 
 interface FileUploadProps {
   name: string;
   placeholder?: string;
-  accept?: 'image/*' | '.pdf' | '.doc' | '.docx';
+  value?: File;
+  accept?: FilePickerAccept;
   label?: any;
   isRequired?: boolean;
   error?: string;
-  previewType?: 'avatar' | 'banner' | 'pdf';
-  onChange: ({ name, file }: { name: string; file: File }) => void;
+  previewType?: PreviewType;
+  onChange: ({ name, file }: FilePicker) => void;
 }
 
 const FileUpload: FC<FileUploadProps> = ({
@@ -31,6 +33,7 @@ const FileUpload: FC<FileUploadProps> = ({
   placeholder = 'Select a file ...',
   name,
   accept = 'image/*, .pdf, .doc, .docx',
+  value,
   error,
   label,
   isRequired = false,
@@ -39,6 +42,12 @@ const FileUpload: FC<FileUploadProps> = ({
   const inputRef: any = useRef();
   const [filePreview, setFilePreview] = useState<any>(null);
   const [fileName, setFileName] = useState<string>('');
+
+  useEffect(() => {
+    if (value) {
+      setFilePreview(value);
+    }
+  }, [value]);
 
   const handleChange = (e: any) => {
     const file: File = e.target.files[0];
@@ -54,12 +63,8 @@ const FileUpload: FC<FileUploadProps> = ({
 
     reader.onloadend = () => {
       setFilePreview(reader.result);
-      //set name
       setFileName(file.name);
     };
-
-    // let url = URL.createObjectURL(file);
-    // setFileUrl(url);
   };
 
   const openFilePicker = () => {

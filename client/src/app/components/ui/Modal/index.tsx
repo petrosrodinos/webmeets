@@ -21,7 +21,7 @@ type ModalProps = {
 
 const Modal: FC<ModalProps> = ({ isOpen, title, children, actionTitle, onClose, onAction, ...rest }) => {
   return (
-    <ChakraModal isOpen={isOpen} onClose={onClose} {...rest}>
+    <ChakraModal size={'xl'} isOpen={isOpen} onClose={onClose} {...rest}>
       <ModalOverlay />
       <ModalContent maxH="800px" overflow="auto">
         <ModalHeader>{title}</ModalHeader>
