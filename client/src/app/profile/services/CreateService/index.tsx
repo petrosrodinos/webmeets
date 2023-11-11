@@ -2,12 +2,12 @@
 
 import { Flex, Stack, Button, useToast, VStack, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import Input from '../../components/ui/Input';
+import Input from '../../../components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import FileUpload from '@/app/components/ui/FilePicker';
 import { useState } from 'react';
-import TextArea from '../../components/ui/TextArea';
+import TextArea from '../../../components/ui/TextArea';
 import { useRouter } from 'next/navigation';
 import { ServiceSchema } from '@/validation-schemas/service';
 import { createService } from '@/services/service';
@@ -15,7 +15,7 @@ import { FC } from 'react';
 import Modal from '@/app/components/ui/Modal';
 import Select from '@/app/components/ui/Select';
 import { SERVICE_CATEGORIES } from '@/constants/optionsData';
-import MultiFilePicker from '@/app/components/ui/CertificatesPicker';
+import MultiFilePicker from '@/app/components/ui/MultiFilePicker';
 import { MultiFilePickerItemData } from '@/interfaces/components';
 
 interface CreateServiceProps {}

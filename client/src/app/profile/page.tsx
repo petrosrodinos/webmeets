@@ -51,11 +51,11 @@ export default function Profile() {
 
   const onSubmit: SubmitHandler<any> = (values: CreateProfile) => {
     console.log(values);
-    // if (!isOnSite) {
-    //   ['phone', 'city', 'area', 'address', 'postalCode'].forEach((name: string) => {
-    //     delete values[name];
-    //   });
-    // }
+    if (!isOnSite) {
+      ['phone', 'city', 'area', 'address', 'postalCode'].forEach((name: string) => {
+        delete values[name];
+      });
+    }
     createProfileMutation(values, {
       onSuccess: () => {
         setIsModalOpen(true);
@@ -96,7 +96,7 @@ export default function Profile() {
 
   const handleActionClick = () => {
     setIsModalOpen(false);
-    router.push('/services');
+    router.push('/profile/services');
   };
 
   return (

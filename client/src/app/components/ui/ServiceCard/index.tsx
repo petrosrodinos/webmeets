@@ -2,14 +2,27 @@ import { FC } from 'react';
 import Image from 'next/image';
 import { Box, Heading, Text, Stack, Avatar, useColorModeValue, Button } from '@chakra-ui/react';
 import { Service } from '@/interfaces/service';
+import { useRouter } from 'next/navigation';
 
 interface ServiceCardProps {
   service: Service;
+  fromProfile?: boolean;
 }
 
 const ServiceCard: FC<ServiceCardProps> = ({
-  service: { name, description, category, banner, certificates, createdAt, profile, user },
+  service: { id, name, description, category, banner, certificates, createdAt, profile, user },
+  fromProfile = false,
 }) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (fromProfile) {
+      router.push(`/profile/services/${id}`);
+    } else {
+      router.push(`/services/${id}`);
+    }
+  };
+
   return (
     <>
       <Box
@@ -44,6 +57,7 @@ const ServiceCard: FC<ServiceCardProps> = ({
         </Stack>
         <Stack mt={8} direction={'row'} spacing={4}>
           <Button
+            onClick={handleClick}
             flex={1}
             fontSize={'sm'}
             rounded={'full'}

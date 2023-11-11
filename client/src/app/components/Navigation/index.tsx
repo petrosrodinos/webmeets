@@ -13,10 +13,9 @@ import {
   BoxProps,
   FlexProps,
 } from '@chakra-ui/react';
-import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
+import { FiHome, FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import NavigationBar from './NavigationBar';
-import { useState } from 'react';
 
 interface LinkItemProps {
   name: string;
@@ -38,7 +37,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', path: '/home', icon: FiHome },
   { name: 'Meets', path: '/meets', icon: FiTrendingUp },
   { name: 'Bookings', path: '/bookings', icon: FiCompass },
-  { name: 'Services', path: '/services', icon: FiCompass },
+  { name: 'Services', path: '/profile/services', icon: FiCompass },
   { name: 'Profile', path: '/profile', icon: FiSettings },
 ];
 
