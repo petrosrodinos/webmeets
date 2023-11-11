@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import Navigation from './components/Navigation';
-import { ReactQueryProvider } from '@/app/components/providers/ReactQuery';
-import { ChakraUIProvider } from '@/app/components/providers/ChakraUI';
+import Navigation from '@/components/Navigation';
+import { ReactQueryProvider } from '@/components/providers/ReactQuery';
+import { ChakraUIProvider } from '@/components/providers/ChakraUI';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });

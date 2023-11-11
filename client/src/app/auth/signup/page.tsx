@@ -2,14 +2,14 @@
 
 import { Flex, Box, HStack, Stack, Button, Heading, Text, useColorModeValue, Link, useToast } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import Input from '../../components/ui/Input';
+import Input from '@/components/ui/Input';
 import { SignupSchema } from '@/validation-schemas/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import { signUpUser } from '@/services/auth';
 import { authStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import FileUpload from '@/app/components/ui/FilePicker';
+import FileUpload from '@/components/ui/FilePicker';
 import { Checkbox } from '@chakra-ui/react';
 
 export default function SignUp() {

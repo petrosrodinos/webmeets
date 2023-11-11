@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 import { getService } from '@/services/service';
-import Spinner from '@/app/components/ui/Spinner';
+import Spinner from '@/components/ui/Spinner';
 import Meets from './Meets';
 import { Service as ServiceDetails } from './Service';
 

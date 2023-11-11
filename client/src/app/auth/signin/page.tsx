@@ -1,6 +1,6 @@
 'use client';
 
-import Input from '@/app/components/ui/Input';
+import Input from '@/components/ui/Input';
 import { signInUser } from '@/services/auth';
 import { authStore } from '@/store/authStore';
 import { SignInSchema } from '@/validation-schemas/auth';

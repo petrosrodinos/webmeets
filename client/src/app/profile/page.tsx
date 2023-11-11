@@ -14,19 +14,19 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import Input from '../components/ui/Input';
+import Input from '@/components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
-import FileUpload from '@/app/components/ui/FilePicker';
+import FileUpload from '@/components/ui/FilePicker';
 import { ProfileSchema } from '@/validation-schemas/profile';
 import { createProfile } from '@/services/profile';
 import { useState } from 'react';
-import TextArea from '../components/ui/TextArea';
-import Modal from '../components/ui/Modal';
+import TextArea from '@/components/ui/TextArea';
+import Modal from '@/components/ui/Modal';
 import { useRouter } from 'next/navigation';
-import TagSelector from '../components/ui/TagSelector';
+import TagSelector from '@/components/ui/TagSelector';
 import { SERVICE_CATEGORIES_ARRAY } from '@/constants/optionsData';
-import Select from '../components/ui/Select';
+import Select from '@/components/ui/Select';
 import { COUNTRIES } from '@/constants/optionsData';
 import { CreateProfile } from '@/interfaces/profile';
 

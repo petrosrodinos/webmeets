@@ -1,8 +1,8 @@
 'use client';
 
-import Modal from '../../../../components/ui/Modal';
+import Modal from '@/components/ui/Modal';
 import { useState, FC } from 'react';
-import ServiceCard from '../../../../components/ui/ServiceCard';
+import ServiceCard from '@/components/ui/ServiceCard';
 import { Button, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { useQuery } from 'react-query';

@@ -14,12 +14,6 @@ const nextConfig = {
   env: {
     API_URL: process.env.API_URL,
   },
-  compilerOptions: {
-    baseUrl: 'src/app',
-    paths: {
-      '@/components/*': ['components/*'],
-    },
-  },
 };
 
 module.exports = nextConfig;

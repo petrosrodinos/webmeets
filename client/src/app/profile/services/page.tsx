@@ -1,14 +1,14 @@
 'use client';
 
-import Modal from '../../components/ui/Modal';
+import Modal from '@/components/ui/Modal';
 import { useState } from 'react';
 import CreateService from './CreateService';
-import ServiceCard from '../../components/ui/ServiceCard';
+import ServiceCard from '@/components/ui/ServiceCard';
 import { Button, Center, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import { getServices } from '@/services/service';
-import Spinner from '../../components/ui/Spinner';
+import Spinner from '@/components/ui/Spinner';
 
 const Services = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
