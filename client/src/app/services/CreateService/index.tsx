@@ -11,7 +11,7 @@ import TextArea from '../../components/ui/TextArea';
 import { useRouter } from 'next/navigation';
 import { ServiceSchema } from '@/validation-schemas/service';
 import { createService } from '@/services/service';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import Modal from '@/app/components/ui/Modal';
 import Select from '@/app/components/ui/Select';
 import { SERVICE_CATEGORIES } from '@/constants/optionsData';

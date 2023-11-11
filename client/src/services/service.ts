@@ -2,6 +2,7 @@ import { API_URL } from '@/constants/api';
 import axios from 'axios';
 import { getAuthState } from '../store/authStore';
 import { Service } from '@/interfaces/service';
+import { reformService } from './reformer/service';
 
 export const createService = async (payload: Service) => {
   try {
@@ -17,10 +18,11 @@ export const createService = async (payload: Service) => {
   }
 };
 
-export const getServices = async () => {
+export const getServices = async (): Promise<Service[]> => {
   try {
     const result = await axios.get(`${API_URL}service`);
-    return result.data;
+    const reformedData = result.data.map((service: any) => reformService(service));
+    return reformedData;
   } catch (err: any) {
     throw err?.response?.data;
   }

@@ -1,7 +1,7 @@
 import { API_URL } from '@/constants/api';
 import axios from 'axios';
 import { getAuthState } from '../store/authStore';
-import { Profile } from '@/interfaces/profile';
+import { CreateProfile } from '@/interfaces/profile';
 
 const getConfig = () => {
   return {
@@ -9,7 +9,7 @@ const getConfig = () => {
   };
 };
 
-export const createProfile = async (payload: Profile) => {
+export const createProfile = async (payload: CreateProfile) => {
   try {
     const result = await axios.post(`${API_URL}profile`, payload, {
       headers: {

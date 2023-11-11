@@ -1,6 +1,6 @@
 import { API_URL } from '@/constants/api';
 import axios from 'axios';
-import { SignIn, SignUp } from '@/interfaces/auth';
+import { SignIn, SignUp } from '@/interfaces/user';
 
 export const signInUser = async (payload: SignIn): Promise<any> => {
   try {

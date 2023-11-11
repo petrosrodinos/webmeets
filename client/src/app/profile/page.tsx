@@ -13,7 +13,7 @@ import {
   FormLabel,
   VStack,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import Input from '../components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
@@ -28,6 +28,7 @@ import TagSelector from '../components/ui/TagSelector';
 import { SERVICE_CATEGORIES_ARRAY } from '@/constants/optionsData';
 import Select from '../components/ui/Select';
 import { COUNTRIES } from '@/constants/optionsData';
+import { CreateProfile } from '@/interfaces/profile';
 
 export default function Profile() {
   const toast = useToast();
@@ -44,17 +45,17 @@ export default function Profile() {
     resolver: yupResolver(ProfileSchema),
   });
 
-  const { mutate: createProfileMutation, isLoading } = useMutation((user: any) => {
+  const { mutate: createProfileMutation, isLoading } = useMutation((user: CreateProfile) => {
     return createProfile(user);
   });
 
-  function onSubmit(values: any) {
+  const onSubmit: SubmitHandler<any> = (values: CreateProfile) => {
     console.log(values);
-    if (!isOnSite) {
-      ['phone', 'city', 'area', 'address', 'postalCode'].forEach((name: any) => {
-        delete values[name];
-      });
-    }
+    // if (!isOnSite) {
+    //   ['phone', 'city', 'area', 'address', 'postalCode'].forEach((name: string) => {
+    //     delete values[name];
+    //   });
+    // }
     createProfileMutation(values, {
       onSuccess: () => {
         setIsModalOpen(true);
@@ -79,7 +80,7 @@ export default function Profile() {
         }
       },
     });
-  }
+  };
 
   const handleImageChange = ({ file, name }: { file: File; name: any }) => {
     setValue(name, file);

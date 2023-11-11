@@ -16,10 +16,10 @@ export class CreateProfileDto {
   categories: string;
 
   @IsOptional()
-  banner: Express.Multer.File;
+  banner: string;
 
   @IsOptional()
-  avatar: Express.Multer.File;
+  avatar: string;
 
   @IsString()
   @IsOptional()

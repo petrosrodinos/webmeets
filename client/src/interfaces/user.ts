@@ -12,3 +12,10 @@ export interface SignUp {
   avatar: string;
   isBusiness: boolean;
 }
+
+export interface User {
+  id: string;
+  firstname: string;
+  lastname: string;
+  avatar: string;
+}
