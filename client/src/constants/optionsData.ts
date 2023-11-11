@@ -2,52 +2,52 @@ import { OptionItem } from '@/interfaces/components';
 
 export const SERVICE_CATEGORIES: OptionItem[] = [
   {
-    label: 'physical training',
-    value: 'Physical Training',
+    value: 'physical training',
+    label: 'Physical Training',
   },
   {
-    label: 'psychology',
-    value: 'Psychology',
+    value: 'psychology',
+    label: 'Psychology',
   },
   {
-    label: 'nutrition',
-    value: 'Nutrition',
+    value: 'nutrition',
+    label: 'Nutrition',
   },
   {
-    label: 'physiotherapy',
-    value: 'Physiotherapy',
+    value: 'physiotherapy',
+    label: 'Physiotherapy',
   },
   {
-    label: 'consulting',
-    value: 'Consulting',
+    value: 'consulting',
+    label: 'Consulting',
   },
   {
-    label: 'business',
-    value: 'Business',
+    value: 'business',
+    label: 'Business',
   },
   {
-    label: 'marketing',
-    value: 'Marketing',
+    value: 'marketing',
+    label: 'Marketing',
   },
   {
-    label: 'design',
-    value: 'Design',
+    value: 'design',
+    label: 'Design',
   },
   {
-    label: 'programming',
-    value: 'Programming',
+    value: 'programming',
+    label: 'Programming',
   },
   {
-    label: 'music',
-    value: 'Music',
+    value: 'music',
+    label: 'Music',
   },
   {
-    label: 'languages',
-    value: 'Languages',
+    value: 'languages',
+    label: 'Languages',
   },
   {
-    label: 'logistics',
-    value: 'Logistics',
+    value: 'logistics',
+    label: 'Logistics',
   },
 ];
 

@@ -27,19 +27,19 @@ const MultiFilePicker: FC<MultiFilePickerProps> = ({ label, inputLabel, itemName
       <FormControl>
         <FormLabel>{label}</FormLabel>
         <Accordion width={'100%'} defaultIndex={[0]} allowMultiple>
-          <Item
-            nameValue={files[0]?.name}
-            fileValue={files[0]?.file}
-            itemName={`${itemName} 1`}
-            inputLabel={inputLabel}
-            onAdd={handleAdd}
-            accept={accept}
-            previewType={previewType}
-          />
+          {files.length == 0 && (
+            <Item
+              itemName={`${itemName} 1`}
+              inputLabel={inputLabel}
+              onAdd={handleAdd}
+              accept={accept}
+              previewType={previewType}
+            />
+          )}
           {files.map((file, index) => (
             <Item
               key={index}
-              itemName={`${itemName} ${index + 1}`}
+              itemName={`${itemName} ${index + 1} g`}
               inputLabel={inputLabel}
               nameValue={file.name}
               fileValue={file.file}
@@ -48,6 +48,15 @@ const MultiFilePicker: FC<MultiFilePickerProps> = ({ label, inputLabel, itemName
               previewType={previewType}
             />
           ))}
+          {files.length > 0 && (
+            <Item
+              itemName={`${itemName} ${files.length + 1} b`}
+              inputLabel={inputLabel}
+              onAdd={handleAdd}
+              accept={accept}
+              previewType={previewType}
+            />
+          )}
         </Accordion>
       </FormControl>
     </>

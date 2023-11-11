@@ -25,6 +25,8 @@ const Item: FC<ItemProps> = ({ itemName, inputLabel, nameValue = '', fileValue, 
       file,
       name: fileName,
     });
+    setFileName('');
+    setFile(undefined);
   };
 
   const handleFileChange = ({ file, name }: { file: File; name: any }) => {

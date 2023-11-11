@@ -9,7 +9,7 @@ export const ServiceSchema = yup.object().shape({
     .of(
       yup.object().shape({
         name: yup.string(),
-        file: yup.mixed(), // Adjust the type accordingly
+        file: yup.mixed(),
       }),
     )
     .optional(),

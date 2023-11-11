@@ -54,16 +54,16 @@ const FileUpload: FC<FileUploadProps> = ({
     if (!file) {
       return;
     }
-    onChange?.({
-      name,
-      file,
-    });
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
     reader.onloadend = () => {
       setFilePreview(reader.result);
       setFileName(file.name);
+      onChange?.({
+        name,
+        file,
+      });
     };
   };
 

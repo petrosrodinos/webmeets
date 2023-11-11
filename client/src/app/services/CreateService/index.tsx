@@ -34,10 +34,6 @@ const CreateService: FC<CreateServiceProps> = () => {
     resolver: yupResolver(ServiceSchema),
   });
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
   const { mutate: createServiceMutation, isLoading } = useMutation((user: any) => {
     return createService(user);
   });
@@ -45,7 +41,7 @@ const CreateService: FC<CreateServiceProps> = () => {
   function onSubmit(values: any) {
     console.log(values);
 
-    return;
+    // return;
 
     createServiceMutation(values, {
       onSuccess: (data) => {

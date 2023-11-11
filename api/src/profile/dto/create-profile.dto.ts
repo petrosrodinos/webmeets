@@ -22,7 +22,7 @@ export class CreateProfileDto {
   avatar: Express.Multer.File;
 
   @IsString()
-  // @IsOptional()
+  @IsOptional()
   isOnline: boolean;
 
   @IsString()

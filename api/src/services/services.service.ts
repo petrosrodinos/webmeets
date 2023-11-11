@@ -18,20 +18,23 @@ export class ServicesService {
     try {
       const bannerFile = files.find((file) => file.fieldname === 'banner');
 
-      const bannerUrl = await this.s3Service.uploadFile(bannerFile);
+      let bannerUrl = undefined;
+      if (bannerFile) {
+        bannerUrl = await this.s3Service.uploadFile(bannerFile);
+      }
 
       const certificatesFiles = files.filter((file) => file.fieldname.includes('certificates'));
 
-      const certificatesUrls = await this.s3Service.uploadFiles(certificatesFiles);
-
       const certificates = [];
-
-      for (let i = 0; i < createServiceDto.certificates.length; i++) {
-        certificates.push({
-          _id: new mongoose.Types.ObjectId(),
-          name: createServiceDto.certificates[i].name,
-          file: Object.values(certificatesUrls)[i],
-        });
+      if (certificatesFiles.length > 0) {
+        const certificatesUrls = await this.s3Service.uploadFiles(certificatesFiles);
+        for (let i = 0; i < createServiceDto.certificates.length; i++) {
+          certificates.push({
+            _id: new mongoose.Types.ObjectId(),
+            name: createServiceDto.certificates[i].name,
+            file: Object.values(certificatesUrls)[i],
+          });
+        }
       }
 
       delete createServiceDto.certificates;
