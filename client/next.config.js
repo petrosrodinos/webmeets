@@ -5,7 +5,7 @@ const nextConfig = {
 
     return config;
   },
-  output: 'export',
+  // output: 'export',
   reactStrictMode: true,
   swcMinify: true,
   images: {
@@ -13,6 +13,12 @@ const nextConfig = {
   },
   env: {
     API_URL: process.env.API_URL,
+  },
+  compilerOptions: {
+    baseUrl: 'src/app',
+    paths: {
+      '@/components/*': ['components/*'],
+    },
   },
 };
 

@@ -1,16 +1,18 @@
 'use client';
 
-import Modal from '../../components/ui/Modal';
-import { useState } from 'react';
-import CreateService from './CreateService';
-import ServiceCard from '../../components/ui/ServiceCard';
-import { Button, Center, SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import Modal from '../../../../components/ui/Modal';
+import { useState, FC } from 'react';
+import ServiceCard from '../../../../components/ui/ServiceCard';
+import { Button, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import { getServices } from '@/services/service';
-import Spinner from '../../components/ui/Spinner';
 
-const Services = () => {
+interface MeetsProps {
+  serviceId: string;
+}
+
+const Meets: FC<MeetsProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: services, isLoading } = useQuery('services', getServices);
@@ -22,7 +24,7 @@ const Services = () => {
   return (
     <>
       <Modal title="Create a service" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} actionTitle="Create">
-        <CreateService />
+        {/* <CreateService /> */}
       </Modal>
       <Stack maxW="100%">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
@@ -38,7 +40,7 @@ const Services = () => {
         >
           Create
         </Button>
-        <Spinner loading={isLoading} />
+        {/* <Spinner loading={isLoading} /> */}
         <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={3}>
           {services?.map((service: any) => (
             <ServiceCard key={service._id} service={service} fromProfile={true} />
@@ -49,4 +51,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Meets;

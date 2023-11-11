@@ -27,3 +27,13 @@ export const getServices = async (): Promise<Service[]> => {
     throw err?.response?.data;
   }
 };
+
+export const getService = async (id: string): Promise<Service> => {
+  try {
+    const result = await axios.get(`${API_URL}service/${id}`);
+    const reformedData = reformService(result.data);
+    return reformedData;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
