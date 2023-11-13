@@ -82,7 +82,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       />
 
       <Text display={{ base: 'flex', md: 'none' }} fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-        Logo
+        Webmeets
       </Text>
 
       <HStack spacing={{ base: '0', md: '6' }}>
