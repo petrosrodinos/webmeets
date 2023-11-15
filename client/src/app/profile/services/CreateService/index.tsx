@@ -49,8 +49,8 @@ const CreateService: FC<CreateServiceProps> = () => {
       },
       onError: (error: any) => {
         toast({
-          title: error.message,
-          description: 'Something went wrong',
+          title: 'Something went wrong',
+          description: error.message,
           position: 'top',
           isClosable: true,
           status: 'error',

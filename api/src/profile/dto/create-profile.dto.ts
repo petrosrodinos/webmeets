@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProfileDto {
   @IsString()
@@ -40,7 +40,7 @@ export class CreateProfileDto {
   @IsOptional()
   city: string;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  postalCode: string;
+  postalCode: number;
 }

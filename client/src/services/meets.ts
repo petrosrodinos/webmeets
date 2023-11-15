@@ -7,9 +7,9 @@ import { Meet } from '@/interfaces/meet';
 
 export const createMeet = async (payload: Meet) => {
   try {
-    const result = await axios.post(`${API_URL}sermeetvice`, payload, {
+    const result = await axios.post(`${API_URL}meet`, payload, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        // 'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${getAuthState().token}`,
       },
     });

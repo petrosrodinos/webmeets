@@ -1,4 +1,4 @@
-export interface CreateProfile {
+export interface CreateProfile extends Address {
   country: string;
   categories: string[];
   bio: string;
@@ -7,14 +7,10 @@ export interface CreateProfile {
   banner?: File;
   phone?: string;
   email?: string;
-  city?: string;
-  postalCode?: string;
-  area?: string;
-  address?: string;
   [key: string]: string | string[] | File | boolean | undefined;
 }
 
-export interface Profile {
+export interface Profile extends Address {
   id: string;
   userId: string;
   avatar: string;
@@ -22,12 +18,15 @@ export interface Profile {
   categories: string[];
   isOnline: boolean;
   bio: string;
-  city?: string;
-  postalCode?: string;
   country?: string;
-  area?: string;
-  address?: string;
   phone?: string;
   email?: string;
   createdAt: string;
+}
+
+export interface Address {
+  city?: string;
+  postalCode?: string;
+  area?: string;
+  address?: string;
 }

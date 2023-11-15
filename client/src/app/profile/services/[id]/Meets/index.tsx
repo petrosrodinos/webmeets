@@ -19,13 +19,9 @@ const Meets: FC<MeetsProps> = () => {
 
   const { data: meets, isLoading } = useQuery('meets', getMeets);
 
-  const handleActionClick = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <>
-      <Modal title="Create a service" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} actionTitle="Create">
+      <Modal title="Create a Meet" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} actionTitle="Create">
         <CreateMeet />
       </Modal>
       <Stack maxW="100%">

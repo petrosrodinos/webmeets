@@ -1,4 +1,5 @@
-import { IsOptional, IsString, IsEmail, IsArray, IsNumber, IsBoolean } from 'class-validator';
+import { IsOptional, IsString, IsEmail, IsArray, IsNumber, IsBoolean, IsEnum } from 'class-validator';
+import { MeetType } from 'src/types/meet';
 
 export class CreateMeetDto {
   @IsString()
@@ -11,23 +12,8 @@ export class CreateMeetDto {
   description: string;
 
   @IsArray()
-  category: string;
-
-  @IsArray()
   @IsOptional()
   images: string[];
-
-  @IsString()
-  @IsOptional()
-  phone: string;
-
-  @IsEmail()
-  @IsOptional()
-  email: string;
-
-  @IsOptional()
-  @IsString()
-  address: string;
 
   @IsOptional()
   @IsNumber()
@@ -41,7 +27,27 @@ export class CreateMeetDto {
   @IsNumber()
   price: number;
 
-  @IsBoolean()
+  @IsString()
+  @IsString()
+  type: MeetType;
+
+  @IsString()
   @IsOptional()
-  isOnline: boolean;
+  phone: string;
+
+  @IsOptional()
+  @IsString()
+  address: string;
+
+  @IsOptional()
+  @IsString()
+  city: string;
+
+  @IsOptional()
+  @IsString()
+  area: string;
+
+  @IsOptional()
+  @IsNumber()
+  postalCode: number;
 }
