@@ -20,7 +20,7 @@ import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Service } from 'src/schemas/service.schema';
 import { AnyFilesInterceptor, FilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('service')
+@Controller('services')
 @ApiTags('Service')
 export class ServicesController {
   constructor(

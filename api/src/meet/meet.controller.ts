@@ -7,13 +7,10 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Meet } from 'src/schemas/meet.schema';
 import { ProfileService } from 'src/profile/profile.service';
 
-@Controller('meet')
+@Controller('meets')
 @ApiTags('Meet')
 export class MeetController {
-  constructor(
-    private readonly meetService: MeetService,
-    private readonly profileService: ProfileService,
-  ) {}
+  constructor(private readonly meetService: MeetService) {}
 
   @UseGuards(JwtGuard)
   @Post()

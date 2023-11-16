@@ -9,6 +9,8 @@ import { useQuery } from 'react-query';
 import { getMeets } from '@/services/meets';
 import Spinner from '@/components/ui/Spinner';
 import CreateMeet from './CreateMeet';
+import MeetCard from '@/components/ui/MeetCard';
+import { Meet } from '@/interfaces/meet';
 
 interface MeetsProps {
   serviceId: string;
@@ -40,8 +42,8 @@ const Meets: FC<MeetsProps> = () => {
         </Button>
         <Spinner loading={isLoading} />
         <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={3}>
-          {meets?.map((service: any) => (
-            <ServiceCard key={service._id} service={service} fromProfile={true} />
+          {meets?.map((meet: Meet) => (
+            <MeetCard key={meet.id} meet={meet} fromProfile={true} />
           ))}
         </SimpleGrid>
       </Stack>

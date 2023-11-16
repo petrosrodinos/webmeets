@@ -1,12 +1,12 @@
 import { API_URL } from '@/constants/api';
 import axios from 'axios';
 import { getAuthState } from '../store/authStore';
-import { Service } from '@/interfaces/service';
+import { Service, NewService } from '@/interfaces/service';
 import { reformService } from './reformer/service';
 
-export const createService = async (payload: Service) => {
+export const createService = async (payload: NewService) => {
   try {
-    const result = await axios.post(`${API_URL}service`, payload, {
+    const result = await axios.post(`${API_URL}services`, payload, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${getAuthState().token}`,
@@ -20,7 +20,7 @@ export const createService = async (payload: Service) => {
 
 export const getServices = async (): Promise<Service[]> => {
   try {
-    const result = await axios.get(`${API_URL}service`);
+    const result = await axios.get(`${API_URL}services`);
     const reformedData = result.data.map((service: any) => reformService(service));
     return reformedData;
   } catch (err: any) {
@@ -30,7 +30,7 @@ export const getServices = async (): Promise<Service[]> => {
 
 export const getService = async (id: string): Promise<Service> => {
   try {
-    const result = await axios.get(`${API_URL}service/${id}`);
+    const result = await axios.get(`${API_URL}services/${id}`);
     const reformedData = reformService(result.data);
     return reformedData;
   } catch (err: any) {

@@ -9,6 +9,7 @@ import { AiOutlineArrowRight } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import { getServices } from '@/services/service';
 import Spinner from '@/components/ui/Spinner';
+import { Service } from '@/interfaces/service';
 
 const Services = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,8 +37,8 @@ const Services = () => {
         </Button>
         <Spinner loading={isLoading} />
         <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={3}>
-          {services?.map((service: any) => (
-            <ServiceCard key={service._id} service={service} fromProfile={true} />
+          {services?.map((service: Service) => (
+            <ServiceCard key={service.id} service={service} fromProfile={true} />
           ))}
         </SimpleGrid>
       </Stack>

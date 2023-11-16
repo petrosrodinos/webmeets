@@ -3,11 +3,12 @@ import axios from 'axios';
 import { getAuthState } from '../store/authStore';
 import { Service } from '@/interfaces/service';
 import { reformService } from './reformer/service';
-import { Meet } from '@/interfaces/meet';
+import { Meet, NewMeet } from '@/interfaces/meet';
+import { reformMeet } from './reformer/meet';
 
-export const createMeet = async (payload: Meet) => {
+export const createMeet = async (payload: NewMeet) => {
   try {
-    const result = await axios.post(`${API_URL}meet`, payload, {
+    const result = await axios.post(`${API_URL}meets`, payload, {
       headers: {
         // 'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${getAuthState().token}`,
@@ -19,20 +20,21 @@ export const createMeet = async (payload: Meet) => {
   }
 };
 
-export const getMeets = async (): Promise<Service[]> => {
+export const getMeets = async (): Promise<Meet[]> => {
   try {
-    const result = await axios.get(`${API_URL}meet`);
-    const reformedData = result.data.map((service: any) => reformService(service));
+    const result = await axios.get(`${API_URL}meets`);
+    const reformedData = result.data.map((meet: any) => reformMeet(meet));
+    console.log(reformedData);
     return reformedData;
   } catch (err: any) {
     throw err?.response?.data;
   }
 };
 
-export const getMeet = async (id: string): Promise<Service> => {
+export const getMeet = async (id: string): Promise<Meet> => {
   try {
-    const result = await axios.get(`${API_URL}meet/${id}`);
-    const reformedData = reformService(result.data);
+    const result = await axios.get(`${API_URL}meets/${id}`);
+    const reformedData = reformMeet(result.data);
     return reformedData;
   } catch (err: any) {
     throw err?.response?.data;

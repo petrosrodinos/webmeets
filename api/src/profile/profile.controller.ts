@@ -20,7 +20,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ProfileService } from './profile.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
-@Controller('profile')
+@Controller('profiles')
 @ApiTags('Profile')
 export class ProfileController {
   constructor(

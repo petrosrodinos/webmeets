@@ -4,7 +4,6 @@ import { useParams } from 'next/navigation';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 import { getService } from '@/services/service';
-import Spinner from '@/components/ui/Spinner';
 import Meets from './Meets';
 import { Service as ServiceDetails } from './Service';
 
@@ -12,10 +11,9 @@ const Service: FC = () => {
   const params = useParams();
   const { id } = params;
 
-  const { data: service, isLoading } = useQuery(['service', id], () => getService(id as string));
+  const { data: service } = useQuery(['service', id], () => getService(id as string));
   return (
     <>
-      <Spinner loading={isLoading} />
       <Tabs isFitted variant="enclosed">
         <TabList>
           <Tab>Meets</Tab>

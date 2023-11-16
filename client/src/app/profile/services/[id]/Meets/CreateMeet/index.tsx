@@ -14,12 +14,9 @@ import Modal from '@/components/ui/Modal';
 import { createMeet } from '@/services/meets';
 import { MeetSchema } from '@/validation-schemas/meet';
 import { useParams } from 'next/navigation';
+import { Place } from '@/interfaces/meet';
 
-interface CreateMeetProps {
-  serviceId: string;
-}
-
-type Place = 'remote' | 'client-location' | 'in-person';
+interface CreateMeetProps {}
 
 const CreateMeet: FC<CreateMeetProps> = () => {
   const params = useParams();
@@ -75,7 +72,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
 
   const handleActionClick = () => {
     setCreatedMeetId(null);
-    router.push(`/services/${createdMeetId}`);
+    router.push(`/profile/meets/${createdMeetId}`);
   };
 
   const handleChange = (value: any) => {
