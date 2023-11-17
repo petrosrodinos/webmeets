@@ -15,6 +15,7 @@ import { createMeet } from '@/services/meets';
 import { MeetSchema } from '@/validation-schemas/meet';
 import { useParams } from 'next/navigation';
 import { Place } from '@/interfaces/meet';
+import ImagePicker from '@/components/ui/ImagePicker';
 
 interface CreateMeetProps {}
 
@@ -66,8 +67,9 @@ const CreateMeet: FC<CreateMeetProps> = () => {
     });
   }
 
-  const handleBannerChange = ({ file, name }: { file: File; name: any }) => {
-    setValue(name, file);
+  const handleImageChange = (images: any) => {
+    // setValue(name, file);
+    console.log('imags', images);
   };
 
   const handleActionClick = () => {
@@ -117,14 +119,16 @@ const CreateMeet: FC<CreateMeetProps> = () => {
                 />
                 <Input placeholder="Enter Price" label="Price" error={errors.price?.message} register={register('price')} />
 
-                <FileUpload
+                <ImagePicker label="Select images" onChange={handleImageChange} />
+
+                {/* <FileUpload
                   placeholder="Add photos"
                   previewType="banner"
                   onChange={handleBannerChange}
                   label="Meet Photos"
                   name="images"
                   accept="image/*"
-                />
+                /> */}
 
                 <Center>
                   <RadioGroup onChange={handleChange} value={type}>
