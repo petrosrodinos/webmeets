@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import Input from '@/components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
-import FileUpload from '@/components/ui/FilePicker';
 import { useState } from 'react';
 import TextArea from '@/components/ui/TextArea';
 import { useRouter } from 'next/navigation';
@@ -16,6 +15,7 @@ import { MeetSchema } from '@/validation-schemas/meet';
 import { useParams } from 'next/navigation';
 import { Place } from '@/interfaces/meet';
 import ImagePicker from '@/components/ui/ImagePicker';
+import { ImagePickerItemData } from '@/interfaces/components';
 
 interface CreateMeetProps {}
 
@@ -67,9 +67,8 @@ const CreateMeet: FC<CreateMeetProps> = () => {
     });
   }
 
-  const handleImageChange = (images: any) => {
-    // setValue(name, file);
-    console.log('imags', images);
+  const handleImageChange = (data: ImagePickerItemData) => {
+    setValue(data.name as 'images', data.files);
   };
 
   const handleActionClick = () => {
@@ -119,16 +118,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
                 />
                 <Input placeholder="Enter Price" label="Price" error={errors.price?.message} register={register('price')} />
 
-                <ImagePicker label="Select images" onChange={handleImageChange} />
-
-                {/* <FileUpload
-                  placeholder="Add photos"
-                  previewType="banner"
-                  onChange={handleBannerChange}
-                  label="Meet Photos"
-                  name="images"
-                  accept="image/*"
-                /> */}
+                <ImagePicker name="images" label="Select images" onChange={handleImageChange} />
 
                 <Center>
                   <RadioGroup onChange={handleChange} value={type}>

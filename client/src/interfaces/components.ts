@@ -16,3 +16,8 @@ export interface MultiFilePickerItemData {
   name: string;
   file: File;
 }
+
+export interface ImagePickerItemData {
+  name: string;
+  files: File[];
+}

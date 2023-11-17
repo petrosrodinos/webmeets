@@ -5,11 +5,12 @@ import {
   FileSizeValidator,
   ImageDimensionsValidator,
 } from 'use-file-picker/validators';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import Spinner from '@/components/ui/Spinner';
 import { Button, SimpleGrid, useColorModeValue, Box } from '@chakra-ui/react';
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
+import { ImagePickerItemData } from '@/interfaces/components';
 import './style.css';
 
 interface ImagePickerProps {
@@ -17,10 +18,11 @@ interface ImagePickerProps {
   maxFiles?: number;
   multiple?: boolean;
   accept?: string;
-  onChange: (files: any) => void;
+  name: string;
+  onChange: (data: ImagePickerItemData) => void;
 }
 
-const ImagePicker: FC<ImagePickerProps> = ({ label, onChange, multiple = true, accept = 'image/*', maxFiles = 5 }) => {
+const ImagePicker: FC<ImagePickerProps> = ({ label, name, onChange, multiple = true, accept = 'image/*', maxFiles = 5 }) => {
   const FilePickerButton = ({ label }: { label: string }) => {
     return (
       <Button onClick={() => openFilePicker()} leftIcon={<MdOutlineAddPhotoAlternate />} colorScheme="pink" variant="solid">
@@ -44,11 +46,13 @@ const ImagePicker: FC<ImagePickerProps> = ({ label, onChange, multiple = true, a
       //     minWidth: 768,
       //   }),
     ],
+    onFilesSuccessfullySelected: ({ plainFiles, filesContent }) => {
+      onChange({
+        name,
+        files: plainFiles,
+      });
+    },
   });
-
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
 
   if (errors.length) {
     return (
@@ -74,7 +78,6 @@ const ImagePicker: FC<ImagePickerProps> = ({ label, onChange, multiple = true, a
   return (
     <div>
       <FilePickerButton label={label} />
-      <br />
       <Box rounded={'sm'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'sm'} p={1}>
         <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={2}>
           {filesContent.map((file, index) => (

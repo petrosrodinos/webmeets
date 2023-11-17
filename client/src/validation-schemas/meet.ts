@@ -6,7 +6,7 @@ export const MeetSchema = yup.object().shape({
   duration: yup.number(),
   maxParticipants: yup.number(),
   price: yup.number(),
-  //   images: yup.array().of(yup.mixed()).optional(),
+  images: yup.array().of(yup.mixed()).optional(),
   phone: yup.string().optional(),
   address: yup.string().optional(),
   city: yup.string().optional(),
