@@ -5,7 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Service } from 'src/schemas/service.schema';
 import { Model, Error } from 'mongoose';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
-import * as mongoose from 'mongoose';
+import { Types } from 'mongoose';
 @Injectable()
 export class ServicesService {
   constructor(
@@ -30,7 +30,7 @@ export class ServicesService {
         const certificatesUrls = await this.s3Service.uploadFiles(certificatesFiles);
         for (let i = 0; i < createServiceDto.certificates.length; i++) {
           certificates.push({
-            _id: new mongoose.Types.ObjectId(),
+            _id: new Types.ObjectId(),
             name: createServiceDto.certificates[i].name,
             file: Object.values(certificatesUrls)[i],
           });

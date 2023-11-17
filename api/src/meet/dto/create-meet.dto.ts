@@ -18,19 +18,15 @@ export class CreateMeetDto {
     file: Express.Multer.File;
   }[];
 
-  @IsOptional()
-  @IsNumber()
-  duration: number;
-
-  @IsNumber()
-  @IsOptional()
-  maxParticipants: number;
-
-  @IsOptional()
-  @IsNumber()
-  price: number;
+  @IsString()
+  duration: string;
 
   @IsString()
+  maxParticipants: string;
+
+  @IsString()
+  price: string;
+
   @IsString()
   type: MeetType;
 
@@ -51,6 +47,6 @@ export class CreateMeetDto {
   area: string;
 
   @IsOptional()
-  @IsNumber()
-  postalCode: number;
+  @IsString()
+  postalCode: string;
 }

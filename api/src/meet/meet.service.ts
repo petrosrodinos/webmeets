@@ -5,6 +5,7 @@ import { Model, Error } from 'mongoose';
 import { Meet } from 'src/schemas/meet.schema';
 import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class MeetService {
@@ -15,11 +16,18 @@ export class MeetService {
   ) {}
   async create(userId: string, profileId: string, createMeetDto: CreateMeetDto, files: Express.Multer.File[]) {
     try {
-      const images = await this.s3Service.uploadFiles(files);
+      const images = [];
+      for (let i = 0; i < files.length; i++) {
+        const uploadedFileUrl = await this.s3Service.uploadFile(files[i]);
+        images.push({
+          _id: new Types.ObjectId(),
+          file: uploadedFileUrl,
+        });
+      }
 
       const meet = new this.meetModel({
         ...createMeetDto,
-        ...images,
+        images,
         userId,
         profileId,
       });

@@ -40,7 +40,7 @@ export class CreateProfileDto {
   @IsOptional()
   city: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  postalCode: number;
+  postalCode: string;
 }
