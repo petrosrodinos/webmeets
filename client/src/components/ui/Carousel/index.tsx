@@ -7,21 +7,28 @@ import Slider from 'react-slick';
 
 interface CarouselProps {
   images: string[];
+  dots: boolean;
+  arrows: boolean;
+  fade: boolean;
+  infinite: boolean;
+  autoplay: boolean;
+  speed: number;
+  autoplaySpeed: number;
+  slidesToShow: number;
+  slidesToScroll: number;
 }
 
-const settings = {
-  dots: true,
-  arrows: false,
-  fade: true,
-  infinite: true,
-  autoplay: false,
-  speed: 500,
-  autoplaySpeed: 5000,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-};
-
-const Carousel: FC<CarouselProps> = () => {
+const Carousel: FC<CarouselProps> = ({
+  dots = true,
+  arrows = false,
+  fade = true,
+  infinite = true,
+  autoplay = false,
+  speed = 500,
+  autoplaySpeed = 5000,
+  slidesToShow = 1,
+  slidesToScroll = 1,
+}) => {
   const [slider, setSlider] = useState<Slider | null>(null);
 
   const images = [
@@ -65,7 +72,18 @@ const Carousel: FC<CarouselProps> = () => {
       >
         <MdArrowForwardIos size="20px" />
       </IconButton>
-      <Slider {...settings} ref={(slider: any) => setSlider(slider)}>
+      <Slider
+        dots={dots}
+        arrows={arrows}
+        fade={fade}
+        infinite={infinite}
+        autoplay={autoplay}
+        speed={speed}
+        autoplaySpeed={autoplaySpeed}
+        slidesToShow={slidesToShow}
+        slidesToScroll={slidesToScroll}
+        ref={(slider: any) => setSlider(slider)}
+      >
         {images.map((image: string, index: number) => (
           <Box
             key={index}
