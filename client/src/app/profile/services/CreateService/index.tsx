@@ -18,9 +18,11 @@ import { SERVICE_CATEGORIES } from '@/constants/optionsData';
 import MultiFilePicker from '@/components/ui/MultiFilePicker';
 import { MultiFilePickerItemData } from '@/interfaces/components';
 
-interface CreateServiceProps {}
+interface CreateServiceProps {
+  isEditing?: boolean;
+}
 
-const CreateService: FC<CreateServiceProps> = () => {
+const CreateService: FC<CreateServiceProps> = ({ isEditing = false }) => {
   const toast = useToast();
   const [createdServiceId, setCreatedServiceId] = useState<string | null>(null);
   const router = useRouter();
@@ -84,7 +86,7 @@ const CreateService: FC<CreateServiceProps> = () => {
         <Text>Now you can create meets for this service.</Text>
       </Modal>
       <Flex>
-        <Stack mx={'auto'} width={'xl'}>
+        <Stack mx={'auto'} width={'100%'}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <VStack>

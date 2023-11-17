@@ -2,8 +2,7 @@ import { FC } from 'react';
 import { useParams } from 'next/navigation';
 
 const Settings: FC = () => {
-  const params = useParams();
-  const { id } = params;
+  const { id } = useParams();
   return <div>settings {id}</div>;
 };
 

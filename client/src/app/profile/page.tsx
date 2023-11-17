@@ -20,7 +20,7 @@ import { useMutation } from 'react-query';
 import FileUpload from '@/components/ui/FilePicker';
 import { ProfileSchema } from '@/validation-schemas/profile';
 import { createProfile } from '@/services/profile';
-import { useState } from 'react';
+import { useState, FC } from 'react';
 import TextArea from '@/components/ui/TextArea';
 import Modal from '@/components/ui/Modal';
 import { useRouter } from 'next/navigation';
@@ -30,7 +30,7 @@ import Select from '@/components/ui/Select';
 import { COUNTRIES } from '@/constants/optionsData';
 import { CreateProfile } from '@/interfaces/profile';
 
-export default function Profile() {
+const Profile: FC = () => {
   const toast = useToast();
   const [isOnSite, setIsOnSite] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -177,4 +177,6 @@ export default function Profile() {
       </Flex>
     </>
   );
-}
+};
+
+export default Profile;
