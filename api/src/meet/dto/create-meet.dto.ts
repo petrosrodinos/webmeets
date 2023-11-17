@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsEmail, IsArray, IsNumber, IsBoolean, IsEnum } from 'class-validator';
+import { IsOptional, IsString, IsEmail, IsArray, IsNumber } from 'class-validator';
 import { MeetType } from 'src/types/meet';
 
 export class CreateMeetDto {
@@ -13,14 +13,17 @@ export class CreateMeetDto {
 
   @IsArray()
   @IsOptional()
-  images: string[];
+  images: {
+    name: string;
+    file: Express.Multer.File;
+  }[];
 
   @IsOptional()
   @IsNumber()
   duration: number;
 
-  @IsOptional()
   @IsNumber()
+  @IsOptional()
   maxParticipants: number;
 
   @IsOptional()

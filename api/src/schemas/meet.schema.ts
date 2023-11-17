@@ -21,8 +21,16 @@ export class Meet {
   @Prop()
   description: string;
 
-  @Prop()
-  images: string[];
+  @Prop({
+    images: [
+      {
+        _id: true,
+        name: String,
+        file: String,
+      },
+    ],
+  })
+  images: Array<{ _id: Types.ObjectId; file: string }>;
 
   @Prop()
   duration: number;
@@ -51,7 +59,7 @@ export class Meet {
   area: string;
 
   @Prop()
-  postalCode: number;
+  postalCode: string;
 }
 
 export const MeetSchema = SchemaFactory.createForClass(Meet);

@@ -4,17 +4,22 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Error } from 'mongoose';
 import { Meet } from 'src/schemas/meet.schema';
 import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { S3Service } from 'src/aws-s3/aws-s3.service';
 
 @Injectable()
 export class MeetService {
   constructor(
     @InjectModel(Meet.name)
     private meetModel: Model<Meet>,
+    private s3Service: S3Service,
   ) {}
-  async create(userId: string, profileId: string, createMeetDto: CreateMeetDto) {
+  async create(userId: string, profileId: string, createMeetDto: CreateMeetDto, files: Express.Multer.File[]) {
     try {
+      const images = await this.s3Service.uploadFiles(files);
+
       const meet = new this.meetModel({
         ...createMeetDto,
+        ...images,
         userId,
         profileId,
       });

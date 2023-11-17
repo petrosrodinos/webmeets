@@ -1,24 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { MeetService } from './meet.service';
 import { CreateMeetDto } from './dto/create-meet.dto';
 import { UpdateMeetDto } from './dto/update-meet.dto';
 import { JwtGuard } from '../auth/guard';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Meet } from 'src/schemas/meet.schema';
-import { ProfileService } from 'src/profile/profile.service';
+import { UserService } from 'src/user/user.service';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('meets')
 @ApiTags('Meet')
 export class MeetController {
-  constructor(private readonly meetService: MeetService) {}
+  constructor(
+    private readonly meetService: MeetService,
+    private readonly userService: UserService,
+  ) {}
 
   @UseGuards(JwtGuard)
   @Post()
-  @ApiOkResponse({ type: Meet })
+  @UseInterceptors(FilesInterceptor('images'))
   @ApiBearerAuth()
-  create(@Req() req: Express.Request, @Body() createMeetDto: CreateMeetDto) {
+  @ApiOkResponse({ type: Meet })
+  async create(
+    @Req() req: Express.Request,
+    @Body() createMeetDto: CreateMeetDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
     const { userId, profileId } = req.user;
-    return this.meetService.create(userId, profileId, createMeetDto);
+    let profileid = profileId;
+    if (!profileid) {
+      const user = await this.userService.findOne(userId);
+      profileid = user.profileId._id.toString();
+    }
+    return this.meetService.create(userId, profileId, createMeetDto, files);
   }
 
   @Get()

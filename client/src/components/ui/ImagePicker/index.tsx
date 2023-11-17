@@ -78,16 +78,18 @@ const ImagePicker: FC<ImagePickerProps> = ({ label, name, onChange, multiple = t
   return (
     <div>
       <FilePickerButton label={label} />
-      <Box rounded={'sm'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'sm'} p={1}>
-        <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={2}>
-          {filesContent.map((file, index) => (
-            <div className="image-container">
-              <IoIosCloseCircleOutline className="image-remove-button" onClick={() => removeFileByIndex(index)} />
-              <img className="image-picker-image" key={index} alt={file.name} src={file.content}></img>
-            </div>
-          ))}
-        </SimpleGrid>
-      </Box>
+      {filesContent.length > 0 && (
+        <Box rounded={'sm'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'sm'} p={1}>
+          <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={2}>
+            {filesContent.map((file, index) => (
+              <div className="image-container">
+                <IoIosCloseCircleOutline className="image-remove-button" onClick={() => removeFileByIndex(index)} />
+                <img className="image-picker-image" key={index} alt={file.name} src={file.content}></img>
+              </div>
+            ))}
+          </SimpleGrid>
+        </Box>
+      )}
     </div>
   );
 };

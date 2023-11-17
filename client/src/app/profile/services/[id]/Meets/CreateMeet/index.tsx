@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex, Stack, Button, useToast, VStack, Text, Box, RadioGroup, Radio, Center } from '@chakra-ui/react';
+import { Flex, Stack, Button, useToast, VStack, Text, Box, RadioGroup, Radio, Center, FormLabel } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Input from '@/components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -120,6 +120,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
 
                 <ImagePicker name="images" label="Select images" onChange={handleImageChange} />
 
+                <FormLabel>Location</FormLabel>
                 <Center>
                   <RadioGroup onChange={handleChange} value={type}>
                     <Stack direction="row">
