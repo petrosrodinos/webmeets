@@ -2,7 +2,7 @@
 
 import { FC, useState } from 'react';
 import { Box, IconButton, useBreakpointValue } from '@chakra-ui/react';
-import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
+import { MdArrowForwardIos, MdArrowBackIosNew } from 'react-icons/md';
 import Slider from 'react-slick';
 
 interface CarouselProps {
@@ -51,7 +51,7 @@ const Carousel: FC<CarouselProps> = () => {
         zIndex={2}
         onClick={() => slider?.slickPrev()}
       >
-        <BiLeftArrowAlt size="40px" />
+        <MdArrowBackIosNew size="20px" />
       </IconButton>
       <IconButton
         aria-label="right-arrow"
@@ -63,7 +63,7 @@ const Carousel: FC<CarouselProps> = () => {
         zIndex={2}
         onClick={() => slider?.slickNext()}
       >
-        <BiRightArrowAlt size="40px" />
+        <MdArrowForwardIos size="20px" />
       </IconButton>
       <Slider {...settings} ref={(slider: any) => setSlider(slider)}>
         {images.map((image: string, index: number) => (
