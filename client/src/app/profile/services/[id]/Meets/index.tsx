@@ -12,9 +12,7 @@ import CreateMeet from './CreateMeet';
 import MeetCard from '@/components/ui/MeetCard';
 import { Meet } from '@/interfaces/meet';
 
-interface MeetsProps {
-  serviceId: string;
-}
+interface MeetsProps {}
 
 const Meets: FC<MeetsProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

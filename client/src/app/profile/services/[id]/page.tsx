@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 import { getService } from '@/services/service';
 import Meets from './Meets';
 import { Service as ServiceDetails } from './Service';
+import Settings from './Settings';
 
 const Service: FC = () => {
   const params = useParams();
@@ -18,13 +19,17 @@ const Service: FC = () => {
         <TabList>
           <Tab>Meets</Tab>
           <Tab>{service?.name || 'Service'}</Tab>
+          <Tab>Settings</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Meets serviceId={id as string} />
+            <Meets />
           </TabPanel>
           <TabPanel>
             <ServiceDetails serviceId={service?.id as string} />
+          </TabPanel>
+          <TabPanel>
+            <Settings />
           </TabPanel>
         </TabPanels>
       </Tabs>
