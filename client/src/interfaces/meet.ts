@@ -1,17 +1,18 @@
 import { Address } from './profile';
 import { Service } from './service';
 
-export type Place = 'remote' | 'client-location' | 'in-person';
+export type MeetType = 'remote' | 'client-location' | 'in-person';
 
 export interface NewMeet extends Address {
   name: string;
   description: string;
-  images?: File[];
+  images: File[];
   phone?: string;
   duration: number;
   maxParticipants: number;
   price: number;
-  type: Place;
+  type: MeetType;
+  [key: string]: any;
 }
 
 export interface Meet extends Address {
@@ -21,9 +22,9 @@ export interface Meet extends Address {
   phone?: string;
   duration: number;
   maxParticipants: number;
-  images?: { id: string; file: string }[];
+  images: { id: string; file: string }[];
   price: number;
-  type: Place;
+  type: MeetType;
   service: Service;
   createdAt: string;
 }

@@ -7,15 +7,15 @@ import Slider from 'react-slick';
 
 interface CarouselProps {
   images: string[];
-  dots: boolean;
-  arrows: boolean;
-  fade: boolean;
-  infinite: boolean;
-  autoplay: boolean;
-  speed: number;
-  autoplaySpeed: number;
-  slidesToShow: number;
-  slidesToScroll: number;
+  dots?: boolean;
+  arrows?: boolean;
+  fade?: boolean;
+  infinite?: boolean;
+  autoplay?: boolean;
+  speed?: number;
+  autoplaySpeed?: number;
+  slidesToShow?: number;
+  slidesToScroll?: number;
 }
 
 const Carousel: FC<CarouselProps> = ({

@@ -13,7 +13,7 @@ import Modal from '@/components/ui/Modal';
 import { createMeet } from '@/services/meets';
 import { MeetSchema } from '@/validation-schemas/meet';
 import { useParams } from 'next/navigation';
-import { Place } from '@/interfaces/meet';
+import { MeetType } from '@/interfaces/meet';
 import ImagePicker from '@/components/ui/ImagePicker';
 import { ImagePickerItemData } from '@/interfaces/components';
 
@@ -25,7 +25,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
   const toast = useToast();
   const [createdMeetId, setCreatedMeetId] = useState<string | null>(null);
   const router = useRouter();
-  const [type, setType] = useState<Place>('remote');
+  const [type, setType] = useState<MeetType>('remote');
 
   const {
     handleSubmit,
@@ -106,7 +106,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
                 />
                 <Input
                   placeholder="Enter meet duration"
-                  label="Duration"
+                  label="Duration (minutes)"
                   error={errors.duration?.message}
                   register={register('duration')}
                 />

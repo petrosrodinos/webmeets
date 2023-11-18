@@ -18,7 +18,7 @@ import { JwtGuard } from '../auth/guard';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Meet } from 'src/schemas/meet.schema';
 import { UserService } from 'src/user/user.service';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('meets')
 @ApiTags('Meet')
@@ -30,7 +30,7 @@ export class MeetController {
 
   @UseGuards(JwtGuard)
   @Post()
-  @UseInterceptors(FilesInterceptor('images'))
+  @UseInterceptors(AnyFilesInterceptor())
   @ApiBearerAuth()
   @ApiOkResponse({ type: Meet })
   async create(
@@ -44,6 +44,7 @@ export class MeetController {
       const user = await this.userService.findOne(userId);
       profileid = user.profileId._id.toString();
     }
+
     return this.meetService.create(userId, profileId, createMeetDto, files);
   }
 

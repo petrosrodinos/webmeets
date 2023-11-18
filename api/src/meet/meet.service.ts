@@ -17,7 +17,7 @@ export class MeetService {
   async create(userId: string, profileId: string, createMeetDto: CreateMeetDto, files: Express.Multer.File[]) {
     try {
       const images = [];
-      for (let i = 0; i < files.length; i++) {
+      for (let i = 0; i < files?.length; i++) {
         const uploadedFileUrl = await this.s3Service.uploadFile(files[i]);
         images.push({
           _id: new Types.ObjectId(),

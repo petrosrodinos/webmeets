@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import Image from 'next/image';
 import { Box, Heading, Text, Stack, Avatar, useColorModeValue, Button } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { Meet } from '@/interfaces/meet';
@@ -36,7 +35,7 @@ const MeetCard: FC<MeetCardProps> = ({
         overflow={'hidden'}
       >
         <Box h={'210px'} bg={'gray.100'} mt={-6} mx={-6} mb={6} pos={'relative'}>
-          <Carousel images={[]} />
+          <Carousel images={images.map((image) => image.file)} />
         </Box>
         <Stack>
           <Text color={'green.500'} textTransform={'uppercase'} fontWeight={800} fontSize={'sm'} letterSpacing={1.1}>
