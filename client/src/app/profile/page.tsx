@@ -150,6 +150,7 @@ const Profile: FC = () => {
                     <Input
                       label="Phone Number"
                       placeholder="Enter Phone"
+                      type="tel"
                       error={errors.phone?.message}
                       register={register('phone')}
                     />

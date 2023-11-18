@@ -5,6 +5,7 @@ import {
   FormErrorMessage,
   FormLabel,
   InputGroup,
+  InputLeftElement,
   InputRightElement,
 } from '@chakra-ui/react';
 import { FC, useState } from 'react';
@@ -19,38 +20,34 @@ interface AdditionalProps {
   props?: ChakraInputProps;
   register?: any;
   error?: any;
+  icon?: any;
 }
 
 type InputProps = ChakraInputProps & AdditionalProps;
 
-const Input: FC<InputProps> = ({ label, required = false, password, register, error, props, ...rest }) => {
-  const SelectedInput = password ? PasswordInput : NormalInput;
+const Input: FC<InputProps> = ({ label, required = false, password, register, error, icon: Icon, props, ...rest }) => {
+  const [showPassword, setShowPassword] = useState(password ? false : true);
 
   return (
     <FormControl isInvalid={!!error} isRequired={required}>
       {label && <FormLabel>{label}</FormLabel>}
-      {<SelectedInput register={register} {...props} {...rest} />}
+      <InputGroup>
+        {Icon && (
+          <InputLeftElement pointerEvents="none">
+            <Icon color="gray.300" />
+          </InputLeftElement>
+        )}
+        <ChakraInput type={showPassword ? 'text' : 'password'} {...props} {...register} {...rest} />
+        {password && (
+          <InputRightElement h={'full'}>
+            <Button variant={'ghost'} onClick={() => setShowPassword((prev) => !prev)}>
+              {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
+            </Button>
+          </InputRightElement>
+        )}
+      </InputGroup>
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
-  );
-};
-
-const NormalInput: FC<InputProps> = ({ props, register, ...rest }) => {
-  return <ChakraInput {...props} {...register} {...rest} />;
-};
-
-const PasswordInput: FC<InputProps> = ({ props, register, ...rest }) => {
-  const [showPassword, setShowPassword] = useState(false);
-
-  return (
-    <InputGroup>
-      <ChakraInput type={showPassword ? 'text' : 'password'} {...register} {...props} {...rest} />
-      <InputRightElement h={'full'}>
-        <Button variant={'ghost'} onClick={() => setShowPassword((prev) => !prev)}>
-          {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
-        </Button>
-      </InputRightElement>
-    </InputGroup>
   );
 };
 

@@ -11,6 +11,10 @@ import { authStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import FileUpload from '@/components/ui/FilePicker';
 import { Checkbox } from '@chakra-ui/react';
+import { BsTelephone } from 'react-icons/bs';
+import { RiLockPasswordLine } from 'react-icons/ri';
+import { IoPersonOutline } from 'react-icons/io5';
+import { TfiEmail } from 'react-icons/tfi';
 
 export default function SignUp() {
   const toast = useToast();
@@ -99,6 +103,7 @@ export default function SignUp() {
                     placeholder="Enter First Name"
                     error={errors.firstname?.message}
                     register={register('firstname')}
+                    icon={IoPersonOutline}
                   />
                 </Box>
                 <Box>
@@ -107,6 +112,7 @@ export default function SignUp() {
                     placeholder="Enter Last Name"
                     error={errors.lastname?.message}
                     register={register('lastname')}
+                    icon={IoPersonOutline}
                   />
                 </Box>
               </HStack>
@@ -115,6 +121,8 @@ export default function SignUp() {
                   <Input
                     label="Phone Number"
                     placeholder="Enter Phone"
+                    type="tel"
+                    icon={BsTelephone}
                     error={errors.phone?.message}
                     register={register('phone')}
                   />
@@ -124,6 +132,7 @@ export default function SignUp() {
                     label="Email address"
                     placeholder="Enter Email"
                     error={errors.email?.message}
+                    icon={TfiEmail}
                     register={register('email')}
                   />
                 </Box>
@@ -140,6 +149,7 @@ export default function SignUp() {
                 label="Password"
                 placeholder="Enter Password"
                 password
+                icon={RiLockPasswordLine}
                 register={register('password')}
               />
 
