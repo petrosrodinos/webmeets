@@ -16,12 +16,7 @@ interface MeetsProps {}
 const Meets: FC<MeetsProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: meets, isLoading, error } = useQuery('meets', getMeets);
-
-  useEffect(() => {
-    console.log('errr', error);
-    console.log('mmm', meets);
-  }, [meets, error]);
+  const { data: meets, isLoading } = useQuery('meets', getMeets);
 
   return (
     <>

@@ -86,7 +86,7 @@ const Profile: FC = () => {
     setValue(name, file);
   };
 
-  const handleChange = (e: any) => {
+  const handleCheckBoxChange = (e: any) => {
     setIsOnSite(e.target.checked);
   };
 
@@ -143,17 +143,32 @@ const Profile: FC = () => {
                 <FileUpload accept="image/*" previewType="banner" onChange={handleImageChange} label="Banner" name="banner" />
 
                 <FormLabel>I have a physical business</FormLabel>
-                <Switch {...register('isOnline')} onChange={handleChange} colorScheme="teal" size="lg" />
+                <Switch {...register('isOnline')} onChange={handleCheckBoxChange} colorScheme="teal" size="lg" />
 
                 {isOnSite && (
                   <VStack>
-                    <Input label="Phone Number" error={errors.phone?.message} register={register('phone')} />
-                    <Input label="City" error={errors.city?.message} register={register('city')} />
-                    <Input label="Area" error={errors.area?.message} register={register('area')} />
+                    <Input
+                      label="Phone Number"
+                      placeholder="Enter Phone"
+                      error={errors.phone?.message}
+                      register={register('phone')}
+                    />
+                    <Input label="City" placeholder="Enter City" error={errors.city?.message} register={register('city')} />
+                    <Input label="Area" placeholder="Enter Area" error={errors.area?.message} register={register('area')} />
 
-                    <Input label="Address" error={errors.address?.message} register={register('address')} />
+                    <Input
+                      label="Address"
+                      placeholder="Enter Address"
+                      error={errors.address?.message}
+                      register={register('address')}
+                    />
 
-                    <Input label="Postal Code" error={errors.postalCode?.message} register={register('postalCode')} />
+                    <Input
+                      label="Postal Code"
+                      placeholder="Enter Postal Code"
+                      error={errors.postalCode?.message}
+                      register={register('postalCode')}
+                    />
                   </VStack>
                 )}
 

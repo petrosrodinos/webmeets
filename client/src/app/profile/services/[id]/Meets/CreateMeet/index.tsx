@@ -16,6 +16,7 @@ import { useParams } from 'next/navigation';
 import { MeetType } from '@/interfaces/meet';
 import ImagePicker from '@/components/ui/ImagePicker';
 import { ImagePickerItemData } from '@/interfaces/components';
+import NumberInput from '@/components/ui/NumberInput';
 
 interface CreateMeetProps {}
 
@@ -104,19 +105,21 @@ const CreateMeet: FC<CreateMeetProps> = () => {
                   register={register('description')}
                   placeholder="Add your meet description here"
                 />
-                <Input
-                  placeholder="Enter meet duration"
+                <NumberInput
+                  min={1}
+                  defaultValue={60}
                   label="Duration (minutes)"
                   error={errors.duration?.message}
                   register={register('duration')}
                 />
-                <Input
-                  placeholder="Enter max participants"
+                <NumberInput
+                  min={1}
+                  defaultValue={1}
                   label="Max Participants"
                   error={errors.maxParticipants?.message}
                   register={register('maxParticipants')}
                 />
-                <Input placeholder="Enter Price" label="Price" error={errors.price?.message} register={register('price')} />
+                <NumberInput min={0} defaultValue={5} label="Price" error={errors.price?.message} register={register('price')} />
 
                 <ImagePicker name="images" label="Select images" onChange={handleImageChange} />
 
@@ -145,13 +148,28 @@ const CreateMeet: FC<CreateMeetProps> = () => {
 
                 {type == 'in-person' && (
                   <VStack>
-                    <Input label="Phone Number" error={errors.phone?.message} register={register('phone')} />
-                    <Input label="City" error={errors.city?.message} register={register('city')} />
-                    <Input label="Area" error={errors.area?.message} register={register('area')} />
+                    <Input
+                      label="Phone Number"
+                      placeholder="Enter Phone"
+                      error={errors.phone?.message}
+                      register={register('phone')}
+                    />
+                    <Input label="City" placeholder="Enter City" error={errors.city?.message} register={register('city')} />
+                    <Input label="Area" placeholder="Enter Area" error={errors.area?.message} register={register('area')} />
 
-                    <Input label="Address" error={errors.address?.message} register={register('address')} />
+                    <Input
+                      label="Address"
+                      placeholder="Enter Address"
+                      error={errors.address?.message}
+                      register={register('address')}
+                    />
 
-                    <Input label="Postal Code" error={errors.postalCode?.message} register={register('postalCode')} />
+                    <Input
+                      label="Postal Code"
+                      placeholder="Enter Postal Code"
+                      error={errors.postalCode?.message}
+                      register={register('postalCode')}
+                    />
                   </VStack>
                 )}
 
