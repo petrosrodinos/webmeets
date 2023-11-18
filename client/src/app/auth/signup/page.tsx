@@ -31,10 +31,13 @@ export default function SignUp() {
   });
 
   function onSubmit(values: any) {
+    console.log(values);
+    // return;
     signupMutation(
       {
         ...values,
         role: values.isBusiness ? 'admin' : 'user',
+        birthDate: new Date(values.birthDate).toISOString(),
       },
       {
         onSuccess: (data) => {
@@ -91,42 +94,72 @@ export default function SignUp() {
             <Stack spacing={4}>
               <HStack>
                 <Box>
-                  <Input label="First Name" error={errors.firstname?.message} register={register('firstname')} />
+                  <Input
+                    label="First Name"
+                    placeholder="Enter First Name"
+                    error={errors.firstname?.message}
+                    register={register('firstname')}
+                  />
                 </Box>
                 <Box>
-                  <Input label="Last Name" error={errors.lastname?.message} register={register('lastname')} />
+                  <Input
+                    label="Last Name"
+                    placeholder="Enter Last Name"
+                    error={errors.lastname?.message}
+                    register={register('lastname')}
+                  />
                 </Box>
               </HStack>
               <HStack>
                 <Box>
-                  <Input label="Phone Number" error={errors.phone?.message} register={register('phone')} />
+                  <Input
+                    label="Phone Number"
+                    placeholder="Enter Phone"
+                    error={errors.phone?.message}
+                    register={register('phone')}
+                  />
                 </Box>
                 <Box>
-                  <Input label="Email address" error={errors.email?.message} register={register('email')} />
+                  <Input
+                    label="Email address"
+                    placeholder="Enter Email"
+                    error={errors.email?.message}
+                    register={register('email')}
+                  />
                 </Box>
               </HStack>
-
-              <Input error={errors.password?.message} label="Password" isPassword={true} register={register('password')} />
+              <Input
+                label="Date of Birth"
+                placeholder="Enter Date Of Birth"
+                error={errors.birthDate?.message}
+                type="date"
+                register={register('birthDate')}
+              />
+              <Input
+                error={errors.password?.message}
+                label="Password"
+                placeholder="Enter Password"
+                password
+                register={register('password')}
+              />
 
               <FileUpload onChange={handleImageChange} label="Avatar" name="profilePicture" />
 
               <Checkbox {...register('isBusiness')}>I have a business</Checkbox>
 
-              <Stack spacing={10} pt={2}>
-                <Button
-                  isLoading={isLoading}
-                  type="submit"
-                  loadingText="Submitting"
-                  size="lg"
-                  bg={'blue.400'}
-                  color={'white'}
-                  _hover={{
-                    bg: 'blue.500',
-                  }}
-                >
-                  Sign up
-                </Button>
-              </Stack>
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                loadingText="Submitting"
+                size="lg"
+                bg={'blue.400'}
+                color={'white'}
+                _hover={{
+                  bg: 'blue.500',
+                }}
+              >
+                Sign up
+              </Button>
               <Stack pt={6}>
                 <Text align={'center'}>
                   Already a user?{' '}

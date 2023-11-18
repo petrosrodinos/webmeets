@@ -42,6 +42,13 @@ export class User {
   email: string;
 
   @ApiProperty({
+    description: 'Birth date of the user',
+    format: 'date',
+  })
+  @Prop()
+  birthDate: Date;
+
+  @ApiProperty({
     description: 'password of the user',
     format: 'string',
   })

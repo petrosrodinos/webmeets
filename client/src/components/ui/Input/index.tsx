@@ -15,7 +15,7 @@ type ChakraInputProps = React.ComponentProps<typeof ChakraInput>;
 interface AdditionalProps {
   label?: string;
   required?: boolean;
-  isPassword?: boolean;
+  password?: boolean;
   props?: ChakraInputProps;
   register?: any;
   error?: any;
@@ -23,8 +23,8 @@ interface AdditionalProps {
 
 type InputProps = ChakraInputProps & AdditionalProps;
 
-const Input: FC<InputProps> = ({ label, required = false, isPassword, register, error, props, ...rest }) => {
-  const SelectedInput = isPassword ? PasswordInput : NormalInput;
+const Input: FC<InputProps> = ({ label, required = false, password, register, error, props, ...rest }) => {
+  const SelectedInput = password ? PasswordInput : NormalInput;
 
   return (
     <FormControl isInvalid={!!error} isRequired={required}>
