@@ -18,9 +18,9 @@ export const createMeet = async (payload: NewMeet) => {
   }
 };
 
-export const getMeets = async (): Promise<Meet[]> => {
+export const getMeets = async (filters: { [key: string]: string } = {}): Promise<Meet[]> => {
   try {
-    const result = await axios.get(`${API_URL}meets`);
+    const result = await axios.get(`${API_URL}meets?${new URLSearchParams(filters).toString()}`);
     const reformedData = result.data.map((meet: any) => reformMeet(meet));
     return reformedData;
   } catch (err: any) {

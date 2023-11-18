@@ -1,7 +1,7 @@
 'use client';
 
 import Modal from '@/components/ui/Modal';
-import { useState, FC, useEffect } from 'react';
+import { useState, FC } from 'react';
 import { Button, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { useQuery } from 'react-query';
@@ -10,13 +10,15 @@ import Spinner from '@/components/ui/Spinner';
 import CreateMeet from './CreateMeet';
 import MeetCard from '@/components/ui/MeetCard';
 import { Meet } from '@/interfaces/meet';
+import { useParams } from 'next/navigation';
 
 interface MeetsProps {}
 
 const Meets: FC<MeetsProps> = () => {
+  const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: meets, isLoading } = useQuery('meets', getMeets);
+  const { data: meets, isLoading } = useQuery(['meets', id], () => getMeets({ serviceId: id.toString() }));
 
   return (
     <>

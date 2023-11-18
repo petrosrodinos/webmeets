@@ -18,7 +18,7 @@ export const createService = async (payload: NewService) => {
   }
 };
 
-export const getServices = async (filters: { [key: string]: string }): Promise<Service[]> => {
+export const getServices = async (filters: { [key: string]: string } = {}): Promise<Service[]> => {
   try {
     const result = await axios.get(`${API_URL}services?${new URLSearchParams(filters).toString()}`);
     const reformedData = result.data.map((service: any) => reformService(service));
