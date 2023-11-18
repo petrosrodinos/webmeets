@@ -16,7 +16,7 @@ const Services = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userId } = authStore((state) => state);
 
-  const { data: services, isLoading } = useQuery('services', getServices);
+  const { data: services, isLoading } = useQuery('services', () => getServices({ userId }));
 
   return (
     <>
