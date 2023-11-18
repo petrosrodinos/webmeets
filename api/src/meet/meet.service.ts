@@ -42,9 +42,13 @@ export class MeetService {
     }
   }
 
-  async findAll() {
+  async findAll(query: any) {
     try {
-      const meets = await this.meetModel.find().populate('userId profileId serviceId', '-password -email -phone');
+      const meets = await this.meetModel
+        .find({
+          ...query,
+        })
+        .populate('userId profileId serviceId', '-password -email -phone');
       if (!meets || meets.length === 0) {
         throw new NotFoundException('Could not find meets.');
       }

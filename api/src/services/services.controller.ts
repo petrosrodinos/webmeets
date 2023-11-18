@@ -10,6 +10,7 @@ import {
   Req,
   UseInterceptors,
   UploadedFiles,
+  Query,
 } from '@nestjs/common';
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
@@ -53,8 +54,8 @@ export class ServicesController {
 
   @Get()
   @ApiOkResponse({ type: Service, isArray: true })
-  findAll() {
-    return this.servicesService.findAll();
+  findAll(@Query() query: any) {
+    return this.servicesService.findAll(query);
   }
 
   @Get(':id')

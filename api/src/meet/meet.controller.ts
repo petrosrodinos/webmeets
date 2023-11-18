@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
   Req,
   UploadedFiles,
   UseGuards,
@@ -50,8 +51,8 @@ export class MeetController {
 
   @Get()
   @ApiOkResponse({ type: Meet })
-  findAll() {
-    return this.meetService.findAll();
+  findAll(@Query() query: any) {
+    return this.meetService.findAll(query);
   }
 
   @Get(':id')

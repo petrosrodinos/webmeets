@@ -57,9 +57,14 @@ export class ServicesService {
     }
   }
 
-  async findAll() {
+  async findAll(query: any) {
     try {
-      const services = await this.serviceModel.find().populate('userId profileId', '-password -email -phone');
+      console.log('query', query);
+      const services = await this.serviceModel
+        .find({
+          ...query,
+        })
+        .populate('userId profileId', '-password -email -phone');
       if (!services || services.length === 0) {
         throw new NotFoundException('Could not find services.');
       }
