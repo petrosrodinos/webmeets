@@ -2,7 +2,7 @@
 
 import Modal from '@/components/ui/Modal';
 import { useState, FC } from 'react';
-import { Button, SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import { Alert, AlertIcon, Button, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import { getMeets } from '@/services/meets';
@@ -40,6 +40,12 @@ const Meets: FC<MeetsProps> = () => {
           Create
         </Button>
         <Spinner loading={isLoading} />
+        {!meets && !isLoading && (
+          <Alert status="warning">
+            <AlertIcon />
+            Could not find any meets.
+          </Alert>
+        )}
         <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={3}>
           {meets?.map((meet: Meet) => (
             <MeetCard key={meet.id} meet={meet} fromProfile={true} />

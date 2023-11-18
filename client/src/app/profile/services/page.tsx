@@ -4,7 +4,7 @@ import Modal from '@/components/ui/Modal';
 import { useState } from 'react';
 import CreateService from './CreateService';
 import ServiceCard from '@/components/ui/ServiceCard';
-import { Button, SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import { Alert, AlertIcon, Button, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import { getServices } from '@/services/service';
@@ -38,6 +38,12 @@ const Services = () => {
           Create
         </Button>
         <Spinner loading={isLoading} />
+        {!services && !isLoading && (
+          <Alert status="warning">
+            <AlertIcon />
+            Could not find any services
+          </Alert>
+        )}
         <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={3}>
           {services?.map((service: Service) => (
             <ServiceCard key={service.id} service={service} fromProfile={true} />
