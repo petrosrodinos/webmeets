@@ -10,9 +10,11 @@ import { useQuery } from 'react-query';
 import { getServices } from '@/services/service';
 import Spinner from '@/components/ui/Spinner';
 import { Service } from '@/interfaces/service';
+import { authStore } from '@/store/authStore';
 
 const Services = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { userId } = authStore((state) => state);
 
   const { data: services, isLoading } = useQuery('services', getServices);
 

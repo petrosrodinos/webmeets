@@ -32,6 +32,8 @@ export default function SignIn() {
         logIn({
           ...data.user,
           token: data.token,
+          exp: data.exp,
+          userId: data.user._id,
         });
         router.push('/home');
       },
