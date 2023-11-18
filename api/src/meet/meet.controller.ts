@@ -45,7 +45,7 @@ export class MeetController {
       profileid = user.profileId._id.toString();
     }
 
-    return this.meetService.create(userId, profileId, createMeetDto, files);
+    return this.meetService.create(userId, profileid, createMeetDto, files);
   }
 
   @Get()

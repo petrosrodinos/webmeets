@@ -22,7 +22,6 @@ export const getMeets = async (): Promise<Meet[]> => {
   try {
     const result = await axios.get(`${API_URL}meets`);
     const reformedData = result.data.map((meet: any) => reformMeet(meet));
-    console.log('reformed', reformedData);
     return reformedData;
   } catch (err: any) {
     throw err?.response?.data;

@@ -1,7 +1,7 @@
 'use client';
 
 import Modal from '@/components/ui/Modal';
-import { useState, FC } from 'react';
+import { useState, FC, useEffect } from 'react';
 import { Button, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { useQuery } from 'react-query';
@@ -16,9 +16,12 @@ interface MeetsProps {}
 const Meets: FC<MeetsProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: meets, isLoading } = useQuery('meets', getMeets, {
-    retry: false,
-  });
+  const { data: meets, isLoading, error } = useQuery('meets', getMeets);
+
+  useEffect(() => {
+    console.log('errr', error);
+    console.log('mmm', meets);
+  }, [meets, error]);
 
   return (
     <>

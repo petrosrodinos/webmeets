@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsArray, IsNumber } from 'class-validator';
+import { IsOptional, IsString, IsArray } from 'class-validator';
 import { MeetType } from 'src/types/meet';
 
 export class CreateMeetDto {
