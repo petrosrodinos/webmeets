@@ -29,6 +29,8 @@ import { SERVICE_CATEGORIES_ARRAY } from '@/constants/optionsData';
 import Select from '@/components/ui/Select';
 import { COUNTRIES } from '@/constants/optionsData';
 import { CreateProfile } from '@/interfaces/profile';
+import { MultiFilePickerItemData } from '@/interfaces/components';
+import MultiFilePicker from '@/components/ui/MultiFilePicker';
 
 const Profile: FC = () => {
   const toast = useToast();
@@ -45,12 +47,13 @@ const Profile: FC = () => {
     resolver: yupResolver(ProfileSchema),
   });
 
-  const { mutate: createProfileMutation, isLoading } = useMutation((user: CreateProfile) => {
-    return createProfile(user);
+  const { mutate: createProfileMutation, isLoading } = useMutation((data: CreateProfile) => {
+    return createProfile(data);
   });
 
   const onSubmit: SubmitHandler<any> = (values: CreateProfile) => {
     console.log(values);
+    // return;
     if (!isOnSite) {
       ['phone', 'city', 'area', 'address', 'postalCode'].forEach((name: string) => {
         delete values[name];
@@ -94,21 +97,26 @@ const Profile: FC = () => {
     setValue(name, items);
   };
 
+  const handleCertificatesSelect = (data: MultiFilePickerItemData[]) => {
+    console.log(data);
+    setValue('certificates', data);
+  };
+
   const handleActionClick = () => {
     setIsModalOpen(false);
-    router.push('/profile/services');
+    router.push('/profile/meets');
   };
 
   return (
     <>
       <Modal
-        title="Your business profile is created!"
+        title="Your business profile is finished!"
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        actionTitle="Create your services"
+        actionTitle="Create"
         onAction={handleActionClick}
       >
-        <Text>Now you can create your services and meets.</Text>
+        <Text>Now you can create your Meets.</Text>
       </Modal>
       <Flex>
         <Stack mx={'auto'} width={'lg'}>
@@ -141,6 +149,15 @@ const Profile: FC = () => {
                 <FileUpload accept="image/*" onChange={handleImageChange} label="Avatar" name="avatar" />
 
                 <FileUpload accept="image/*" previewType="banner" onChange={handleImageChange} label="Banner" name="banner" />
+
+                <MultiFilePicker
+                  itemName="Certificate"
+                  inputLabel="Name"
+                  label="Add your Certificates"
+                  accept=".pdf"
+                  previewType="pdf"
+                  onChange={handleCertificatesSelect}
+                />
 
                 <FormLabel>I have a physical business</FormLabel>
                 <Switch {...register('isOnline')} onChange={handleCheckBoxChange} colorScheme="teal" size="lg" />

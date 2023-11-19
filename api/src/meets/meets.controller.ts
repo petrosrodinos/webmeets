@@ -12,13 +12,13 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { MeetService } from './meet.service';
+import { MeetService } from './meets.service';
 import { CreateMeetDto } from './dto/create-meet.dto';
 import { UpdateMeetDto } from './dto/update-meet.dto';
 import { JwtGuard } from '../auth/guard';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Meet } from 'src/schemas/meet.schema';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/users/users.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('meets')

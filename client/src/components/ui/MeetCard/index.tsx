@@ -10,7 +10,7 @@ interface MeetCardProps {
 }
 
 const MeetCard: FC<MeetCardProps> = ({
-  meet: { id, name, description, images, createdAt, price, maxParticipants, duration, service },
+  meet: { id, name, description, images, createdAt, price, maxParticipants, duration, profile, user },
   fromProfile = false,
 }) => {
   const router = useRouter();
@@ -47,10 +47,10 @@ const MeetCard: FC<MeetCardProps> = ({
           <Text color={'gray.500'}>{description}</Text>
         </Stack>
         <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
-          <Avatar src={service.profile.avatar} />
+          <Avatar src={profile.avatar} />
           <Stack direction={'column'} spacing={0} fontSize={'sm'}>
             <Text fontWeight={600}>
-              {service.user.firstname} {service.user.lastname}
+              {user.firstname} {user.lastname}
             </Text>
             <Text color={'gray.500'}>{createdAt}</Text>
           </Stack>

@@ -8,6 +8,11 @@ export const reformProfile = (data: any): Profile => ({
   banner: data.banner,
   categories: data.categories,
   address: data.address,
+  certificates: data.certificates.map((certificate: any) => ({
+    id: certificate._id,
+    name: certificate.name,
+    file: certificate.file,
+  })),
   isOnline: data.isOnline,
   email: data.email,
   phone: data.phone,

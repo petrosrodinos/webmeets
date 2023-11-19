@@ -1,31 +1,33 @@
 'use client';
 
 import Modal from '@/components/ui/Modal';
-import { useState } from 'react';
-import CreateService from './CreateService';
-import ServiceCard from '@/components/ui/ServiceCard';
+import { useState, FC } from 'react';
 import { Alert, AlertIcon, Button, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { useQuery } from 'react-query';
-import { getServices } from '@/services/service';
+import { getMeets } from '@/services/meets';
 import Spinner from '@/components/ui/Spinner';
-import { Service } from '@/interfaces/service';
+import CreateMeet from './CreateMeet';
+import MeetCard from '@/components/ui/MeetCard';
+import { Meet } from '@/interfaces/meet';
 import { authStore } from '@/store/authStore';
 
-const Services = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { userId } = authStore((state) => state);
+interface MeetsProps {}
 
-  const { data: services, isLoading } = useQuery('services', () => getServices({ userId }));
+const Meets: FC<MeetsProps> = () => {
+  const { userId } = authStore((state) => state);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { data: meets, isLoading } = useQuery(['meets'], () => getMeets({ userId }));
 
   return (
     <>
-      <Modal title="Create a service" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} actionTitle="Create">
-        <CreateService />
+      <Modal title="Create a Meet" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} actionTitle="Create">
+        <CreateMeet />
       </Modal>
       <Stack maxW="100%">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          You can create or customize your services here.
+          You can create or customize your meets here.
         </Text>
         <Button
           onClick={() => setIsModalOpen(true)}
@@ -38,15 +40,15 @@ const Services = () => {
           Create
         </Button>
         <Spinner loading={isLoading} />
-        {!services && !isLoading && (
+        {!meets && !isLoading && (
           <Alert status="warning">
             <AlertIcon />
-            Could not find any services
+            Could not find any meets.
           </Alert>
         )}
         <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={3}>
-          {services?.map((service: Service) => (
-            <ServiceCard key={service.id} service={service} fromProfile={true} />
+          {meets?.map((meet: Meet) => (
+            <MeetCard key={meet.id} meet={meet} fromProfile={true} />
           ))}
         </SimpleGrid>
       </Stack>
@@ -54,4 +56,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Meets;

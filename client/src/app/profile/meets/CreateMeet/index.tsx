@@ -12,17 +12,16 @@ import { FC } from 'react';
 import Modal from '@/components/ui/Modal';
 import { createMeet } from '@/services/meets';
 import { MeetSchema } from '@/validation-schemas/meet';
-import { useParams } from 'next/navigation';
 import { MeetType } from '@/interfaces/meet';
 import ImagePicker from '@/components/ui/ImagePicker';
 import { ImagePickerItemData } from '@/interfaces/components';
 import NumberInput from '@/components/ui/NumberInput';
+import { SERVICE_CATEGORIES } from '@/constants/optionsData';
+import Select from '@/components/ui/Select';
 
 interface CreateMeetProps {}
 
 const CreateMeet: FC<CreateMeetProps> = () => {
-  const params = useParams();
-  const { id } = params;
   const toast = useToast();
   const [createdMeetId, setCreatedMeetId] = useState<string | null>(null);
   const router = useRouter();
@@ -37,8 +36,8 @@ const CreateMeet: FC<CreateMeetProps> = () => {
     resolver: yupResolver(MeetSchema),
   });
 
-  const { mutate: createMeetMutation, isLoading } = useMutation((user: any) => {
-    return createMeet(user);
+  const { mutate: createMeetMutation, isLoading } = useMutation((data: any) => {
+    return createMeet(data);
   });
 
   function onSubmit(values: any) {
@@ -49,7 +48,6 @@ const CreateMeet: FC<CreateMeetProps> = () => {
     const payload = {
       ...values,
       type,
-      serviceId: id,
     };
 
     createMeetMutation(payload, {
@@ -87,10 +85,10 @@ const CreateMeet: FC<CreateMeetProps> = () => {
         title="Your meet is created"
         isOpen={!!createdMeetId}
         onClose={() => setCreatedMeetId(null)}
-        actionTitle="GO"
+        actionTitle="VISIT"
         onAction={handleActionClick}
       >
-        <Text>Now you can visit your meet.</Text>
+        <Text>Now you can manage your meet.</Text>
       </Modal>
       <Flex>
         <Stack mx={'auto'} width={'xl'} spacing={4}>
@@ -104,6 +102,13 @@ const CreateMeet: FC<CreateMeetProps> = () => {
                   label="Description"
                   register={register('description')}
                   placeholder="Add your meet description here"
+                />
+                <Select
+                  error={errors.category?.message}
+                  placeholder="Category"
+                  options={SERVICE_CATEGORIES}
+                  label="Category"
+                  register={register('category')}
                 />
                 <NumberInput
                   min={1}

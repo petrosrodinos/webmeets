@@ -1,6 +1,19 @@
 'use client';
 
-import { Flex, Box, HStack, Stack, Button, Heading, Text, useColorModeValue, Link, useToast } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  HStack,
+  Stack,
+  Button,
+  Heading,
+  Text,
+  useColorModeValue,
+  Link,
+  useToast,
+  FormLabel,
+  Switch,
+} from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Input from '@/components/ui/Input';
 import { SignupSchema } from '@/validation-schemas/auth';
@@ -50,7 +63,7 @@ export default function SignUp() {
             token: data.token,
           });
           if (data.user.role === 'admin') {
-            router.push('/settings');
+            router.push('/profile');
           } else {
             router.push('/home');
           }
@@ -155,7 +168,8 @@ export default function SignUp() {
 
               <FileUpload onChange={handleImageChange} label="Avatar" name="profilePicture" />
 
-              <Checkbox {...register('isBusiness')}>I have a business</Checkbox>
+              <FormLabel>I have a business</FormLabel>
+              <Switch {...register('isBusiness')} colorScheme="teal" size="lg" />
 
               <Button
                 isLoading={isLoading}

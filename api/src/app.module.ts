@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
+import { UserModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ProfileModule } from './profile/profile.module';
+import { ProfileModule } from './profiles/profiles.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import { MeetModule } from './meet/meet.module';
+import { MeetModule } from './meets/meets.module';
 
 @Module({
   imports: [

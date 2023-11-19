@@ -3,30 +3,28 @@ import { FC } from 'react';
 import { useParams } from 'next/navigation';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
-import { getService } from '@/services/service';
-import Meets from './Meets';
-import { Service as ServiceDetails } from './Service';
 import Settings from './Settings';
+import { getMeet } from '@/services/meets';
 
 const Service: FC = () => {
   const params = useParams();
   const { id } = params;
 
-  const { data: service } = useQuery(['service', id], () => getService(id as string));
+  const { data: meet } = useQuery(['meet', id], () => getMeet(id as string));
   return (
     <>
       <Tabs isFitted variant="enclosed">
         <TabList>
-          <Tab>Meets</Tab>
-          <Tab>{service?.name || 'Service'}</Tab>
+          <Tab>Bookings</Tab>
+          <Tab>{meet?.name || 'Meet'}</Tab>
           <Tab>Settings</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Meets />
+            <h1>bookings</h1>
           </TabPanel>
           <TabPanel>
-            <ServiceDetails serviceId={service?.id as string} />
+            <h2>details</h2>
           </TabPanel>
           <TabPanel>
             <Settings />

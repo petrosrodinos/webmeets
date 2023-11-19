@@ -26,7 +26,7 @@ const NumberInput: FC<InputProps> = ({ label, required = false, register, error,
   return (
     <FormControl isInvalid={!!error} isRequired={required}>
       {label && <FormLabel>{label}</FormLabel>}
-      <ChakraNumberInput register={register} {...props} {...rest}>
+      <ChakraNumberInput {...register} {...props} {...rest}>
         <NumberInputField />
         <NumberInputStepper>
           <NumberIncrementStepper />

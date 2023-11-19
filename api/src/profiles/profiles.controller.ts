@@ -15,9 +15,9 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtGuard } from '../auth/guard';
 import { Profile } from 'src/schemas/profile.schema';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/users/users.service';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { ProfileService } from './profile.service';
+import { ProfileService } from './profiles.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('profiles')

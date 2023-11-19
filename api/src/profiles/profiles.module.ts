@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ProfileService } from './profile.service';
-import { ProfileController } from './profile.controller';
+import { ProfileService } from './profiles.service';
+import { ProfileController } from './profiles.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProfileSchema } from 'src/schemas/profile.schema';
 import { UserSchema } from 'src/schemas/user.schema';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/users/users.service';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
 
 @Module({

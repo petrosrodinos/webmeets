@@ -2,7 +2,7 @@ import { Body, Controller, Get, Patch, UseGuards, Req } from '@nestjs/common';
 import { User } from 'src/schemas/user.schema';
 import { JwtGuard } from '../auth/guard';
 import { UpdateUserDto } from './dto';
-import { UserService } from './user.service';
+import { UserService } from './users.service';
 import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(JwtGuard)

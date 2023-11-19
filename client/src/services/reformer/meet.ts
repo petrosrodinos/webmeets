@@ -9,6 +9,7 @@ export const reformMeet = (meet: any): Meet => ({
   name: meet.name,
   description: meet.description,
   phone: meet.phone,
+  category: meet.category,
   duration: meet.duration,
   maxParticipants: meet.maxParticipants,
   price: meet.price,
@@ -18,9 +19,6 @@ export const reformMeet = (meet: any): Meet => ({
     id: certificate._id,
     file: certificate.file,
   })),
-  service: {
-    ...reformService(meet.serviceId),
-    profile: reformProfile(meet.profileId),
-    user: reformUser(meet.userId),
-  },
+  profile: reformProfile(meet.profileId),
+  user: reformUser(meet.userId),
 });

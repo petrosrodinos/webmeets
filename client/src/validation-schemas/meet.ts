@@ -3,6 +3,7 @@ import * as yup from 'yup';
 export const MeetSchema = yup.object().shape({
   name: yup.string().required(),
   description: yup.string().required(),
+  category: yup.string(),
   duration: yup.number(),
   maxParticipants: yup.number(),
   price: yup.number(),
