@@ -6,7 +6,6 @@ import { useQuery } from 'react-query';
 import Settings from './Settings';
 import { getMeet } from '@/services/meets';
 import Bookings from './Bookings';
-import Meet from './Details';
 import Details from './Details';
 import Statistics from './Statistics';
 import Reviews from './Reviews';
@@ -35,7 +34,7 @@ const Service: FC = () => {
             <Reviews />
           </TabPanel>
           <TabPanel>
-            <Details />
+            <Details meet={meet} />
           </TabPanel>
           <TabPanel>
             <Statistics />

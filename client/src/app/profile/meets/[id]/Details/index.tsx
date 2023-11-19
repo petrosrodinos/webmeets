@@ -1,9 +1,13 @@
 import { FC } from 'react';
-import { useParams } from 'next/navigation';
+import { Meet } from '@/interfaces/meet';
+import CreateMeet from '../../CreateMeet';
 
-const Details: FC = () => {
-  const { id } = useParams();
-  return <div>Details {id}</div>;
+interface DetailsProps {
+  meet: Meet;
+}
+
+const Details: FC<DetailsProps> = ({ meet }) => {
+  return <CreateMeet meet={meet} />;
 };
 
 export default Details;

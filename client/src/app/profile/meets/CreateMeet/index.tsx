@@ -10,18 +10,20 @@ import TextArea from '@/components/ui/TextArea';
 import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 import Modal from '@/components/ui/Modal';
-import { createMeet } from '@/services/meets';
+import { createMeet, editMeet } from '@/services/meets';
 import { MeetSchema } from '@/validation-schemas/meet';
-import { MeetType } from '@/interfaces/meet';
+import { Meet, MeetType } from '@/interfaces/meet';
 import ImagePicker from '@/components/ui/ImagePicker';
 import { ImagePickerItemData } from '@/interfaces/components';
 import NumberInput from '@/components/ui/NumberInput';
 import { SERVICE_CATEGORIES } from '@/constants/optionsData';
 import Select from '@/components/ui/Select';
 
-interface CreateMeetProps {}
+interface CreateMeetProps {
+  meet?: Meet;
+}
 
-const CreateMeet: FC<CreateMeetProps> = () => {
+const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
   const toast = useToast();
   const [createdMeetId, setCreatedMeetId] = useState<string | null>(null);
   const router = useRouter();
@@ -40,6 +42,10 @@ const CreateMeet: FC<CreateMeetProps> = () => {
     return createMeet(data);
   });
 
+  const { mutate: editMeetMutation } = useMutation((data: any) => {
+    return editMeet(meet?.id as string, data);
+  });
+
   function onSubmit(values: any) {
     console.log(values);
 
@@ -53,6 +59,37 @@ const CreateMeet: FC<CreateMeetProps> = () => {
     createMeetMutation(payload, {
       onSuccess: (data) => {
         setCreatedMeetId(data._id);
+      },
+      onError: (error: any) => {
+        toast({
+          title: 'Something went wrong',
+          description: error.message,
+          position: 'top',
+          isClosable: true,
+          status: 'error',
+        });
+      },
+    });
+  }
+
+  function onSave(values: any) {
+    console.log(values);
+
+    // return;
+
+    const payload = {
+      ...values,
+      type,
+    };
+
+    editMeetMutation(payload, {
+      onSuccess: (data: any) => {
+        toast({
+          title: 'Meet updated successfully',
+          position: 'top',
+          isClosable: true,
+          status: 'success',
+        });
       },
       onError: (error: any) => {
         toast({
@@ -91,9 +128,9 @@ const CreateMeet: FC<CreateMeetProps> = () => {
         <Text>Now you can manage your meet.</Text>
       </Modal>
       <Flex>
-        <Stack mx={'auto'} width={'xl'} spacing={4}>
+        <Stack mx={'auto'} width="100%" spacing={4}>
           <Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(meet ? onSave : onSubmit)}>
               <Stack>
                 <Input placeholder="Enter meet name" label="Name" error={errors.name?.message} register={register('name')} />
 
@@ -187,7 +224,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
                 <Button
                   isLoading={isLoading}
                   type="submit"
-                  loadingText="Creating..."
+                  loadingText={meet ? 'Updating' : 'Creating'}
                   size="lg"
                   bg={'blue.400'}
                   color={'white'}
@@ -195,7 +232,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
                     bg: 'blue.500',
                   }}
                 >
-                  Create
+                  {meet ? 'Update' : 'Create'}
                 </Button>
               </Stack>
             </form>
