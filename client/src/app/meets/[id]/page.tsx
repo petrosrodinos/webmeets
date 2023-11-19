@@ -21,6 +21,7 @@ import { useQuery } from 'react-query';
 import Spinner from '@/components/ui/Spinner';
 import Carousel from '@/components/ui/Carousel';
 import Rating from '@/components/ui/Rating';
+import Tag from '@/components/ui/Tag';
 
 // export async function generateStaticParams() {
 //   return [
@@ -60,6 +61,7 @@ const Meet: FC<MeetProps> = ({ params }) => {
               <Text color={useColorModeValue('gray.900', 'gray.400')} fontWeight={300} fontSize={'2xl'}>
                 ${meet.price}
               </Text>
+              <Tag maxWidth="fit-content" value={meet.category} />
               <Rating value={meet.rating} />
             </Box>
 

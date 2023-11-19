@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Meet } from '@/interfaces/meet';
 import Carousel from '../Carousel';
 import Rating from '../Rating';
+import Tag from '../Tag';
 
 interface MeetCardProps {
   meet: Meet;
@@ -13,7 +14,7 @@ interface MeetCardProps {
 
 const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) => {
   const router = useRouter();
-  const { id, name, description, images, createdAt, price, maxParticipants, duration, rating, profile, user } = meet;
+  const { id, name, description, images, createdAt, price, maxParticipants, duration, category, rating, profile, user } = meet;
   const handleClick = () => {
     if (fromProfile) {
       router.push(`/profile/meets/${id}`);
@@ -43,6 +44,7 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
           <Heading color={useColorModeValue('gray.700', 'white')} fontSize={'2xl'} fontFamily={'body'}>
             {name}
           </Heading>
+          <Tag maxWidth="fit-content" value={category} />
           <Rating value={rating} />
           <Text color={'gray.500'}>{description}</Text>
           <Text color={'gray.500'}>{duration}:minutes</Text>
