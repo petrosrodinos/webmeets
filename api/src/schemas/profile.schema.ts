@@ -29,6 +29,17 @@ export class Profile {
   @Prop()
   country: string;
 
+  @Prop({
+    certificates: [
+      {
+        _id: true,
+        name: String,
+        file: String,
+      },
+    ],
+  })
+  certificates: Array<{ _id: Types.ObjectId; name: string; file: string }>;
+
   @Prop()
   address: string;
 

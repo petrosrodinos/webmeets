@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class CreateProfileDto {
   @IsString()
@@ -20,6 +20,13 @@ export class CreateProfileDto {
 
   @IsOptional()
   avatar: string;
+
+  @IsArray()
+  @IsOptional()
+  certificates: {
+    name: string;
+    file: Express.Multer.File;
+  }[];
 
   @IsString()
   @IsOptional()
