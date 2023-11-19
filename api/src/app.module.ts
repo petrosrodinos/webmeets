@@ -4,7 +4,6 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProfileModule } from './profile/profile.module';
-import { ServicesModule } from './services/services.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
@@ -26,7 +25,6 @@ import { MeetModule } from './meet/meet.module';
     AuthModule,
     UserModule,
     ProfileModule,
-    ServicesModule,
     AwsS3Module,
     MeetModule,
   ],
