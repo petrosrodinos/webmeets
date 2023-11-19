@@ -36,6 +36,9 @@ export class Meet {
   duration: number;
 
   @Prop()
+  rating: number;
+
+  @Prop()
   type: MeetType;
 
   @Prop()

@@ -7,14 +7,12 @@ import Carousel from '../Carousel';
 interface MeetCardProps {
   meet: Meet;
   fromProfile?: boolean;
+  handleBook?: (meet: Meet) => void;
 }
 
-const MeetCard: FC<MeetCardProps> = ({
-  meet: { id, name, description, images, createdAt, price, maxParticipants, duration, profile, user },
-  fromProfile = false,
-}) => {
+const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) => {
   const router = useRouter();
-
+  const { id, name, description, images, createdAt, price, maxParticipants, duration, profile, user } = meet;
   const handleClick = () => {
     if (fromProfile) {
       router.push(`/profile/meets/${id}`);
@@ -57,6 +55,7 @@ const MeetCard: FC<MeetCardProps> = ({
             <Text color={'gray.500'}>{createdAt}</Text>
           </Stack>
         </Stack>
+
         <Stack mt={8} direction={'row'} spacing={4}>
           <Button
             onClick={handleClick}
@@ -75,6 +74,19 @@ const MeetCard: FC<MeetCardProps> = ({
           >
             Visit
           </Button>
+          {!fromProfile && (
+            <Button
+              onClick={() => handleBook?.(meet)}
+              flex={1}
+              fontSize={'sm'}
+              rounded={'full'}
+              _focus={{
+                bg: 'gray.200',
+              }}
+            >
+              Quick Book
+            </Button>
+          )}
         </Stack>
       </Box>
     </>

@@ -9,14 +9,15 @@ import Bookings from './Bookings';
 import Details from './Details';
 import Statistics from './Statistics';
 import Reviews from './Reviews';
+import Spinner from '@/components/ui/Spinner';
 
 const Service: FC = () => {
-  const params = useParams();
-  const { id } = params;
+  const { id } = useParams();
 
-  const { data: meet } = useQuery(['meet', id], () => getMeet(id as string));
+  const { data: meet, isLoading } = useQuery(['meet', id], () => getMeet(id as string));
   return (
     <>
+      <Spinner loading={isLoading} />
       <Tabs isFitted variant="enclosed">
         <TabList>
           <Tab>Bookings</Tab>

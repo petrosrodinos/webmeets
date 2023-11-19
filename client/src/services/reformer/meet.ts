@@ -15,6 +15,10 @@ export const reformMeet = (meet: any): Meet => ({
   price: meet.price,
   type: meet.type,
   createdAt: formatDate(meet.createdAt),
+  city: meet.city,
+  address: meet.address,
+  area: meet.area,
+  postalCode: meet.postalCode,
   images: meet.images.map((certificate: any) => ({
     id: certificate._id,
     file: certificate.file,

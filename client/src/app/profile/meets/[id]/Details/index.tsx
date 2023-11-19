@@ -3,7 +3,7 @@ import { Meet } from '@/interfaces/meet';
 import CreateMeet from '../../CreateMeet';
 
 interface DetailsProps {
-  meet: Meet;
+  meet: Meet | undefined;
 }
 
 const Details: FC<DetailsProps> = ({ meet }) => {
