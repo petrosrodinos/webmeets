@@ -60,7 +60,7 @@ export default function SignIn() {
   }
   return (
     <Flex width="100%">
-      <Stack spacing={8} mx={'auto'} maxW={'xl'} py={12} px={6}>
+      <Stack spacing={8} mx={'auto'} maxW={'xl'} px={6}>
         <Stack>
           <Heading fontSize={'4xl'}>Sign in to your account</Heading>
           <Text fontSize={'lg'} color={'gray.600'}>

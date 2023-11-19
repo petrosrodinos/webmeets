@@ -97,7 +97,7 @@ export default function SignUp() {
 
   return (
     <Flex>
-      <Stack spacing={8} mx={'auto'} maxW={'xl'} py={12} px={6}>
+      <Stack spacing={8} mx={'auto'} maxW={'xl'} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
             Sign up

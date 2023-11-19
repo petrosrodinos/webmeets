@@ -16,6 +16,7 @@ import {
 import { FiHome, FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import NavigationBar from './NavigationBar';
+import { authStore } from '@/store/authStore';
 
 interface LinkItemProps {
   name: string;
@@ -100,17 +101,29 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
   );
 };
 
-const SidebarWithHeader = (props: any) => {
+const NavigationDrawer = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isLoggedIn } = authStore();
 
   return (
     <Box minH="100vh" bg={useColorModeValue('white', 'gray.900')}>
-      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose} returnFocusOnClose={false} onOverlayClick={onClose} size="xs">
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
+      {isLoggedIn && (
+        <>
+          <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
+          <Drawer
+            isOpen={isOpen}
+            placement="left"
+            onClose={onClose}
+            returnFocusOnClose={false}
+            onOverlayClick={onClose}
+            size="xs"
+          >
+            <DrawerContent>
+              <SidebarContent onClose={onClose} />
+            </DrawerContent>
+          </Drawer>
+        </>
+      )}
       <NavigationBar onOpen={onOpen} />
       <Box as="main" ml={{ base: 0, md: 60 }} p="4">
         {props.children}
@@ -119,4 +132,4 @@ const SidebarWithHeader = (props: any) => {
   );
 };
 
-export default SidebarWithHeader;
+export default NavigationDrawer;
