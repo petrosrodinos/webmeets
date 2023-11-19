@@ -12,14 +12,14 @@ export class Meet {
   @Prop({ type: Types.ObjectId, ref: 'Profile' })
   profileId: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'Service' })
-  serviceId: Types.ObjectId;
-
   @Prop()
   name: string;
 
   @Prop()
   description: string;
+
+  @Prop()
+  category: string;
 
   @Prop({
     images: [
@@ -38,9 +38,7 @@ export class Meet {
   @Prop()
   type: MeetType;
 
-  @Prop({
-    default: 100,
-  })
+  @Prop()
   maxParticipants: number;
 
   @Prop()

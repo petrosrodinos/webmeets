@@ -3,13 +3,13 @@ import { MeetType } from 'src/types/meet';
 
 export class CreateMeetDto {
   @IsString()
-  serviceId: string;
-
-  @IsString()
   name: string;
 
   @IsString()
   description: string;
+
+  @IsString()
+  category: string;
 
   @IsArray()
   @IsOptional()
