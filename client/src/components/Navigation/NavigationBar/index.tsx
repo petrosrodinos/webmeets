@@ -24,6 +24,7 @@ import { useRouter } from 'next/navigation';
 import { authStore } from '@/store/authStore';
 import { FiHome, FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
 import { LinkItemProps, NavItemProps } from '..';
+import { navigationStore } from '@/store/navigationStore';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -78,6 +79,7 @@ const AvatarMenuItems = [
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { isLoggedIn, username, avatar, role, logOut } = authStore((state) => state);
+  const { setSelectedLink, selectedLink } = navigationStore((state) => state);
   const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
 
@@ -96,7 +98,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent={'space-between'}
-      // justifyContent={{ base: 'space-between', md: 'flex-end' }}
       {...rest}
     >
       <IconButton
@@ -113,7 +114,13 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       <HStack spacing={8} alignItems={'center'}>
         <HStack as={'nav'} spacing={4} marginLeft={{ base: '50px', md: '250px' }} display={{ base: 'none', md: 'flex' }}>
           {NavigationLinks.map((link, index) => (
-            <NavLink key={index} path={link.path} icon={link?.icon}>
+            <NavLink
+              onClick={() => setSelectedLink(link.path)}
+              selectedLink={selectedLink}
+              key={index}
+              path={link.path}
+              icon={link?.icon}
+            >
               {link.name}
             </NavLink>
           ))}
@@ -182,18 +189,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   );
 };
 
-const NavLink = ({ icon, path, children }: NavItemProps) => {
+const NavLink = ({ icon, path, selectedLink, children, ...rest }: NavItemProps) => {
   return (
     <Box
       as="a"
       px={2}
       py={1}
       rounded={'md'}
+      bg={selectedLink == path ? 'cyan.400' : 'transparent'}
       _hover={{
         textDecoration: 'none',
         bg: useColorModeValue('gray.200', 'gray.700'),
       }}
       href={path}
+      {...rest}
     >
       {/* {icon && (
           <Icon

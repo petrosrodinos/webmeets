@@ -18,6 +18,7 @@ import { FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import NavigationBar, { NavigationLinks } from './NavigationBar';
 import { authStore } from '@/store/authStore';
+import { navigationStore } from '@/store/navigationStore';
 
 export interface LinkItemProps {
   name: string;
@@ -29,6 +30,7 @@ export interface NavItemProps extends FlexProps {
   icon?: IconType;
   path: string;
   children: React.ReactNode;
+  selectedLink: string;
 }
 
 interface SidebarProps extends BoxProps {
@@ -42,6 +44,8 @@ const LinkItems: Array<LinkItemProps> = [
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const { setSelectedLink, selectedLink } = navigationStore((state) => state);
+
   return (
     <Box
       transition="3s ease"
@@ -62,14 +66,20 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       <VStack flexDirection="column" alignItems="flex-start" display={{ base: 'flex', md: 'none' }}>
         {NavigationLinks.map((link) => (
           <Box width="100%">
-            <NavItem key={link.name} path={link.path} icon={link?.icon}>
+            <NavItem selectedLink={selectedLink} key={link.name} path={link.path} icon={link?.icon}>
               {link.name}
             </NavItem>
           </Box>
         ))}
       </VStack>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} path={link.path} icon={link?.icon}>
+        <NavItem
+          onClick={() => setSelectedLink(link.path)}
+          selectedLink={selectedLink}
+          key={link.name}
+          path={link.path}
+          icon={link?.icon}
+        >
           {link.name}
         </NavItem>
       ))}
@@ -77,7 +87,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   );
 };
 
-const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, path, selectedLink, ...rest }: NavItemProps) => {
   return (
     <Box as="a" href={path} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
@@ -91,7 +101,7 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
           bg: 'cyan.300',
           color: 'white',
         }}
-        // bg={path == window?.location?.pathname ? 'cyan.400' : 'transparent'}
+        bg={selectedLink == path ? 'cyan.400' : 'transparent'}
         {...rest}
       >
         {icon && (
