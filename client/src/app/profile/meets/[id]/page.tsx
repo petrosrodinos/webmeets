@@ -5,6 +5,11 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 import Settings from './Settings';
 import { getMeet } from '@/services/meets';
+import Bookings from './Bookings';
+import Meet from './Details';
+import Details from './Details';
+import Statistics from './Statistics';
+import Reviews from './Reviews';
 
 const Service: FC = () => {
   const params = useParams();
@@ -16,16 +21,26 @@ const Service: FC = () => {
       <Tabs isFitted variant="enclosed">
         <TabList>
           <Tab>Bookings</Tab>
-          <Tab>{meet?.name || 'Meet'}</Tab>
+          <Tab>Reviews</Tab>
+          <Tab>Details</Tab>
+          <Tab>Statistics</Tab>
           <Tab>Settings</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-            <h1>bookings</h1>
+            <Bookings />
+          </TabPanel>
+
+          <TabPanel>
+            <Reviews />
           </TabPanel>
           <TabPanel>
-            <h2>details</h2>
+            <Details />
           </TabPanel>
+          <TabPanel>
+            <Statistics />
+          </TabPanel>
+
           <TabPanel>
             <Settings />
           </TabPanel>

@@ -34,7 +34,7 @@ import MultiFilePicker from '@/components/ui/MultiFilePicker';
 
 const Profile: FC = () => {
   const toast = useToast();
-  const [isOnSite, setIsOnSite] = useState(false);
+  const [isPhysical, setisPhysical] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
@@ -54,7 +54,7 @@ const Profile: FC = () => {
   const onSubmit: SubmitHandler<any> = (values: CreateProfile) => {
     console.log(values);
     // return;
-    if (!isOnSite) {
+    if (!isPhysical) {
       ['phone', 'city', 'area', 'address', 'postalCode'].forEach((name: string) => {
         delete values[name];
       });
@@ -90,7 +90,7 @@ const Profile: FC = () => {
   };
 
   const handleCheckBoxChange = (e: any) => {
-    setIsOnSite(e.target.checked);
+    setisPhysical(e.target.checked);
   };
 
   const handleTagChange = (name: any, items: string[]) => {
@@ -162,10 +162,10 @@ const Profile: FC = () => {
                 <FormLabel>I have a physical business</FormLabel>
                 <Switch {...register('isOnline')} onChange={handleCheckBoxChange} colorScheme="teal" size="lg" />
 
-                {isOnSite && (
+                {isPhysical && (
                   <VStack>
                     <Input
-                      label="Phone Number"
+                      label="Business Phone Number"
                       placeholder="Enter Phone"
                       type="tel"
                       error={errors.phone?.message}
@@ -175,7 +175,7 @@ const Profile: FC = () => {
                     <Input label="Area" placeholder="Enter Area" error={errors.area?.message} register={register('area')} />
 
                     <Input
-                      label="Address"
+                      label="Business Address"
                       placeholder="Enter Address"
                       error={errors.address?.message}
                       register={register('address')}
