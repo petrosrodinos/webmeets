@@ -45,6 +45,8 @@ const MeetCard: FC<MeetCardProps> = ({
             {name}
           </Heading>
           <Text color={'gray.500'}>{description}</Text>
+          <Text color={'gray.500'}>{duration}:minutes</Text>
+          <Text color={'gray.500'}>{maxParticipants}:people</Text>
         </Stack>
         <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
           <Avatar src={profile.avatar} />
