@@ -16,11 +16,14 @@ import {
   Button,
   Stack,
   useColorMode,
+  Icon,
 } from '@chakra-ui/react';
-import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
+import { FiMenu, FiChevronDown } from 'react-icons/fi';
 import { BsMoonFill, BsSun } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
 import { authStore } from '@/store/authStore';
+import { FiHome, FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
+import { LinkItemProps, NavItemProps } from '..';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -31,6 +34,29 @@ interface AvatarMenuItemProps {
   onClick: () => void;
   path?: string;
 }
+
+export const NavigationLinks: LinkItemProps[] = [
+  {
+    name: 'Home',
+    path: '/home',
+    icon: FiHome,
+  },
+  {
+    name: 'Meets',
+    path: '/meets',
+    icon: FiTrendingUp,
+  },
+  {
+    name: 'Contact',
+    path: '/contact',
+    icon: FiCompass,
+  },
+  {
+    name: 'About',
+    path: '/about',
+    icon: FiSettings,
+  },
+];
 
 const AvatarMenuItems = [
   {
@@ -69,7 +95,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       bg={useColorModeValue('gray.100', 'gray.900')}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
-      justifyContent={{ base: 'space-between', md: 'flex-end' }}
+      justifyContent={'space-between'}
+      // justifyContent={{ base: 'space-between', md: 'flex-end' }}
       {...rest}
     >
       <IconButton
@@ -83,69 +110,103 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       <Text display={{ base: 'flex', md: 'none' }} fontSize="2xl" fontFamily="monospace" fontWeight="bold">
         Webmeets
       </Text>
-
-      <HStack spacing={{ base: '0', md: '6' }}>
-        <IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} />
-
-        <IconButton
-          onClick={toggleColorMode}
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={colorMode === 'light' ? <BsSun /> : <BsMoonFill />}
-        />
-
-        {!isLoggedIn && (
-          <Stack flex={{ base: 1, md: 0 }} justify={'flex-end'} direction={'row'} spacing={6}>
-            <Button onClick={() => router.push('/auth/signin')} as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'}>
-              Sign In
-            </Button>
-            <Button
-              onClick={() => router.push('/auth/signup')}
-              as={'a'}
-              // display={{ base: 'none', md: 'inline-flex' }}
-              fontSize={'sm'}
-              fontWeight={600}
-              color={'white'}
-              bg={'pink.400'}
-              _hover={{
-                bg: 'pink.300',
-              }}
-            >
-              Sign Up
-            </Button>
-          </Stack>
-        )}
-        {isLoggedIn && (
-          <Flex alignItems={'center'}>
-            <Menu>
-              <MenuButton py={2} transition="all 0.3s" _focus={{ boxShadow: 'none' }}>
-                <HStack>
-                  <Avatar size={'sm'} src={avatar} />
-                  <VStack display={{ base: 'none', md: 'flex' }} alignItems="flex-start" spacing="1px" ml="2">
-                    <Text fontSize="sm">{username}</Text>
-                    <Text fontSize="xs" color="gray.600">
-                      {role}
-                    </Text>
-                  </VStack>
-                  <Box display={{ base: 'none', md: 'flex' }}>
-                    <FiChevronDown />
-                  </Box>
-                </HStack>
-              </MenuButton>
-
-              <MenuList bg={useColorModeValue('white', 'gray.900')} borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                {AvatarMenuItems.map((item) => (
-                  <AvatarMenuItem key={item.name} name={item.name} onClick={item.onClick} path={item.path} />
-                ))}
-                <MenuDivider />
-                <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
-              </MenuList>
-            </Menu>
-          </Flex>
-        )}
+      <HStack spacing={8} alignItems={'center'}>
+        <HStack as={'nav'} spacing={4} marginLeft={{ base: '50px', md: '250px' }} display={{ base: 'none', md: 'flex' }}>
+          {NavigationLinks.map((link, index) => (
+            <NavLink key={index} path={link.path} icon={link?.icon}>
+              {link.name}
+            </NavLink>
+          ))}
+        </HStack>
       </HStack>
+      <Flex alignItems={'center'}>
+        <HStack spacing={{ base: '0', md: '6' }}>
+          <IconButton
+            onClick={toggleColorMode}
+            size="lg"
+            variant="ghost"
+            aria-label="open menu"
+            icon={colorMode === 'light' ? <BsSun /> : <BsMoonFill />}
+          />
+
+          {!isLoggedIn && (
+            <Stack flex={{ base: 1, md: 0 }} justify={'flex-end'} direction={'row'} spacing={6}>
+              <Button onClick={() => router.push('/auth/signin')} as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'}>
+                Sign In
+              </Button>
+              <Button
+                onClick={() => router.push('/auth/signup')}
+                as={'a'}
+                // display={{ base: 'none', md: 'inline-flex' }}
+                fontSize={'sm'}
+                fontWeight={600}
+                color={'white'}
+                bg={'pink.400'}
+                _hover={{
+                  bg: 'pink.300',
+                }}
+              >
+                Sign Up
+              </Button>
+            </Stack>
+          )}
+          {isLoggedIn && (
+            <Flex alignItems={'center'}>
+              <Menu>
+                <MenuButton py={2} transition="all 0.3s" _focus={{ boxShadow: 'none' }}>
+                  <HStack>
+                    <Avatar size={'sm'} src={avatar} />
+                    <VStack display={{ base: 'none', md: 'flex' }} alignItems="flex-start" spacing="1px" ml="0">
+                      <Text fontSize="sm">{username}</Text>
+                      <Text fontSize="xs" color="gray.600">
+                        {role}
+                      </Text>
+                    </VStack>
+                    <FiChevronDown />
+                  </HStack>
+                </MenuButton>
+
+                <MenuList bg={useColorModeValue('white', 'gray.900')} borderColor={useColorModeValue('gray.200', 'gray.700')}>
+                  {AvatarMenuItems.map((item) => (
+                    <AvatarMenuItem key={item.name} name={item.name} onClick={item.onClick} path={item.path} />
+                  ))}
+                  <MenuDivider />
+                  <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+                </MenuList>
+              </Menu>
+            </Flex>
+          )}
+        </HStack>
+      </Flex>
     </Flex>
+  );
+};
+
+const NavLink = ({ icon, path, children }: NavItemProps) => {
+  return (
+    <Box
+      as="a"
+      px={2}
+      py={1}
+      rounded={'md'}
+      _hover={{
+        textDecoration: 'none',
+        bg: useColorModeValue('gray.200', 'gray.700'),
+      }}
+      href={path}
+    >
+      {/* {icon && (
+          <Icon
+            mr="4"
+            fontSize="16"
+            _groupHover={{
+              color: 'white',
+            }}
+            as={icon}
+          />
+        )} */}
+      {children}
+    </Box>
   );
 };
 

@@ -12,20 +12,21 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
+  VStack,
 } from '@chakra-ui/react';
-import { FiHome, FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
+import { FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
 import { IconType } from 'react-icons';
-import NavigationBar from './NavigationBar';
+import NavigationBar, { NavigationLinks } from './NavigationBar';
 import { authStore } from '@/store/authStore';
 
-interface LinkItemProps {
+export interface LinkItemProps {
   name: string;
   path: string;
-  icon: IconType;
+  icon?: IconType;
 }
 
-interface NavItemProps extends FlexProps {
-  icon: IconType;
+export interface NavItemProps extends FlexProps {
+  icon?: IconType;
   path: string;
   children: React.ReactNode;
 }
@@ -35,7 +36,6 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', path: '/home', icon: FiHome },
   { name: 'Bookings', path: '/bookings', icon: FiCompass },
   { name: 'Meets', path: '/profile/meets', icon: FiTrendingUp },
   { name: 'Profile', path: '/profile', icon: FiSettings },
@@ -59,8 +59,17 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
+      <VStack flexDirection="column" alignItems="flex-start" display={{ base: 'flex', md: 'none' }}>
+        {NavigationLinks.map((link) => (
+          <Box width="100%">
+            <NavItem key={link.name} path={link.path} icon={link?.icon}>
+              {link.name}
+            </NavItem>
+          </Box>
+        ))}
+      </VStack>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} path={link.path} icon={link.icon}>
+        <NavItem key={link.name} path={link.path} icon={link?.icon}>
           {link.name}
         </NavItem>
       ))}
