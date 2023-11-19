@@ -19,6 +19,7 @@ export const reformMeet = (meet: any): Meet => ({
   address: meet.address,
   area: meet.area,
   postalCode: meet.postalCode,
+  rating: meet?.rating || 0,
   images: meet.images.map((certificate: any) => ({
     id: certificate._id,
     file: certificate.file,

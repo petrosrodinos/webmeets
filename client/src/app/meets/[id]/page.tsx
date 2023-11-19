@@ -20,6 +20,7 @@ import { getMeet } from '@/services/meets';
 import { useQuery } from 'react-query';
 import Spinner from '@/components/ui/Spinner';
 import Carousel from '@/components/ui/Carousel';
+import Rating from '@/components/ui/Rating';
 
 // export async function generateStaticParams() {
 //   return [
@@ -51,7 +52,7 @@ const Meet: FC<MeetProps> = ({ params }) => {
       {meet && (
         <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, md: 10 }} py={{ base: 18, md: 24 }}>
           <Carousel images={meet.images.map((image) => image.file)} />
-          <Stack spacing={{ base: 6, md: 10 }}>
+          <Stack spacing={{ base: 6, md: 1 }}>
             <Box as={'header'}>
               <Heading lineHeight={1.1} fontWeight={600} fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
                 {meet.name}
@@ -59,6 +60,7 @@ const Meet: FC<MeetProps> = ({ params }) => {
               <Text color={useColorModeValue('gray.900', 'gray.400')} fontWeight={300} fontSize={'2xl'}>
                 ${meet.price}
               </Text>
+              <Rating value={meet.rating} />
             </Box>
 
             <Stack

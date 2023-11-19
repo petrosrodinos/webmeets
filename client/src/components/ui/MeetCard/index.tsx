@@ -3,6 +3,7 @@ import { Box, Heading, Text, Stack, Avatar, useColorModeValue, Button } from '@c
 import { useRouter } from 'next/navigation';
 import { Meet } from '@/interfaces/meet';
 import Carousel from '../Carousel';
+import Rating from '../Rating';
 
 interface MeetCardProps {
   meet: Meet;
@@ -12,7 +13,7 @@ interface MeetCardProps {
 
 const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) => {
   const router = useRouter();
-  const { id, name, description, images, createdAt, price, maxParticipants, duration, profile, user } = meet;
+  const { id, name, description, images, createdAt, price, maxParticipants, duration, rating, profile, user } = meet;
   const handleClick = () => {
     if (fromProfile) {
       router.push(`/profile/meets/${id}`);
@@ -42,6 +43,7 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
           <Heading color={useColorModeValue('gray.700', 'white')} fontSize={'2xl'} fontFamily={'body'}>
             {name}
           </Heading>
+          <Rating value={rating} />
           <Text color={'gray.500'}>{description}</Text>
           <Text color={'gray.500'}>{duration}:minutes</Text>
           <Text color={'gray.500'}>{maxParticipants}:people</Text>
