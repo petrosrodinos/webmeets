@@ -8,6 +8,7 @@ import { AwsS3Module } from './aws-s3/aws-s3.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MeetModule } from './meets/meets.module';
+import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { MeetModule } from './meets/meets.module';
     ProfileModule,
     AwsS3Module,
     MeetModule,
+    BookingsModule,
   ],
   providers: [
     {
