@@ -12,9 +12,12 @@ export class BookingsService {
     private bookingModel: Model<Booking>,
   ) {}
 
-  async create(createBookingDto: CreateBookingDto) {
+  async create(createBookingDto: CreateBookingDto, userId: string) {
     try {
-      const booking = new this.bookingModel(createBookingDto);
+      const booking = new this.bookingModel({
+        ...createBookingDto,
+        userId,
+      });
       await booking.save();
       return booking;
     } catch (error) {

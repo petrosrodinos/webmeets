@@ -4,10 +4,6 @@ import { BookingTypes } from 'src/enums/booking';
 export class CreateBookingDto {
   @IsString()
   @IsNotEmpty()
-  userId: string;
-
-  @IsString()
-  @IsNotEmpty()
   meetId: string;
 
   @IsString()

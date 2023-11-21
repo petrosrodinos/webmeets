@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -15,8 +15,10 @@ export class BookingsController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: Booking })
   @Post()
-  create(@Body() createBookingDto: CreateBookingDto) {
-    return this.bookingsService.create(createBookingDto);
+  create(@Req() req: Express.Request, @Body() createBookingDto: CreateBookingDto) {
+    const userId = req.user.userId;
+
+    return this.bookingsService.create(createBookingDto, userId);
   }
 
   @ApiOkResponse({ type: Booking })
