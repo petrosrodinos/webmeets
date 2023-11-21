@@ -19,6 +19,7 @@ import { IconType } from 'react-icons';
 import NavigationBar, { NavigationLinks } from './NavigationBar';
 import { authStore } from '@/store/authStore';
 import { navigationStore } from '@/store/navigationStore';
+import { selectedLink } from '../../../hooks/selectedLink';
 
 export interface LinkItemProps {
   name: string;
@@ -73,13 +74,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         ))}
       </VStack>
       {LinkItems.map((link) => (
-        <NavItem
-          onClick={() => setSelectedLink(link.path)}
-          selectedLink={selectedLink}
-          key={link.name}
-          path={link.path}
-          icon={link?.icon}
-        >
+        <NavItem selectedLink={selectedLink} key={link.name} path={link.path} icon={link?.icon}>
           {link.name}
         </NavItem>
       ))}
@@ -123,6 +118,7 @@ const NavItem = ({ icon, children, path, selectedLink, ...rest }: NavItemProps) 
 const NavigationDrawer = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoggedIn } = authStore();
+  selectedLink();
 
   return (
     <Box minH="100vh" bg={useColorModeValue('white', 'gray.900')}>

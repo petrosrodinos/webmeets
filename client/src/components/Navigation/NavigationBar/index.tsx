@@ -16,7 +16,6 @@ import {
   Button,
   Stack,
   useColorMode,
-  Icon,
 } from '@chakra-ui/react';
 import { FiMenu, FiChevronDown } from 'react-icons/fi';
 import { BsMoonFill, BsSun } from 'react-icons/bs';
@@ -114,13 +113,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       <HStack spacing={8} alignItems={'center'}>
         <HStack as={'nav'} spacing={4} marginLeft={{ base: '50px', md: '250px' }} display={{ base: 'none', md: 'flex' }}>
           {NavigationLinks.map((link, index) => (
-            <NavLink
-              onClick={() => setSelectedLink(link.path)}
-              selectedLink={selectedLink}
-              key={index}
-              path={link.path}
-              icon={link?.icon}
-            >
+            <NavLink selectedLink={selectedLink} key={index} path={link.path} icon={link?.icon}>
               {link.name}
             </NavLink>
           ))}
