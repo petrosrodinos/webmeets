@@ -16,7 +16,7 @@ export class Booking {
   profileId: Types.ObjectId;
 
   @Prop()
-  description: string;
+  notes: string;
 
   @Prop({
     type: String,

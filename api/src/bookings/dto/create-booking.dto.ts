@@ -12,7 +12,7 @@ export class CreateBookingDto {
 
   @IsString()
   @IsOptional()
-  description: string;
+  notes: string;
 
   @IsEnum(BookingTypes)
   @IsOptional()
