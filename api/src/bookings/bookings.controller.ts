@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req, ForbiddenException } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -22,8 +22,17 @@ export class BookingsController {
   }
 
   @ApiOkResponse({ type: Booking })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   @Get()
-  findAll(@Query() query: any) {
+  findAll(@Query() query: any, @Req() req: Express.Request) {
+    const { userId, profileId } = req.user;
+    if (query.profileId && profileId !== query.profileId) {
+      throw new ForbiddenException('Unauthorized');
+    }
+    if (query.userId && userId !== query.userId) {
+      throw new ForbiddenException('Unauthorized');
+    }
     return this.bookingsService.findAll(query);
   }
 
