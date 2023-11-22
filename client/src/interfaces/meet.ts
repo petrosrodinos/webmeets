@@ -29,7 +29,7 @@ export interface Meet extends Address {
   images: { id: string; file: string }[];
   price: number;
   type: MeetType;
-  profile: Profile;
-  user: User;
+  profile: Profile | null;
+  user: User | null;
   createdAt: string;
 }

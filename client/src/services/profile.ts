@@ -3,12 +3,6 @@ import axios from 'axios';
 import { getAuthState } from '../store/authStore';
 import { CreateProfile } from '@/interfaces/profile';
 
-const getConfig = () => {
-  return {
-    headers: { Authorization: `Bearer ${getAuthState().token}` },
-  };
-};
-
 export const createProfile = async (payload: CreateProfile) => {
   try {
     const result = await axios.post(`${API_URL}profiles`, payload, {

@@ -51,10 +51,10 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
           <Text color={'gray.500'}>{maxParticipants}:people</Text>
         </Stack>
         <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
-          <Avatar src={profile.avatar} />
+          <Avatar src={profile?.avatar} />
           <Stack direction={'column'} spacing={0} fontSize={'sm'}>
             <Text fontWeight={600}>
-              {user.firstname} {user.lastname}
+              {user?.firstname} {user?.lastname}
             </Text>
             <Text color={'gray.500'}>{createdAt}</Text>
           </Stack>

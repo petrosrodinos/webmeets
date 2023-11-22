@@ -2,7 +2,7 @@ import { API_URL } from '@/constants/api';
 import axios from 'axios';
 import { getAuthState } from '../store/authStore';
 import { Meet, NewMeet } from '@/interfaces/meet';
-import { reformMeet } from './reformer/meet';
+import { formatMeet } from './formatter/meet';
 
 export const getHeaders = () => {
   return {
@@ -22,11 +22,11 @@ export const createMeet = async (payload: NewMeet) => {
   }
 };
 
-export const getMeets = async (filters: { [key: string]: string } = {}): Promise<Meet[]> => {
+export const getMeets = async (query: { [key: string]: string } = {}): Promise<Meet[]> => {
   try {
-    const result = await axios.get(`${API_URL}meets?${new URLSearchParams(filters).toString()}`);
-    const reformedData = result.data.map((meet: any) => reformMeet(meet));
-    return reformedData;
+    const result = await axios.get(`${API_URL}meets?${new URLSearchParams(query).toString()}`);
+    const formattedData = result.data.map((meet: any) => formatMeet(meet));
+    return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
   }
@@ -35,8 +35,8 @@ export const getMeets = async (filters: { [key: string]: string } = {}): Promise
 export const getMeet = async (id: string): Promise<Meet> => {
   try {
     const result = await axios.get(`${API_URL}meets/${id}`);
-    const reformedData = reformMeet(result.data);
-    return reformedData;
+    const formattedData = formatMeet(result.data);
+    return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
   }

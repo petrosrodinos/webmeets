@@ -1,16 +1,37 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { Booking } from '@/interfaces/booking';
 
 interface CalendarProps {
+  bookings: Booking[] | undefined;
   view: 'user' | 'profile';
 }
 
-const Calendar: FC<CalendarProps> = ({ view }) => {
+const Calendar: FC<CalendarProps> = ({ view, bookings }) => {
+  const [events, setEvents] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (bookings) {
+      const events = bookings.map((booking) => {
+        return {
+          title: booking?.user?.firstname + ' ' + booking?.user?.lastname,
+          resourceId: booking.id,
+          date: booking.date,
+          // start: booking.start,
+          // end: booking.end,
+          startEditable: true,
+          durationEditable: true,
+        };
+      });
+      setEvents(events);
+    }
+  }, [bookings]);
+
   const handleDateClick = (arg: any) => {
     console.log(arg);
   };
@@ -21,6 +42,7 @@ const Calendar: FC<CalendarProps> = ({ view }) => {
   return (
     <div>
       <FullCalendar
+        allDaySlot={false}
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
@@ -29,19 +51,7 @@ const Calendar: FC<CalendarProps> = ({ view }) => {
         slotDuration={'00:15:00'}
         selectable={true}
         dateClick={handleDateClick}
-        events={[
-          {
-            title: 'event 1',
-            resourceId: 'a',
-            color: 'red',
-            textColor: 'white',
-            start: '2023-11-22T02:00:00',
-            end: '2023-11-22T04:00:00',
-            startEditable: true,
-            durationEditable: true,
-          },
-          { title: 'event 2', start: '2023-11-23T02:00:00', end: '2023-11-23T04:00:00' },
-        ]}
+        events={events}
         plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
         initialView="timeGridWeek"
         eventClick={handleEventClick}

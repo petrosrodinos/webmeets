@@ -1,10 +1,9 @@
 import { Meet } from '@/interfaces/meet';
 import { formatDate } from '@/lib/date';
-import { reformService } from './service';
-import { reformProfile } from './profile';
-import { reformUser } from './user';
+import { formatProfile } from './profile';
+import { formatUser } from './user';
 
-export const reformMeet = (meet: any): Meet => ({
+export const formatMeet = (meet: any): Meet => ({
   id: meet._id,
   name: meet.name,
   description: meet.description,
@@ -24,6 +23,6 @@ export const reformMeet = (meet: any): Meet => ({
     id: certificate._id,
     file: certificate.file,
   })),
-  profile: reformProfile(meet.profileId),
-  user: reformUser(meet.userId),
+  profile: formatProfile(meet.profileId),
+  user: formatUser(meet.userId),
 });
