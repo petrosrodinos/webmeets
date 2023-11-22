@@ -39,7 +39,8 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Bookings', path: '/bookings', icon: FiCompass },
+  { name: 'Personal Booking', path: '/bookings/user', icon: FiCompass },
+  { name: 'Profile Bookings', path: '/bookings/profile', icon: FiCompass },
   { name: 'Meets', path: '/profile/meets', icon: FiTrendingUp },
   { name: 'Profile', path: '/profile', icon: FiSettings },
 ];

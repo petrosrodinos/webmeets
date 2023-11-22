@@ -35,6 +35,10 @@ export default function SignIn() {
           exp: data.exp,
           userId: data.user._id,
         });
+        // if(data.user.role === 'admin'){
+        //   router.push('/admin');
+        //   return;
+        // }
         router.push('/home');
       },
       onError: (error: any) => {
