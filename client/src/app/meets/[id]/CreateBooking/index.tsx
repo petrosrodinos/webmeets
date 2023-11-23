@@ -44,7 +44,7 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
       {
         ...data,
         meetId: meet.id,
-        profileId: meet.profile.id,
+        profileId: meet?.profile?.id,
       },
       {
         onSuccess: () => {

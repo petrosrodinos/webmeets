@@ -27,8 +27,16 @@ export const getBookings = async (query: { [key: string]: string }): Promise<Boo
   try {
     const result = await axios.get(`${API_URL}bookings?${new URLSearchParams(query).toString()}`, getHeaders());
     const formattedData = result.data.map((booking: any) => formatBooking(booking));
-    console.log('asddd', formattedData);
     return formattedData;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
+export const editBooking = async (payload: Booking) => {
+  try {
+    const result = await axios.patch(`${API_URL}bookings/${payload.id}`, payload, getHeaders());
+    return result.data;
   } catch (err: any) {
     throw err?.response?.data;
   }

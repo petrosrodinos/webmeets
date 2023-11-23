@@ -21,3 +21,25 @@ export interface ImagePickerItemData {
   name: string;
   files: File[];
 }
+
+export interface BookingCalendarEvent {
+  id: string;
+  title: string;
+  resourceId?: string;
+  startEditable?: boolean;
+  durationEditable?: boolean;
+  date: Date;
+  start?: Date;
+  end?: Date;
+  allDay?: boolean;
+  extendedProps?: {
+    status: string;
+    profileId: string;
+    meetId: string;
+    notes: string;
+    participants: number;
+  };
+  backgroundColor?: string;
+  borderColor?: string;
+  textColor?: string;
+}
