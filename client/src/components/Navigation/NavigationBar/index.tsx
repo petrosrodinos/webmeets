@@ -166,7 +166,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   </HStack>
                 </MenuButton>
 
-                <MenuList bg={useColorModeValue('white', 'gray.900')} borderColor={useColorModeValue('gray.200', 'gray.700')}>
+                <MenuList
+                  zIndex={100}
+                  bg={useColorModeValue('white', 'gray.900')}
+                  borderColor={useColorModeValue('gray.200', 'gray.700')}
+                >
                   {AvatarMenuItems.map((item) => (
                     <AvatarMenuItem key={item.name} name={item.name} onClick={item.onClick} path={item.path} />
                   ))}

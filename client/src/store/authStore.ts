@@ -8,6 +8,7 @@ interface AuthState {
   role: string;
   avatar: string;
   userId: string;
+  profileId: string;
   exp: number;
   logOut: () => void;
   logIn: (payload: any) => void;
@@ -19,6 +20,7 @@ const initialStateValues = {
   token: '',
   username: '',
   userId: '',
+  profileId: '',
   role: '',
   avatar: '',
   exp: 0,
@@ -42,6 +44,7 @@ export const authStore = create<AuthState>()(
             avatar: payload?.avatar,
             role: payload.role,
             userId: payload.userId,
+            profileId: payload.profileId,
             exp: payload.exp,
           }),
         updateProfile: (payload: any) =>
@@ -51,7 +54,7 @@ export const authStore = create<AuthState>()(
           })),
       }),
       {
-        name: 'auth-webmeets',
+        name: 'webmeets',
       },
     ),
   ),

@@ -34,6 +34,7 @@ export default function SignIn() {
           token: data.token,
           exp: data.exp,
           userId: data.user._id,
+          profileId: data.user?.profileId,
         });
         // if(data.user.role === 'admin'){
         //   router.push('/admin');

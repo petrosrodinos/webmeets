@@ -61,6 +61,8 @@ export default function SignUp() {
           logIn({
             ...data.user,
             token: data.token,
+            exp: data.exp,
+            userId: data.user._id,
           });
           if (data.user.role === 'admin') {
             router.push('/profile');
