@@ -39,10 +39,10 @@ export class ProfileController {
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
     const userId = req.user.userId;
-    const profile = await this.profileService.create(userId, files, createProfileDto);
-    await this.userService.update(req.user.userId, { profileId: profile._id.toString() });
+    const createdProfile = await this.profileService.create(userId, files, createProfileDto);
+    await this.userService.update(req.user.userId, { profileId: createdProfile.profile._id.toString() });
 
-    return profile;
+    return createdProfile;
   }
 
   @Get()

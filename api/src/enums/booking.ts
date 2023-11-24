@@ -1,4 +1,4 @@
-export enum BookingTypes {
+export enum BookingStatuses {
   PENDING = 'pending',
   ACCEPTED = 'accepted',
   REJECTED = 'rejected',

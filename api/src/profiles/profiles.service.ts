@@ -5,6 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Profile } from 'src/schemas/profile.schema';
 import { Model, Error, Types } from 'mongoose';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
+import { CreateJwtService } from 'src/auth/jwt/jwt.service';
+import { Roles } from 'src/enums/roles';
 
 @Injectable()
 export class ProfileService {
@@ -12,6 +14,7 @@ export class ProfileService {
     @InjectModel(Profile.name)
     private profileModel: Model<Profile>,
     private s3Service: S3Service,
+    private jwt: CreateJwtService,
   ) {}
 
   async create(userId: string, files: Express.Multer.File[], createProfileDto: CreateProfileDto) {
@@ -51,7 +54,16 @@ export class ProfileService {
       });
       await profile.save();
 
-      return profile;
+      const token = await this.jwt.signToken({
+        userId,
+        profileId: profile._id,
+        role: Roles.ADMIN,
+      });
+
+      return {
+        token,
+        profile,
+      };
     } catch (error) {
       if (error instanceof Error.ValidationError) {
         throw new ForbiddenException(error.message);

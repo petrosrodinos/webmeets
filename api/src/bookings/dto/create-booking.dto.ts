@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { BookingTypes } from 'src/enums/booking';
+import { BookingStatuses } from 'src/enums/booking';
 
 export class CreateBookingDto {
   @IsString()
@@ -14,7 +14,7 @@ export class CreateBookingDto {
   @IsOptional()
   notes: string;
 
-  @IsEnum(BookingTypes)
+  @IsEnum(BookingStatuses)
   @IsOptional()
   status: string;
 

@@ -1,12 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-
-export enum Role {
-  ADMIN = 'admin',
-  USER = 'user',
-  master = 'master',
-}
+import { Roles } from 'src/enums/roles';
 
 @Schema({
   timestamps: true,
@@ -65,9 +60,13 @@ export class User {
   @ApiProperty({
     description: 'role of the user',
     format: 'string',
+    enum: Object.values(Roles),
   })
-  @Prop()
-  role: Role;
+  @Prop({
+    type: String,
+    enum: Object.values(Roles),
+  })
+  role: Roles;
 
   @Prop({
     type: String,

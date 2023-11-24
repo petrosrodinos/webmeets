@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
-import { BookingTypes } from 'src/enums/booking';
+import { BookingStatuses } from 'src/enums/booking';
 
 @Schema({
   timestamps: true,
@@ -20,10 +20,10 @@ export class Booking {
 
   @Prop({
     type: String,
-    enum: Object.values(BookingTypes),
-    default: BookingTypes.PENDING,
+    enum: Object.values(BookingStatuses),
+    default: BookingStatuses.PENDING,
   })
-  status: BookingTypes;
+  status: BookingStatuses;
 
   @Prop({
     type: Date,
