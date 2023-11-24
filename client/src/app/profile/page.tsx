@@ -16,11 +16,11 @@ import {
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Input from '@/components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import FileUpload from '@/components/ui/FilePicker';
 import { ProfileSchema } from '@/validation-schemas/profile';
-import { createProfile } from '@/services/profile';
-import { useState, FC, useEffect } from 'react';
+import { createProfile as createUserProfile, editProfile as editUserProfile, getProfileById } from '@/services/profile';
+import { useState, FC } from 'react';
 import TextArea from '@/components/ui/TextArea';
 import Modal from '@/components/ui/Modal';
 import { useRouter } from 'next/navigation';
@@ -31,11 +31,11 @@ import { COUNTRIES } from '@/constants/optionsData';
 import { CreateProfile } from '@/interfaces/profile';
 import { MultiFilePickerItemData } from '@/interfaces/components';
 import MultiFilePicker from '@/components/ui/MultiFilePicker';
-import { authStore } from '@/store/authStore';
 import { Roles } from 'enums/roles';
+import { authStore } from '@/store/authStore';
 
 const Profile: FC = () => {
-  const { updateProfile } = authStore((state) => state);
+  const { profileId, updateProfile } = authStore((state) => state);
   const toast = useToast();
   const [isPhysical, setisPhysical] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,16 +46,37 @@ const Profile: FC = () => {
     register,
     formState: { errors },
     setValue,
+    reset,
   } = useForm({
     resolver: yupResolver(ProfileSchema),
   });
 
+  const { data: profileData } = useQuery(
+    'profile',
+    () => {
+      return getProfileById(profileId);
+    },
+    { enabled: !!profileId },
+  );
+
   const { mutate: createProfileMutation, isLoading } = useMutation((data: CreateProfile) => {
-    return createProfile(data);
+    return createUserProfile(data);
+  });
+
+  const { mutate: editProfileMutation, isLoading: isEditing } = useMutation((data: CreateProfile) => {
+    return editUserProfile(data);
   });
 
   const onSubmit: SubmitHandler<any> = (values: CreateProfile) => {
     console.log(values);
+    if (!profileId) {
+      createProfile(values);
+    } else {
+      editProfile(values);
+    }
+  };
+
+  const createProfile = (values: any) => {
     // return;
     if (!isPhysical) {
       ['phone', 'city', 'area', 'address', 'postalCode'].forEach((name: string) => {
@@ -67,8 +88,47 @@ const Profile: FC = () => {
         updateProfile({
           token: data.token,
           role: Roles.ADMIN,
+          profileId: data.profile._id,
         });
         setIsModalOpen(true);
+      },
+      onError: (error: any) => {
+        if (error.statusCode == 409) {
+          toast({
+            title: error.message,
+            description: 'Email or phone number already exists',
+            position: 'top',
+            isClosable: true,
+            status: 'error',
+          });
+        } else {
+          toast({
+            title: error.message,
+            description: 'Something went wrong',
+            position: 'top',
+            isClosable: true,
+            status: 'error',
+          });
+        }
+      },
+    });
+  };
+
+  const editProfile = (values: any) => {
+    // return;
+    if (!isPhysical) {
+      ['phone', 'city', 'area', 'address', 'postalCode'].forEach((name: string) => {
+        delete values[name];
+      });
+    }
+    editProfileMutation(values, {
+      onSuccess: () => {
+        toast({
+          title: 'Profile updated successfully',
+          position: 'top',
+          isClosable: true,
+          status: 'success',
+        });
       },
       onError: (error: any) => {
         if (error.statusCode == 409) {
@@ -130,7 +190,7 @@ const Profile: FC = () => {
         <Stack mx={'auto'} width={'lg'}>
           <Stack align={'center'}>
             <Heading fontSize={'4xl'} textAlign={'center'}>
-              Create Your Profile
+              {profileId ? 'Edit' : 'Create'} Your Profile
             </Heading>
             <Text fontSize={'lg'} color={'gray.600'}>
               to be able to create Services and Meets ✌️
@@ -203,13 +263,13 @@ const Profile: FC = () => {
                   type="submit"
                   loadingText="Submitting"
                   size="lg"
-                  bg={'blue.400'}
+                  bg={'primary.500'}
                   color={'white'}
                   _hover={{
-                    bg: 'blue.500',
+                    bg: 'primary.600',
                   }}
                 >
-                  Create
+                  {profileId ? 'Save' : 'Create'}
                 </Button>
               </Stack>
             </form>

@@ -31,7 +31,7 @@ const Modal: FC<ModalProps> = ({ isOpen, title, children, actionTitle, closeTitl
 
         <ModalFooter>
           {onAction && (
-            <Button colorScheme="cyan" mr={3} onClick={onAction}>
+            <Button bg="primary.500" textColor="white" mr={3} onClick={onAction}>
               {actionTitle}
             </Button>
           )}
