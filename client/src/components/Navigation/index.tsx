@@ -51,7 +51,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue('primary.900', 'gray.900')}
+      bg={useColorModeValue('gray.100', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
@@ -66,16 +66,16 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       <VStack flexDirection="column" alignItems="flex-start" display={{ base: 'flex', md: 'none' }}>
-        {NavigationLinks.map((link) => (
-          <Box width="100%">
-            <NavItem selectedLink={selectedLink} key={link.name} path={link.path} icon={link?.icon}>
+        {NavigationLinks.map((link, index) => (
+          <Box key={index} width="100%">
+            <NavItem selectedLink={selectedLink} path={link.path} icon={link?.icon}>
               {link.name}
             </NavItem>
           </Box>
         ))}
       </VStack>
-      {LinkItems.map((link) => (
-        <NavItem selectedLink={selectedLink} key={link.name} path={link.path} icon={link?.icon}>
+      {LinkItems.map((link, index) => (
+        <NavItem selectedLink={selectedLink} key={index} path={link.path} icon={link?.icon}>
           {link.name}
         </NavItem>
       ))}
