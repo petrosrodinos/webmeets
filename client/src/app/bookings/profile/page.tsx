@@ -15,7 +15,7 @@ const Profile: FC = () => {
   const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
-  const { data: bookings, isLoading } = useQuery('bookings', () => getBookings({ profileId }), {
+  const { data: bookings, isLoading } = useQuery('profile-bookings', () => getBookings({ profileId }), {
     onSuccess: (data) => {
       if (data) {
         const events: BookingCalendarEvent[] = data.map((booking) => {

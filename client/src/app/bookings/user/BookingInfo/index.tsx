@@ -1,12 +1,14 @@
 import { Booking } from '@/interfaces/booking';
 import { editBooking } from '@/services/booking';
-import { EditBookingProfileSchema } from '@/validation-schemas/booking';
+import { EditBookingUserSchema } from '@/validation-schemas/booking';
 import { useToast, Stack, Text, Button, List, ListItem, Box, useColorModeValue, HStack } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
+import NumberInput from '@/components/ui/NumberInput';
+import TextArea from '@/components/ui/TextArea';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -18,32 +20,42 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
 
   useEffect(() => {
+    console.log('booking', booking);
+  }, []);
+
+  useEffect(() => {
     reset({
       date: new Date(booking.date).toISOString().slice(0, 16),
+      participants: String(booking.participants),
+      notes: booking.notes,
     });
   }, []);
 
   useEffect(() => {
     setBookingInfo([
       {
-        label: 'Meet',
-        value: booking.meet.name,
-      },
-      {
-        label: 'Notes',
-        value: booking.notes,
-      },
-      {
-        label: 'Duration',
-        value: booking.meet.duration,
-      },
-      {
-        label: 'Participants',
-        value: booking.participants,
-      },
-      {
         label: 'Created',
         value: booking.createdAt,
+      },
+      {
+        label: 'Phone Number',
+        value: booking?.profile?.phone,
+      },
+      {
+        label: 'Name',
+        value: booking?.meet?.name,
+      },
+      {
+        label: 'City',
+        value: booking?.meet?.city,
+      },
+      {
+        label: 'Address',
+        value: booking?.meet?.address,
+      },
+      {
+        label: 'Postal Code',
+        value: booking?.meet?.postalCode,
       },
       {
         label: 'Meet URL',
@@ -58,7 +70,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(EditBookingProfileSchema),
+    resolver: yupResolver(EditBookingUserSchema),
   });
 
   const handleEditBooking = (data: any) => {
@@ -131,7 +143,23 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
             ))}
           </List>
         </Box>
-        <Input label="Date" error={errors.date?.message} type="datetime-local" register={register('date')} />
+        <NumberInput
+          min={1}
+          max={booking?.meet?.maxParticipants}
+          error={errors.participants?.message}
+          label="Participants"
+          register={register('participants')}
+        />
+
+        <Input
+          label="Date"
+          placeholder="Enter Date"
+          error={errors.date?.message}
+          type="datetime-local"
+          register={register('date')}
+        />
+
+        <TextArea label="Notes" placeholder="Add some notes" register={register('notes')} />
         <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
           Save
         </Button>
