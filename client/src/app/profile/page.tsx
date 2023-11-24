@@ -20,7 +20,7 @@ import { useMutation } from 'react-query';
 import FileUpload from '@/components/ui/FilePicker';
 import { ProfileSchema } from '@/validation-schemas/profile';
 import { createProfile } from '@/services/profile';
-import { useState, FC } from 'react';
+import { useState, FC, useEffect } from 'react';
 import TextArea from '@/components/ui/TextArea';
 import Modal from '@/components/ui/Modal';
 import { useRouter } from 'next/navigation';
@@ -31,8 +31,10 @@ import { COUNTRIES } from '@/constants/optionsData';
 import { CreateProfile } from '@/interfaces/profile';
 import { MultiFilePickerItemData } from '@/interfaces/components';
 import MultiFilePicker from '@/components/ui/MultiFilePicker';
+import { authStore } from '@/store/authStore';
 
 const Profile: FC = () => {
+  const { updateProfile } = authStore((state) => state);
   const toast = useToast();
   const [isPhysical, setisPhysical] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,6 +49,10 @@ const Profile: FC = () => {
     resolver: yupResolver(ProfileSchema),
   });
 
+  useEffect(() => {
+    console.log('asd', errors);
+  }, [errors]);
+
   const { mutate: createProfileMutation, isLoading } = useMutation((data: CreateProfile) => {
     return createProfile(data);
   });
@@ -60,7 +66,10 @@ const Profile: FC = () => {
       });
     }
     createProfileMutation(values, {
-      onSuccess: () => {
+      onSuccess: (data: any) => {
+        updateProfile({
+          token: data.token,
+        });
         setIsModalOpen(true);
       },
       onError: (error: any) => {
@@ -115,6 +124,7 @@ const Profile: FC = () => {
         onClose={() => setIsModalOpen(false)}
         actionTitle="Create"
         onAction={handleActionClick}
+        closeTitle="Later"
       >
         <Text>Now you can create your Meets.</Text>
       </Modal>

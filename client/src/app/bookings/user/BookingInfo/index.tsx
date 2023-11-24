@@ -20,10 +20,6 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
 
   useEffect(() => {
-    console.log('booking', booking);
-  }, []);
-
-  useEffect(() => {
     reset({
       date: new Date(booking.date).toISOString().slice(0, 16),
       participants: String(booking.participants),
@@ -34,7 +30,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   useEffect(() => {
     setBookingInfo([
       {
-        label: 'Created',
+        label: 'Booking Creation Date',
         value: booking.createdAt,
       },
       {
