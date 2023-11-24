@@ -19,6 +19,7 @@ import { UserService } from 'src/users/users.service';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ProfileService } from './profiles.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { Roles } from 'src/enums/roles';
 
 @Controller('profiles')
 @ApiTags('Profile')
@@ -40,7 +41,7 @@ export class ProfileController {
   ) {
     const userId = req.user.userId;
     const createdProfile = await this.profileService.create(userId, files, createProfileDto);
-    await this.userService.update(req.user.userId, { profileId: createdProfile.profile._id.toString() });
+    await this.userService.update(req.user.userId, { profileId: createdProfile.profile._id.toString(), role: Roles.ADMIN });
 
     return createdProfile;
   }

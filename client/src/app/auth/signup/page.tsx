@@ -28,6 +28,7 @@ import { BsTelephone } from 'react-icons/bs';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { IoPersonOutline } from 'react-icons/io5';
 import { TfiEmail } from 'react-icons/tfi';
+import { Roles } from 'enums/roles';
 
 export default function SignUp() {
   const toast = useToast();
@@ -53,7 +54,7 @@ export default function SignUp() {
     signupMutation(
       {
         ...values,
-        role: values.isBusiness ? 'admin' : 'user',
+        role: Roles.USER,
         birthDate: new Date(values.birthDate).toISOString(),
       },
       {
@@ -64,7 +65,7 @@ export default function SignUp() {
             exp: data.exp,
             userId: data.user._id,
           });
-          if (data.user.role === 'admin') {
+          if (values.isBusiness) {
             router.push('/profile');
           } else {
             router.push('/home');

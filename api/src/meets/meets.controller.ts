@@ -18,16 +18,12 @@ import { UpdateMeetDto } from './dto/update-meet.dto';
 import { JwtGuard } from '../auth/guard';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Meet } from 'src/schemas/meet.schema';
-import { UserService } from 'src/users/users.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('meets')
 @ApiTags('Meet')
 export class MeetController {
-  constructor(
-    private readonly meetService: MeetService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly meetService: MeetService) {}
 
   @UseGuards(JwtGuard)
   @Post()
@@ -40,13 +36,8 @@ export class MeetController {
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
     const { userId, profileId } = req.user;
-    let profileid = profileId;
-    if (!profileid) {
-      const user = await this.userService.findOne(userId);
-      profileid = user.profileId._id.toString();
-    }
 
-    return this.meetService.create(userId, profileid, createMeetDto, files);
+    return this.meetService.create(userId, profileId, createMeetDto, files);
   }
 
   @Get()

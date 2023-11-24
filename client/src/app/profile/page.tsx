@@ -32,6 +32,7 @@ import { CreateProfile } from '@/interfaces/profile';
 import { MultiFilePickerItemData } from '@/interfaces/components';
 import MultiFilePicker from '@/components/ui/MultiFilePicker';
 import { authStore } from '@/store/authStore';
+import { Roles } from 'enums/roles';
 
 const Profile: FC = () => {
   const { updateProfile } = authStore((state) => state);
@@ -49,10 +50,6 @@ const Profile: FC = () => {
     resolver: yupResolver(ProfileSchema),
   });
 
-  useEffect(() => {
-    console.log('asd', errors);
-  }, [errors]);
-
   const { mutate: createProfileMutation, isLoading } = useMutation((data: CreateProfile) => {
     return createProfile(data);
   });
@@ -69,6 +66,7 @@ const Profile: FC = () => {
       onSuccess: (data: any) => {
         updateProfile({
           token: data.token,
+          role: Roles.ADMIN,
         });
         setIsModalOpen(true);
       },
