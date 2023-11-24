@@ -1,10 +1,10 @@
 import { Booking } from '@/interfaces/booking';
 import { editBooking } from '@/services/booking';
-import { BookingSchema } from '@/validation-schemas/booking';
-import { useToast, Stack, Text, Button, List, ListItem } from '@chakra-ui/react';
+import { EditBookingProfileSchema } from '@/validation-schemas/booking';
+import { useToast, Stack, Text, Button, List, ListItem, Box, useColorModeValue, HStack } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 
@@ -14,6 +14,7 @@ interface BookingInfoProps {
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   const toast = useToast();
+  const [bookingInfo, setBookingInfo] = useState<any[]>();
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
 
   useEffect(() => {
@@ -22,16 +23,45 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
     });
   }, []);
 
+  useEffect(() => {
+    setBookingInfo([
+      {
+        label: 'Meet',
+        value: booking.meet.name,
+      },
+      {
+        label: 'Notes',
+        value: booking.notes,
+      },
+      {
+        label: 'Duration',
+        value: booking.meet.duration,
+      },
+      {
+        label: 'Participants',
+        value: booking.participants,
+      },
+      {
+        label: 'Created',
+        value: booking.createdAt,
+      },
+      {
+        label: 'Meet URL',
+        value: 'http:someurl',
+      },
+    ]);
+  }, []);
+
   const {
     handleSubmit,
     register,
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(BookingSchema),
+    resolver: yupResolver(EditBookingProfileSchema),
   });
 
-  const handleCreateBooking = (data: any) => {
+  const handleEditBooking = (data: any) => {
     editBookingMutation(
       {
         ...data,
@@ -39,8 +69,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
       {
         onSuccess: () => {
           toast({
-            title: 'Booking created successfully',
-            description: "We've created your booking for you.",
+            title: 'Booking edited successfully',
             position: 'top',
             isClosable: true,
             status: 'success',
@@ -48,7 +77,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
         },
         onError: (error: any) => {
           toast({
-            title: 'Could not create booking',
+            title: 'Could not edit booking',
             description: error.message,
             position: 'top',
             isClosable: true,
@@ -88,42 +117,25 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(handleCreateBooking)}>
+    <form onSubmit={handleSubmit(handleEditBooking)}>
       <Stack spacing="20px">
-        <List spacing={2}>
-          <ListItem>
-            <Text as={'span'} fontWeight={'bold'}>
-              Notes:
-            </Text>{' '}
-            {booking.notes}
-          </ListItem>
-          <ListItem>
-            <Text as={'span'} fontWeight={'bold'}>
-              Duration:
-            </Text>{' '}
-            {booking.meet.duration} minutes
-          </ListItem>
-          <ListItem>
-            <Text as={'span'} fontWeight={'bold'}>
-              Participants:
-            </Text>{' '}
-            {booking.participants}
-          </ListItem>
-          <ListItem>
-            <Text as={'span'} fontWeight={'bold'}>
-              Meet:
-            </Text>{' '}
-            {booking.meet.name}
-          </ListItem>
-          <ListItem>
-            <Text as={'span'} fontWeight={'bold'}>
-              URL:
-            </Text>{' '}
-            http:someurl
-          </ListItem>
-        </List>
+        <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={3}>
+          <List spacing={2}>
+            {bookingInfo?.map((info) => (
+              <ListItem key={info.label}>
+                <HStack>
+                  <Text fontWeight="bold">{info.label}:</Text>
+                  <Text>{info.value}</Text>
+                </HStack>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
         <Input label="Date" error={errors.date?.message} type="datetime-local" register={register('date')} />
-        <Button colorScheme="red" variant="outline" mr={3} onClick={handleCancelBooking}>
+        <Button colorScheme="green" variant="solid" type="submit" maxWidth="100px">
+          Save
+        </Button>
+        <Button colorScheme="red" variant="outline" onClick={handleCancelBooking}>
           Cancel Booking
         </Button>
       </Stack>

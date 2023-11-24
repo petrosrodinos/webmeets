@@ -1,3 +1,4 @@
+import { create } from 'zustand';
 import { Meet } from './meet';
 import { Profile } from './profile';
 import { User } from './user';
@@ -19,4 +20,5 @@ export interface Booking {
   date: Date;
   status: 'pending' | 'accepted' | 'rejected' | 'cancelled' | 'completed';
   participants: number;
+  createdAt: string;
 }

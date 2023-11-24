@@ -5,3 +5,7 @@ export const BookingSchema = yup.object().shape({
   participants: yup.string().required(),
   date: yup.string().required(),
 });
+
+export const EditBookingProfileSchema = yup.object().shape({
+  date: yup.string().required(),
+});
