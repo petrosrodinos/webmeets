@@ -46,12 +46,12 @@ const LinkItems: Array<LinkItemProps> = [
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const { setSelectedLink, selectedLink } = navigationStore((state) => state);
+  const { selectedLink } = navigationStore((state) => state);
 
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue('gray.100', 'gray.900')}
+      bg={useColorModeValue('primary.900', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
@@ -60,7 +60,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+        <Text color="primary.700" fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           WebMeets
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
@@ -94,10 +94,10 @@ const NavItem = ({ icon, children, path, selectedLink, ...rest }: NavItemProps) 
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.300',
+          bg: 'primary.400',
           color: 'white',
         }}
-        bg={selectedLink == path ? 'cyan.400' : 'transparent'}
+        bg={selectedLink == path ? 'primary.500' : 'transparent'}
         {...rest}
       >
         {icon && (

@@ -100,11 +100,20 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
                 <TextArea label="Notes" placeholder="Add some notes" register={register('notes')} />
 
                 <DrawerFooter borderTopWidth="1px">
-                  <Button variant="outline" mr={3} onClick={onClose}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleCreateBooking} type="submit" colorScheme="blue">
+                  <Button
+                    _hover={{
+                      bg: 'primary.600',
+                    }}
+                    mr={3}
+                    onClick={handleCreateBooking}
+                    textColor="white"
+                    type="submit"
+                    bg="primary.500"
+                  >
                     Create
+                  </Button>
+                  <Button variant="outline" onClick={onClose}>
+                    Cancel
                   </Button>
                 </DrawerFooter>
               </Stack>

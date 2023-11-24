@@ -5,6 +5,7 @@ import { Meet } from '@/interfaces/meet';
 import Carousel from '../Carousel';
 import Rating from '../Rating';
 import Tag from '../Tag';
+import { authStore } from '@/store/authStore';
 
 interface MeetCardProps {
   meet: Meet;
@@ -13,6 +14,7 @@ interface MeetCardProps {
 }
 
 const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) => {
+  const { userId } = authStore((state) => state);
   const router = useRouter();
   const { id, name, description, images, createdAt, price, maxParticipants, duration, category, rating, profile, user } = meet;
   const handleClick = () => {
@@ -38,7 +40,7 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
           <Carousel images={images.map((image) => image.file)} />
         </Box>
         <Stack>
-          <Text color={'green.500'} textTransform={'uppercase'} fontWeight={800} fontSize={'sm'} letterSpacing={1.1}>
+          <Text color={'primary.500'} textTransform={'uppercase'} fontWeight={800} fontSize={'sm'} letterSpacing={1.1}>
             ${price}
           </Text>
           <Heading color={useColorModeValue('gray.700', 'white')} fontSize={'2xl'} fontFamily={'body'}>
@@ -64,29 +66,24 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
           <Button
             onClick={handleClick}
             flex={1}
-            fontSize={'sm'}
             rounded={'full'}
-            bg={'blue.400'}
+            bg={'primary.500'}
             color={'white'}
             boxShadow={'0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'}
             _hover={{
-              bg: 'blue.500',
-            }}
-            _focus={{
-              bg: 'blue.500',
+              bg: 'primary.600',
             }}
           >
             Visit
           </Button>
-          {!fromProfile && (
+          {!fromProfile && userId != meet.user?.id && (
             <Button
+              color="primary.500"
+              borderColor={'primary.500'}
+              variant="outline"
               onClick={() => handleBook?.(meet)}
               flex={1}
-              fontSize={'sm'}
               rounded={'full'}
-              _focus={{
-                bg: 'gray.200',
-              }}
             >
               Quick Book
             </Button>

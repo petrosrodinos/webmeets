@@ -80,17 +80,16 @@ export default function SignIn() {
 
               <Stack spacing={10}>
                 <Stack direction={{ base: 'column', sm: 'column' }} align={'start'} justify={'space-between'}>
-                  <Checkbox>Remember me</Checkbox>
                   <Text color={'blue.400'}>Forgot password?</Text>
                 </Stack>
 
                 <Button
                   type="submit"
                   isLoading={isLoading}
-                  bg={'blue.400'}
+                  bg={'primary.500'}
                   color={'white'}
                   _hover={{
-                    bg: 'blue.500',
+                    bg: 'primary.600',
                   }}
                 >
                   Sign in

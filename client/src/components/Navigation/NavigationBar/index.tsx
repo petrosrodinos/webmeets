@@ -107,7 +107,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         icon={<FiMenu />}
       />
 
-      <Text display={{ base: 'flex', md: 'none' }} fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+      <Text color="primary.700" display={{ base: 'flex', md: 'none' }} fontSize="2xl" fontFamily="monospace" fontWeight="bold">
         Webmeets
       </Text>
       <HStack spacing={8} alignItems={'center'}>
@@ -131,19 +131,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
           {!isLoggedIn && (
             <Stack flex={{ base: 1, md: 0 }} justify={'flex-end'} direction={'row'} spacing={6}>
-              <Button onClick={() => router.push('/auth/signin')} as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'}>
+              <Button cursor="pointer" onClick={() => router.push('/auth/signin')} as={'a'} fontSize={'sm'} fontWeight={400}>
                 Sign In
               </Button>
               <Button
+                cursor="pointer"
                 onClick={() => router.push('/auth/signup')}
                 as={'a'}
                 // display={{ base: 'none', md: 'inline-flex' }}
                 fontSize={'sm'}
                 fontWeight={600}
                 color={'white'}
-                bg={'pink.400'}
+                bg={'primary.500'}
                 _hover={{
-                  bg: 'pink.300',
+                  bg: 'primary.600',
                 }}
               >
                 Sign Up
@@ -157,8 +158,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   <HStack>
                     <Avatar size={'sm'} src={avatar} />
                     <VStack display={{ base: 'none', md: 'flex' }} alignItems="flex-start" spacing="1px" ml="0">
-                      <Text fontSize="sm">{username}</Text>
-                      <Text fontSize="xs" color="gray.600">
+                      <Text>{username}</Text>
+                      <Text fontSize="xs" color="primary.500">
                         {role}
                       </Text>
                     </VStack>
@@ -193,30 +194,20 @@ const NavLink = ({ icon, path, selectedLink, children, ...rest }: NavItemProps) 
       px={2}
       py={1}
       rounded={'md'}
-      bg={selectedLink == path ? 'cyan.400' : 'transparent'}
+      bg={selectedLink == path ? 'primary.500' : 'transparent'}
       _hover={{
         textDecoration: 'none',
-        bg: useColorModeValue('gray.200', 'gray.700'),
+        bg: 'primary.400',
       }}
       href={path}
       {...rest}
     >
-      {/* {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )} */}
       {children}
     </Box>
   );
 };
 
-const AvatarMenuItem = ({ name, onClick, path }: AvatarMenuItemProps) => {
+const AvatarMenuItem = ({ name, onClick }: AvatarMenuItemProps) => {
   return (
     <MenuItem onClick={onClick}>
       <HStack>

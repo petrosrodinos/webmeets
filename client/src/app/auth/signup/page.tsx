@@ -109,7 +109,7 @@ export default function SignUp() {
             to enjoy all of our cool features ✌️
           </Text>
         </Stack>
-        <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={8}>
+        <Box rounded={'lg'} bg={useColorModeValue('white', 'red.700')} boxShadow={'lg'} p={8}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <HStack>
@@ -172,17 +172,17 @@ export default function SignUp() {
               <FileUpload onChange={handleImageChange} label="Avatar" name="profilePicture" />
 
               <FormLabel>I have a business</FormLabel>
-              <Switch {...register('isBusiness')} colorScheme="teal" size="lg" />
+              <Switch {...register('isBusiness')} colorScheme="pink" size="lg" />
 
               <Button
                 isLoading={isLoading}
                 type="submit"
                 loadingText="Submitting"
                 size="lg"
-                bg={'blue.400'}
+                bg={'primary.500'}
                 color={'white'}
                 _hover={{
-                  bg: 'blue.500',
+                  bg: 'primary.600',
                 }}
               >
                 Sign up

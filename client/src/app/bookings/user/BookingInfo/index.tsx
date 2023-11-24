@@ -1,7 +1,7 @@
 import { Booking } from '@/interfaces/booking';
 import { editBooking } from '@/services/booking';
 import { EditBookingUserSchema } from '@/validation-schemas/booking';
-import { useToast, Stack, Text, Button, List, ListItem, Box, useColorModeValue, HStack } from '@chakra-ui/react';
+import { useToast, Stack, Text, Button, List, ListItem, Box, useColorModeValue, HStack, Avatar } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
@@ -127,7 +127,15 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   return (
     <form onSubmit={handleSubmit(handleEditBooking)}>
       <Stack spacing="20px">
-        <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={3}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          rounded={'lg'}
+          bg={useColorModeValue('white', 'gray.700')}
+          boxShadow={'lg'}
+          p={3}
+        >
+          <Avatar alignSelf="center" size="xl" src={booking?.profile?.avatar} mb={4} />
           <List spacing={2}>
             {bookingInfo?.map((info) => (
               <ListItem key={info.label}>

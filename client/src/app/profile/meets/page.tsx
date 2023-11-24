@@ -33,9 +33,10 @@ const Meets: FC<MeetsProps> = () => {
           onClick={() => setIsModalOpen(true)}
           mt={5}
           rightIcon={<AiOutlineArrowRight />}
-          colorScheme="teal"
           variant="outline"
           maxW={100}
+          color="primary.500"
+          borderColor={'primary.500'}
         >
           Create
         </Button>
