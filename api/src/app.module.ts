@@ -9,6 +9,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MeetModule } from './meets/meets.module';
 import { BookingsModule } from './bookings/bookings.module';
+import { RoomsModule } from './rooms/rooms.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { BookingsModule } from './bookings/bookings.module';
     AwsS3Module,
     MeetModule,
     BookingsModule,
+    RoomsModule,
   ],
   providers: [
     {
