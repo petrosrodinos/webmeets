@@ -14,13 +14,15 @@ import {
   FlexProps,
   VStack,
 } from '@chakra-ui/react';
-import { FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
+import { IoBookOutline } from 'react-icons/io5';
 import { IconType } from 'react-icons';
 import NavigationBar, { NavigationLinks } from './NavigationBar';
 import { authStore } from '@/store/authStore';
 import { navigationStore } from '@/store/navigationStore';
 import { selectedLink } from '../../../hooks/selectedLink';
-
+import { LuBookMarked } from 'react-icons/lu';
+import { BsShop } from 'react-icons/bs';
+import { HiOutlineVideoCamera } from 'react-icons/hi2';
 export interface LinkItemProps {
   name: string;
   path: string;
@@ -39,10 +41,10 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Personal Booking', path: '/bookings/user', icon: FiCompass },
-  { name: 'Profile Bookings', path: '/bookings/profile', icon: FiCompass },
-  { name: 'Meets', path: '/profile/meets', icon: FiTrendingUp },
-  { name: 'Profile', path: '/profile', icon: FiSettings },
+  { name: 'Personal Booking', path: '/bookings/user', icon: IoBookOutline },
+  { name: 'Profile Bookings', path: '/bookings/profile', icon: LuBookMarked },
+  { name: 'Meets', path: '/profile/meets', icon: HiOutlineVideoCamera },
+  { name: 'Profile', path: '/profile', icon: BsShop },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -96,6 +98,7 @@ const NavItem = ({ icon, children, path, selectedLink, ...rest }: NavItemProps) 
         _hover={{
           bg: 'primary.400',
           color: 'white',
+          // height: '40px',
         }}
         bg={selectedLink == path ? 'primary.500' : 'transparent'}
         {...rest}
