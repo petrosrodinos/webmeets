@@ -30,15 +30,9 @@ export class DailyService {
             // enable_recording: false,
             // enable_grid_view: false,
           },
-          privacy: 'private',
+          privacy: 'public',
         },
-        {
-          headers: {
-            Authorization: `Bearer ${this.DAILY_API_KEY}`,
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-        },
+        this.headers,
       );
 
       return response.data;
