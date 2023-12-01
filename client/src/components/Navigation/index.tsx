@@ -23,6 +23,7 @@ import { selectedLink } from '../../../hooks/selectedLink';
 import { LuBookMarked } from 'react-icons/lu';
 import { BsShop } from 'react-icons/bs';
 import { HiOutlineVideoCamera } from 'react-icons/hi2';
+import Link from 'next/link';
 export interface LinkItemProps {
   name: string;
   path: string;
@@ -87,35 +88,37 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 const NavItem = ({ icon, children, path, selectedLink, ...rest }: NavItemProps) => {
   return (
-    <Box as="a" href={path} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: 'primary.400',
-          color: 'white',
-          // height: '40px',
-        }}
-        bg={selectedLink == path ? 'primary.500' : 'transparent'}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Box>
+    <Link href={path}>
+      <Box style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+        <Flex
+          align="center"
+          p="4"
+          mx="4"
+          borderRadius="lg"
+          role="group"
+          cursor="pointer"
+          _hover={{
+            bg: 'primary.400',
+            color: 'white',
+            // height: '40px',
+          }}
+          bg={selectedLink == path ? 'primary.500' : 'transparent'}
+          {...rest}
+        >
+          {icon && (
+            <Icon
+              mr="4"
+              fontSize="16"
+              _groupHover={{
+                color: 'white',
+              }}
+              as={icon}
+            />
+          )}
+          {children}
+        </Flex>
+      </Box>
+    </Link>
   );
 };
 

@@ -16,6 +16,7 @@ import {
   ListItem,
   useColorModeValue,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import { getMeet } from '@/services/meets';
 import { useQuery } from 'react-query';
@@ -24,6 +25,7 @@ import Carousel from '@/components/ui/Carousel';
 import Rating from '@/components/ui/Rating';
 import Tag from '@/components/ui/Tag';
 import CreateBooking from './CreateBooking';
+import { authStore } from '@/store/authStore';
 
 // export async function generateStaticParams() {
 //   return [
@@ -47,15 +49,31 @@ interface MeetProps {
 
 const Meet: FC<MeetProps> = ({ params }) => {
   const { id } = params;
+  const { isLoggedIn, profileId } = authStore((state) => state);
   const { data: meet, isLoading } = useQuery(['meet', id], () => getMeet(id as string));
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const toast = useToast();
+
+  const handleBook = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: 'Sign in to book this meet!',
+        description: 'You need to be signed in to book this meet or create an account if you do not have one.',
+        position: 'top',
+        isClosable: true,
+        status: 'warning',
+      });
+      return;
+    }
+    onOpen();
+  };
   return (
     <Container maxW={'7xl'}>
       <Spinner loading={isLoading} />
       {meet && (
         <>
           <CreateBooking meet={meet} isOpen={isOpen} onClose={onClose} />
-          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, md: 10 }} py={{ base: 18, md: 24 }}>
+          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, md: 10 }}>
             <Carousel images={meet.images.map((image) => image.file)} />
             <Stack spacing={{ base: 6, md: 1 }}>
               <Box as={'header'}>
@@ -167,23 +185,24 @@ const Meet: FC<MeetProps> = ({ params }) => {
                 </Box>
               </Stack>
 
-              <Button
-                rounded={'none'}
-                w={'full'}
-                mt={8}
-                size={'lg'}
-                py={'7'}
-                bg={useColorModeValue('gray.900', 'gray.50')}
-                color={useColorModeValue('white', 'gray.900')}
-                textTransform={'uppercase'}
-                onClick={onOpen}
-                _hover={{
-                  transform: 'translateY(2px)',
-                  boxShadow: 'lg',
-                }}
-              >
-                BOOK NOW
-              </Button>
+              {meet?.profile?.id !== profileId && (
+                <Button
+                  rounded={'none'}
+                  w={'full'}
+                  mt={8}
+                  size={'lg'}
+                  py={'7'}
+                  textTransform={'uppercase'}
+                  onClick={handleBook}
+                  bg={'primary.500'}
+                  color={'white'}
+                  _hover={{
+                    bg: 'primary.600',
+                  }}
+                >
+                  BOOK NOW
+                </Button>
+              )}
             </Stack>
           </SimpleGrid>
         </>

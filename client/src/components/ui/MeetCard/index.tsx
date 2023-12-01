@@ -14,7 +14,7 @@ interface MeetCardProps {
 }
 
 const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) => {
-  const { userId } = authStore((state) => state);
+  const { profileId } = authStore((state) => state);
   const router = useRouter();
   const { id, name, description, images, createdAt, price, maxParticipants, duration, category, rating, profile, user } = meet;
   const handleClick = () => {
@@ -76,7 +76,7 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
           >
             Visit
           </Button>
-          {!fromProfile && userId != meet.user?.id && (
+          {!fromProfile && profileId != meet.profile?.id && (
             <Button
               color="primary.500"
               borderColor={'primary.500'}

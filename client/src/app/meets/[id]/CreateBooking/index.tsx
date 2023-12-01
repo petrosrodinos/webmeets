@@ -97,7 +97,7 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
                   register={register('date')}
                 />
 
-                <TextArea label="Notes" placeholder="Add some notes" register={register('notes')} />
+                <TextArea label="Notes" placeholder="Add some notes for the host" register={register('notes')} />
 
                 <DrawerFooter borderTopWidth="1px">
                   <Button

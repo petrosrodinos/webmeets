@@ -76,7 +76,7 @@ export default function SignIn() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <Input label="Email address" error={errors.email?.message} register={register('email')} />
-              <Input error={errors.password?.message} label="Password" isPassword={true} register={register('password')} />
+              <Input error={errors.password?.message} label="Password" password register={register('password')} />
 
               <Stack spacing={10}>
                 <Stack direction={{ base: 'column', sm: 'column' }} align={'start'} justify={'space-between'}>

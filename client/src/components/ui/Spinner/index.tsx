@@ -9,7 +9,7 @@ const Spinner: FC<SpinnerProps> = ({ loading, ...rest }) => {
   return loading ? (
     <Center>
       {' '}
-      <ChakraSpinner {...rest} thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+      <ChakraSpinner {...rest} thickness="4px" speed="0.65s" emptyColor="gray.200" color="primary.500" size="xl" />
     </Center>
   ) : null;
 };

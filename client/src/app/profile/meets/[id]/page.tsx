@@ -25,6 +25,7 @@ const Service: FC = () => {
           <Tab>Details</Tab>
           <Tab>Statistics</Tab>
           <Tab>Settings</Tab>
+          {/* <Tab>clients</Tab> */}
         </TabList>
         <TabPanels>
           <TabPanel>

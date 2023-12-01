@@ -109,7 +109,7 @@ export default function SignUp() {
             to enjoy all of our cool features ✌️
           </Text>
         </Stack>
-        <Box rounded={'lg'} bg={useColorModeValue('white', 'red.700')} boxShadow={'lg'} p={8}>
+        <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={8}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <HStack>

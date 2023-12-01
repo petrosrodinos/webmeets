@@ -226,10 +226,10 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
                   type="submit"
                   loadingText={meet ? 'Updating' : 'Creating'}
                   size="lg"
-                  bg={'blue.400'}
+                  bg={'primary.500'}
                   color={'white'}
                   _hover={{
-                    bg: 'blue.500',
+                    bg: 'primary.600',
                   }}
                 >
                   {meet ? 'Update' : 'Create'}
