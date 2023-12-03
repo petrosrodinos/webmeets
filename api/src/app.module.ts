@@ -11,6 +11,7 @@ import { MeetModule } from './meets/meets.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { StripeModule } from './stripe/stripe.module';
+import { HooksModule } from './hooks/hooks.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { StripeModule } from './stripe/stripe.module';
     BookingsModule,
     RoomsModule,
     StripeModule,
+    HooksModule,
   ],
   providers: [
     {

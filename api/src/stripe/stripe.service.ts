@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-// const stripe = require('stripe')(process.env.STRIPE_API_SECRET_KEY);
 
 @Injectable()
 export class StripeService {
@@ -26,7 +25,7 @@ export class StripeService {
         },
       ],
       mode: 'payment',
-      success_url: `${this.domain}?success=true?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${this.domain}?success=true`,
       cancel_url: `${this.domain}?canceled=true`,
     });
 
