@@ -7,6 +7,7 @@ import { S3Service } from 'src/aws-s3/aws-s3.service';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'Meet', schema: MeetSchema }])],
+  exports: [MeetService],
   controllers: [MeetController],
   providers: [MeetService, S3Service],
 })

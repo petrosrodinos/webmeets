@@ -12,11 +12,12 @@ export class BookingsService {
     private bookingModel: Model<Booking>,
   ) {}
 
-  async create(createBookingDto: CreateBookingDto, userId: string) {
+  async create(createBookingDto: CreateBookingDto, paymentId: string, userId: string) {
     try {
       const booking = new this.bookingModel({
         ...createBookingDto,
         userId,
+        paymentId,
       });
       await booking.save();
       return booking;

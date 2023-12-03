@@ -10,6 +10,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { MeetModule } from './meets/meets.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { RoomsModule } from './rooms/rooms.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { RoomsModule } from './rooms/rooms.module';
     MeetModule,
     BookingsModule,
     RoomsModule,
+    StripeModule,
   ],
   providers: [
     {

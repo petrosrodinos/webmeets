@@ -5,20 +5,41 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Booking } from 'src/schemas/booking.schema';
 import { JwtGuard } from 'src/auth/guard';
+import { MeetService } from 'src/meets/meets.service';
+import { StripeService } from 'src/stripe/stripe.service';
 
 @Controller('bookings')
 @ApiTags('Booking')
 export class BookingsController {
-  constructor(private readonly bookingsService: BookingsService) {}
+  constructor(
+    private readonly bookingsService: BookingsService,
+    private meetService: MeetService,
+    private stripeService: StripeService,
+  ) {}
 
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: Booking })
   @Post()
-  create(@Req() req: Express.Request, @Body() createBookingDto: CreateBookingDto) {
+  async create(@Req() req: Express.Request, @Body() createBookingDto: CreateBookingDto) {
     const userId = req.user.userId;
 
-    return this.bookingsService.create(createBookingDto, userId);
+    const meet = await this.meetService.findOne(createBookingDto.meetId);
+    if (meet.userId.toString() == userId) {
+      throw new ForbiddenException('You cannot book your own meet.');
+    }
+    const { name, price } = meet;
+    const payment = await this.stripeService.createCheckoutSession({
+      name,
+      price,
+    });
+
+    const booking = await this.bookingsService.create(createBookingDto, payment.id, userId);
+
+    return {
+      booking,
+      payment,
+    };
   }
 
   @ApiOkResponse({ type: Booking })

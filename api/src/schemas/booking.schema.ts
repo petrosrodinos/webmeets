@@ -32,6 +32,9 @@ export class Booking {
 
   @Prop()
   participants: number;
+
+  @Prop()
+  paymentId: string;
 }
 
 export const BookingSchema = SchemaFactory.createForClass(Booking);
