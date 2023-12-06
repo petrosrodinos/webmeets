@@ -73,4 +73,10 @@ export class ProfileController {
   remove(@Param('id') id: string) {
     return this.profileService.remove(id);
   }
+
+  @Get('full/:id')
+  @ApiOkResponse({ type: Profile })
+  getFullProfile(@Param('id') id: string) {
+    return this.profileService.getFullProfile(id);
+  }
 }

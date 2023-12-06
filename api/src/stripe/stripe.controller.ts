@@ -1,19 +1,33 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { BookingsService } from 'src/bookings/bookings.service';
+import { BookingStatuses } from 'src/enums/booking';
 
 @Controller('stripe')
 export class StripeController {
-  constructor(private readonly stripeService: StripeService) {}
+  constructor(
+    private readonly stripeService: StripeService,
+    private bookingService: BookingsService,
+  ) {}
 
   @Post('hooks')
-  create(@Request() request: any) {
+  async create(@Request() request: any) {
     const event = request.body;
 
     switch (event.type) {
       case 'checkout.session.completed':
-        const paymentIntent = event.data.object;
-        console.log('intent', paymentIntent);
+        const session = event.data.object;
+        console.log('session', session);
+        try {
+          const booking = await this.bookingService.findAll({ paymentId: session.id });
+          const updated = this.bookingService.update(booking[0]._id.toString(), { status: BookingStatuses.CREATED });
+          console.log('updated', updated);
+        } catch (e) {
+          return {
+            received: true,
+          };
+        }
         break;
     }
     return {

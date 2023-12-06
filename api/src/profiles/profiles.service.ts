@@ -7,12 +7,15 @@ import { Model, Error, Types } from 'mongoose';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
 import { CreateJwtService } from 'src/auth/jwt/jwt.service';
 import { Roles } from 'src/enums/roles';
+import { Meet } from 'src/schemas/meet.schema';
 
 @Injectable()
 export class ProfileService {
   constructor(
     @InjectModel(Profile.name)
     private profileModel: Model<Profile>,
+    @InjectModel(Meet.name)
+    private meetModel: Model<Meet>,
     private s3Service: S3Service,
     private jwt: CreateJwtService,
   ) {}
@@ -115,6 +118,23 @@ export class ProfileService {
         throw new NotFoundException('Could not find profile.');
       }
       return deletedProfile;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  async getFullProfile(id: string) {
+    try {
+      const profile = await this.profileModel.findById(id).populate('userId', '-password -email -phone');
+      if (!profile) {
+        throw new NotFoundException('Could not find profile.');
+      }
+      const meets = await this.meetModel.find({ profileId: id }).populate('userId profileId', '-password -email -phone');
+
+      return {
+        profile,
+        meets,
+      };
     } catch (error) {
       throw new NotFoundException(error.message);
     }
