@@ -1,7 +1,10 @@
 import { API_URL } from '@/constants/api';
 import axios from 'axios';
 import { getAuthState } from '../store/authStore';
-import { CreateProfile } from '@/interfaces/profile';
+import { CreateProfile, Profile } from '@/interfaces/profile';
+import { formatProfile } from './formatter/profile';
+import { formatMeet } from './formatter/meet';
+import { Meet } from '@/interfaces/meet';
 
 export const createProfile = async (payload: CreateProfile) => {
   try {
@@ -35,6 +38,21 @@ export const getProfileById = async (id: string) => {
   try {
     const result = await axios.get(`${API_URL}profiles/${id}`);
     return result.data;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
+export const getFullProfile = async (id: string): Promise<{ profile: Profile; meets: Meet[] }> => {
+  try {
+    const result = await axios.get(`${API_URL}profiles/full/${id}`);
+    const data = result.data;
+    const formattedData: any = {
+      profile: formatProfile(data.profile),
+      meets: data.meets.map((meet: any) => formatMeet(meet)),
+    };
+    console.log(formattedData);
+    return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
   }

@@ -147,7 +147,7 @@ const NavigationDrawer = (props: any) => {
         </>
       )}
       <NavigationBar onOpen={onOpen} />
-      <Box as="main" ml={{ base: 0, md: 60 }} p="4">
+      <Box as="main" ml={{ base: 0, md: isLoggedIn ? 60 : 0 }} p="4">
         {props.children}
       </Box>
     </Box>

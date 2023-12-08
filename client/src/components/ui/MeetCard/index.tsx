@@ -10,10 +10,11 @@ import { authStore } from '@/store/authStore';
 interface MeetCardProps {
   meet: Meet;
   fromProfile?: boolean;
+  fromProfiles?: boolean;
   handleBook?: (meet: Meet) => void;
 }
 
-const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) => {
+const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, fromProfiles = false, handleBook }) => {
   const { profileId } = authStore((state) => state);
   const router = useRouter();
   const { id, name, description, images, createdAt, price, maxParticipants, duration, category, rating, profile, user } = meet;
@@ -57,27 +58,29 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
           <Text color={'gray.500'}>{duration} minutes</Text>
           <Text color={'gray.500'}>{maxParticipants} people</Text>
         </Stack>
-        <Stack
-          _hover={{
-            cursor: 'pointer',
-            backgroundColor: 'gray.100',
-          }}
-          mt={6}
-          padding={1}
-          rounded="md"
-          direction={'row'}
-          spacing={4}
-          align={'center'}
-          onClick={handleUserClick}
-        >
-          <Avatar src={profile?.avatar} />
-          <Stack direction={'column'} spacing={0} fontSize={'sm'}>
-            <Text fontWeight={600}>
-              {user?.firstname} {user?.lastname}
-            </Text>
-            <Text color={'gray.500'}>{createdAt}</Text>
+        {!fromProfiles && (
+          <Stack
+            _hover={{
+              cursor: 'pointer',
+              backgroundColor: 'gray.100',
+            }}
+            mt={6}
+            padding={1}
+            rounded="md"
+            direction={'row'}
+            spacing={4}
+            align={'center'}
+            onClick={handleUserClick}
+          >
+            <Avatar src={profile?.avatar} />
+            <Stack direction={'column'} spacing={0} fontSize={'sm'}>
+              <Text fontWeight={600}>
+                {user?.firstname} {user?.lastname}
+              </Text>
+              <Text color={'gray.500'}>{createdAt}</Text>
+            </Stack>
           </Stack>
-        </Stack>
+        )}
 
         <Stack mt={8} direction={'row'} spacing={4}>
           <Button

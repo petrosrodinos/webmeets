@@ -5,8 +5,6 @@ import {
   Container,
   Stack,
   Text,
-  Image,
-  Flex,
   VStack,
   Button,
   Heading,
@@ -26,6 +24,7 @@ import Rating from '@/components/ui/Rating';
 import Tag from '@/components/ui/Tag';
 import CreateBooking from './CreateBooking';
 import { authStore } from '@/store/authStore';
+import Link from 'next/link';
 
 // export async function generateStaticParams() {
 //   return [
@@ -67,6 +66,7 @@ const Meet: FC<MeetProps> = ({ params }) => {
     }
     onOpen();
   };
+
   return (
     <Container maxW={'7xl'}>
       <Spinner loading={isLoading} />
@@ -83,7 +83,27 @@ const Meet: FC<MeetProps> = ({ params }) => {
                 <Text color={useColorModeValue('gray.900', 'gray.400')} fontWeight={300} fontSize={'2xl'}>
                   ${meet.price}
                 </Text>
+                <Link href={`/profiles/${meet?.profile?.id}`}>
+                  <Text
+                    width="fit-content"
+                    mb={1}
+                    height="max-content"
+                    p={1}
+                    _hover={{
+                      border: '1px solid red',
+                      borderColor: 'primary.400',
+                      rounded: 'md',
+                      cursor: 'pointer',
+                    }}
+                    color="primary.500"
+                    fontSize={{ base: '16px', lg: '18px' }}
+                    fontWeight={'500'}
+                  >
+                    {meet.user?.firstname} {meet.user?.lastname}
+                  </Text>
+                </Link>
                 <Tag maxWidth="fit-content" value={meet.category} />
+
                 <Rating value={meet.rating} />
               </Box>
 
