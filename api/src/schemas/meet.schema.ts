@@ -35,7 +35,9 @@ export class Meet {
   @Prop()
   duration: number;
 
-  @Prop()
+  @Prop({
+    default: 1,
+  })
   rating: number;
 
   @Prop()
