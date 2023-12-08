@@ -17,12 +17,17 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
   const { profileId } = authStore((state) => state);
   const router = useRouter();
   const { id, name, description, images, createdAt, price, maxParticipants, duration, category, rating, profile, user } = meet;
-  const handleClick = () => {
+
+  const handleVisitClick = () => {
     if (fromProfile) {
       router.push(`/profile/meets/${id}`);
     } else {
       router.push(`/meets/${id}`);
     }
+  };
+
+  const handleUserClick = () => {
+    router.push(`/profiles/${profile?.id}`);
   };
 
   return (
@@ -49,10 +54,22 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
           <Tag maxWidth="fit-content" value={category} />
           <Rating value={rating} />
           <Text color={'gray.500'}>{description}</Text>
-          <Text color={'gray.500'}>{duration}:minutes</Text>
-          <Text color={'gray.500'}>{maxParticipants}:people</Text>
+          <Text color={'gray.500'}>{duration} minutes</Text>
+          <Text color={'gray.500'}>{maxParticipants} people</Text>
         </Stack>
-        <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
+        <Stack
+          _hover={{
+            cursor: 'pointer',
+            backgroundColor: 'gray.100',
+          }}
+          mt={6}
+          padding={1}
+          rounded="md"
+          direction={'row'}
+          spacing={4}
+          align={'center'}
+          onClick={handleUserClick}
+        >
           <Avatar src={profile?.avatar} />
           <Stack direction={'column'} spacing={0} fontSize={'sm'}>
             <Text fontWeight={600}>
@@ -64,7 +81,7 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, handleBook }) 
 
         <Stack mt={8} direction={'row'} spacing={4}>
           <Button
-            onClick={handleClick}
+            onClick={handleVisitClick}
             flex={1}
             rounded={'full'}
             bg={'primary.500'}
