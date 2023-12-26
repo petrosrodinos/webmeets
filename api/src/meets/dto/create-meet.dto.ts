@@ -12,7 +12,6 @@ export class CreateMeetDto {
   @IsString()
   category: string;
 
-  @IsArray()
   @IsOptional()
   images: Express.Multer.File[];
 

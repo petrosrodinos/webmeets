@@ -20,7 +20,6 @@ export class MeetService {
       for (let i = 0; i < files?.length; i++) {
         const uploadedFileUrl = await this.s3Service.uploadFile(files[i]);
         images.push({
-          _id: new Types.ObjectId(),
           file: uploadedFileUrl,
         });
       }

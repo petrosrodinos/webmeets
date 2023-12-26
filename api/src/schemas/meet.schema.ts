@@ -26,6 +26,14 @@ export class Hours {
 
 const HoursSchema = SchemaFactory.createForClass(Hours);
 
+@Schema()
+export class Image {
+  @Prop()
+  file: string;
+}
+
+const ImageSchema = SchemaFactory.createForClass(Image);
+
 @Schema({
   timestamps: true,
 })
@@ -46,15 +54,10 @@ export class Meet {
   category: string;
 
   @Prop({
-    images: [
-      {
-        _id: true,
-        name: String,
-        file: String,
-      },
-    ],
+    type: [ImageSchema],
+    required: true,
   })
-  images: Array<{ _id: Types.ObjectId; file: string }>;
+  images: Image[];
 
   @Prop()
   duration: number;
