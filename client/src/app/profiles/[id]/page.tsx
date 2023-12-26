@@ -68,15 +68,18 @@ const Profile: FC = () => {
           <Box bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} mt={3} rounded="lg">
             <VStack>
               <Image src={profile.profile.banner} />
-              <HStack spacing={5} alignSelf="flex-start" mt={5} mb={5} ml={5}>
-                <Avatar border="1px solid white" width={70} height={70} src={profile.profile.avatar} />
-                <VStack spacing={0}>
-                  <Text width="100%" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-                    {profile.profile.userId?.firstname + ' ' + profile.profile.userId?.lastname}
-                  </Text>
-                  <Rating value={rating || 1} />
-                </VStack>
-              </HStack>
+              <VStack spacing={5} alignSelf="flex-start" mt={5} mb={5} ml={5}>
+                <HStack spacing={5}>
+                  <Avatar border="1px solid white" width={70} height={70} src={profile.profile.avatar} />
+                  <VStack spacing={0}>
+                    <Text width="100%" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+                      {profile.profile.userId?.firstname + ' ' + profile.profile.userId?.lastname}
+                    </Text>
+                    <Rating value={rating || 1} />
+                  </VStack>
+                </HStack>
+                <Text width="100%">{profile.profile.bio}</Text>
+              </VStack>
             </VStack>
           </Box>
           <Box mt={3} rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={8}>
@@ -89,10 +92,6 @@ const Profile: FC = () => {
               ))}
             </SimpleGrid>
             <Box>
-              <Text fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-                Bio
-              </Text>
-              <Box>{profile.profile.bio}</Box>
               <Text fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
                 Country
               </Text>
