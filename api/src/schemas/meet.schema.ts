@@ -2,6 +2,30 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 import { MeetType } from 'src/types/meet';
 
+@Schema()
+export class Periods {
+  @Prop()
+  from: string;
+  @Prop()
+  to: string;
+}
+
+const PeriodsSchema = SchemaFactory.createForClass(Periods);
+
+@Schema()
+export class Hours {
+  @Prop()
+  day: string;
+
+  @Prop({
+    type: [PeriodsSchema],
+    required: true,
+  })
+  periods: Periods[];
+}
+
+const HoursSchema = SchemaFactory.createForClass(Hours);
+
 @Schema({
   timestamps: true,
 })
@@ -63,6 +87,12 @@ export class Meet {
 
   @Prop()
   postalCode: string;
+
+  @Prop({
+    type: [HoursSchema],
+    required: true,
+  })
+  hours: Hours[];
 }
 
 export const MeetSchema = SchemaFactory.createForClass(Meet);
