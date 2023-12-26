@@ -1,3 +1,5 @@
+import { User } from './user';
+
 export interface CreateProfile extends Address {
   country: string;
   categories: string[];
@@ -13,7 +15,7 @@ export interface CreateProfile extends Address {
 
 export interface Profile extends Address {
   id: string;
-  userId: string;
+  userId: User | null;
   avatar: string;
   banner: string;
   categories: string[];

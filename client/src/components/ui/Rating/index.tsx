@@ -5,13 +5,14 @@ interface RatingProps {
   edit?: boolean;
   value: number;
   onChange?: (value: number) => void;
+  props?: any;
 }
 
-const Rating: FC<RatingProps> = ({ edit = false, value = 0, onChange }) => {
+const Rating: FC<RatingProps> = ({ edit = false, value = 0, onChange, props }) => {
   const ratingChanged = (value: number) => {
     onChange?.(value);
   };
-  return <ReactStars count={5} value={value} edit={edit} onChange={ratingChanged} size={26} activeColor="#ffd700" />;
+  return <ReactStars {...props} count={5} value={value} edit={edit} onChange={ratingChanged} size={26} activeColor="#ffd700" />;
 };
 
 export default Rating;

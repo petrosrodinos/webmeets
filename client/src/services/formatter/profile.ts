@@ -1,5 +1,6 @@
 import { Profile } from '@/interfaces/profile';
 import { formatDate } from '@/lib/date';
+import { formatUser } from './user';
 
 export const formatProfile = (data: any): Profile | null => {
   if (typeof data === 'string') {
@@ -7,7 +8,7 @@ export const formatProfile = (data: any): Profile | null => {
   } else {
     return {
       id: data._id,
-      userId: data.userId,
+      userId: formatUser(data.userId),
       avatar: data.avatar,
       banner: data.banner,
       categories: data.categories,

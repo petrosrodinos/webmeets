@@ -1,5 +1,4 @@
 import { Address, Profile } from './profile';
-import { Service } from './service';
 import { User } from './user';
 
 export type MeetType = 'remote' | 'client-location' | 'in-person';

@@ -51,7 +51,6 @@ export const getFullProfile = async (id: string): Promise<{ profile: Profile; me
       profile: formatProfile(data.profile),
       meets: data.meets.map((meet: any) => formatMeet(meet)),
     };
-    console.log(formattedData);
     return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
