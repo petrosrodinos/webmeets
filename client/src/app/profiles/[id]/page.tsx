@@ -60,11 +60,10 @@ const Profile: FC = () => {
   return (
     <>
       <Spinner loading={isLoading} />
+      {selectedMeet && <CreateBooking meet={selectedMeet} isOpen={isOpen} onClose={onClose} />}
 
       {profile && (
-        <>
-          {selectedMeet && <CreateBooking meet={selectedMeet} isOpen={isOpen} onClose={onClose} />}
-
+        <Box>
           <Box bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} mt={3} rounded="lg">
             <VStack>
               <Image src={profile.profile.banner} />
@@ -107,7 +106,7 @@ const Profile: FC = () => {
               <MeetCard fromProfiles key={meet.id} meet={meet} handleBook={handleBook} />
             ))}
           </SimpleGrid>
-        </>
+        </Box>
       )}
     </>
   );

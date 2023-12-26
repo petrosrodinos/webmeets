@@ -20,6 +20,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { BookingSchema } from '@/validation-schemas/booking';
 import NumberInput from '@/components/ui/NumberInput';
+import { NewBooking } from '@/interfaces/booking';
 interface CreateBookingProps {
   isOpen: boolean;
   onClose: () => void;
@@ -29,11 +30,12 @@ interface CreateBookingProps {
 const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
   const firstField = useRef();
   const toast = useToast();
-  const { mutate: createBookingMutation, isLoading } = useMutation(createBooking);
+  const { mutate: createBookingMutation, isLoading } = useMutation((data: NewBooking) => createBooking(data));
 
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(BookingSchema),
@@ -47,14 +49,10 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
         profileId: meet?.profile?.id,
       },
       {
-        onSuccess: () => {
-          toast({
-            title: 'Booking created successfully',
-            description: "We've created your booking for you.",
-            position: 'top',
-            isClosable: true,
-            status: 'success',
-          });
+        onSuccess: (data: any) => {
+          const paymentUrl = data.payment.url;
+          window.open(paymentUrl, '_blank');
+          reset();
           onClose();
         },
         onError: (error: any) => {
@@ -112,7 +110,7 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
                   >
                     Create
                   </Button>
-                  <Button variant="outline" onClick={onClose}>
+                  <Button disabled={isLoading} variant="outline" onClick={onClose}>
                     Cancel
                   </Button>
                 </DrawerFooter>

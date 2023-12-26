@@ -25,8 +25,8 @@ export class StripeService {
         },
       ],
       mode: 'payment',
-      success_url: `${this.domain}?success=true`,
-      cancel_url: `${this.domain}?canceled=true`,
+      success_url: `${this.domain}/bookings?success=true`,
+      cancel_url: `${this.domain}/bookings?canceled=true`,
     });
 
     return session;

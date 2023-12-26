@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 export const BookingSchema = yup.object().shape({
-  notes: yup.string(),
+  notes: yup.string().optional(),
   participants: yup.string().required(),
   date: yup.string().required(),
 });

@@ -15,6 +15,8 @@ export class StripeController {
   async create(@Request() request: any) {
     const event = request.body;
 
+    console.log('EVENT', event);
+
     switch (event.type) {
       case 'checkout.session.completed':
         const session = event.data.object;
