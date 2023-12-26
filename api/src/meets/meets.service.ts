@@ -5,7 +5,6 @@ import { Model, Error } from 'mongoose';
 import { Meet } from 'src/schemas/meet.schema';
 import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
-import { Types } from 'mongoose';
 
 @Injectable()
 export class MeetService {

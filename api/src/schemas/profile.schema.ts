@@ -1,6 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
+@Schema()
+class Certificates {
+  @Prop()
+  name: string;
+
+  @Prop()
+  file: string;
+}
+
+const CertificatesSchema = SchemaFactory.createForClass(Certificates);
+
 @Schema({
   timestamps: true,
 })
@@ -30,15 +41,9 @@ export class Profile {
   country: string;
 
   @Prop({
-    certificates: [
-      {
-        _id: true,
-        name: String,
-        file: String,
-      },
-    ],
+    type: [CertificatesSchema],
   })
-  certificates: Array<{ _id: Types.ObjectId; name: string; file: string }>;
+  certificates: Certificates[];
 
   @Prop()
   address: string;

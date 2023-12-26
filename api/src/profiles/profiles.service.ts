@@ -3,7 +3,7 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Profile } from 'src/schemas/profile.schema';
-import { Model, Error, Types } from 'mongoose';
+import { Model, Error } from 'mongoose';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
 import { CreateJwtService } from 'src/auth/jwt/jwt.service';
 import { Roles } from 'src/enums/roles';
@@ -41,7 +41,6 @@ export class ProfileService {
         const certificatesUrls = await this.s3Service.uploadFiles(certificatesFiles);
         for (let i = 0; i < createProfileDto.certificates.length; i++) {
           certificates.push({
-            _id: new Types.ObjectId(),
             name: createProfileDto.certificates[i].name,
             file: Object.values(certificatesUrls)[i],
           });
