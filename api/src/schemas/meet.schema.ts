@@ -3,17 +3,17 @@ import { Types } from 'mongoose';
 import { MeetType } from 'src/types/meet';
 
 @Schema()
-export class Periods {
+export class Period {
   @Prop()
   from: string;
   @Prop()
   to: string;
 }
 
-const PeriodsSchema = SchemaFactory.createForClass(Periods);
+const PeriodsSchema = SchemaFactory.createForClass(Period);
 
 @Schema()
-export class Hours {
+export class Hour {
   @Prop()
   day: string;
 
@@ -21,10 +21,22 @@ export class Hours {
     type: [PeriodsSchema],
     required: true,
   })
-  periods: Periods[];
+  periods: Period[];
 }
 
-const HoursSchema = SchemaFactory.createForClass(Hours);
+const HoursSchema = SchemaFactory.createForClass(Hour);
+
+@Schema()
+export class Closure {
+  @Prop()
+  name: string;
+  @Prop()
+  from: string;
+  @Prop()
+  to: string;
+}
+
+const ClosureSchema = SchemaFactory.createForClass(Closure);
 
 @Schema()
 export class Image {
@@ -95,7 +107,13 @@ export class Meet {
     type: [HoursSchema],
     required: true,
   })
-  hours: Hours[];
+  hours: Hour[];
+
+  @Prop({
+    type: [ClosureSchema],
+    required: true,
+  })
+  closures: Closure[];
 }
 
 export const MeetSchema = SchemaFactory.createForClass(Meet);
