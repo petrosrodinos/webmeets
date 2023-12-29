@@ -74,11 +74,6 @@ export class Meet {
   @Prop()
   duration: number;
 
-  @Prop({
-    default: 1,
-  })
-  rating: number;
-
   @Prop()
   type: MeetType;
 
