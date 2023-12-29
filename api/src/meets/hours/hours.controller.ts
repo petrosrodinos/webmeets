@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, UseGuards, Delete } from '@nestjs/common';
 import { JwtGuard } from '../../auth/guard';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Meet } from 'src/schemas/meet.schema';
@@ -33,5 +33,11 @@ export class HoursController {
     @Body() updatePeriodsDto: UpdatePeriodsDto,
   ) {
     return this.hoursService.editPeriod(id, hourId, periodId, updatePeriodsDto);
+  }
+
+  @Delete(':hourId/periods/:periodId')
+  @ApiOkResponse({ type: Meet })
+  deletePeriod(@Param('id') id: string, @Param('hourId') hourId: string, @Param('periodId') periodId: string) {
+    return this.hoursService.removePeriod(id, hourId, periodId);
   }
 }

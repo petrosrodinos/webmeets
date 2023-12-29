@@ -73,13 +73,26 @@ export class HoursService {
     }
   }
 
-  async remove(id: string) {
+  async removePeriod(meetId: string, hourId: string, periodId: string) {
     try {
-      const deletedMeet = await this.meetModel.findOneAndDelete({ _id: id });
-      if (!deletedMeet) {
+      const meet = await this.meetModel.findById(meetId);
+      if (!meet) {
         throw new NotFoundException('Could not find meet.');
       }
-      return deletedMeet;
+
+      const hour = meet.hours.find((hour: any) => hour._id == hourId);
+      if (!hour) {
+        throw new NotFoundException('Could not find hour.');
+      }
+
+      const period = hour.periods.find((period: any) => period._id == periodId);
+      if (!period) {
+        throw new NotFoundException('Could not find period.');
+      }
+
+      hour.periods = hour.periods.filter((period: any) => period._id != periodId);
+      await meet.save();
+      return meet;
     } catch (error) {
       throw new NotFoundException(error.message);
     }
