@@ -1,6 +1,6 @@
 import { IsOptional, IsString, IsArray } from 'class-validator';
 import { MeetType } from 'src/types/meet';
-import { CreateHoursDto } from '../hours/dto/create-hours.dto';
+import { CreateHourDto } from '../hours/dto/create-hour.dto';
 import { CreateClosureDto } from '../closures/dto/create-closure.dto';
 
 export class CreateMeetDto {
@@ -49,7 +49,7 @@ export class CreateMeetDto {
   postalCode: string;
 
   @IsArray()
-  hours: CreateHoursDto[];
+  hours: CreateHourDto[];
 
   @IsArray()
   @IsOptional()

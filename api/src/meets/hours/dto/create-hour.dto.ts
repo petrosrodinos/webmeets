@@ -1,14 +1,14 @@
 import { IsString, IsArray } from 'class-validator';
 
-export class CreateHoursDto {
+export class CreateHourDto {
   @IsString()
   day: string;
 
   @IsArray()
-  periods: CreatePeriodsDto[];
+  periods: CreatePeriodDto[];
 }
 
-export class CreatePeriodsDto {
+export class CreatePeriodDto {
   @IsString()
   from: string;
 

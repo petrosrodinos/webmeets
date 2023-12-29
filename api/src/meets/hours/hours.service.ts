@@ -1,5 +1,5 @@
-import { CreateHoursDto, CreatePeriodsDto } from './dto/create-hours.dto';
-import { UpdateHoursDto, UpdatePeriodsDto } from './dto/update-hours.dto';
+import { CreateHourDto, CreatePeriodDto } from './dto/create-hour.dto';
+import { UpdateHourDto, UpdatePeriodDto } from './dto/update-hour.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Error } from 'mongoose';
 import { Meet } from 'src/schemas/meet.schema';
@@ -11,7 +11,7 @@ export class HoursService {
     @InjectModel(Meet.name)
     private meetModel: Model<Meet>,
   ) {}
-  async create(meetId: string, createHoursDto: CreateHoursDto) {
+  async create(meetId: string, createHoursDto: CreateHourDto) {
     try {
       const meet = await this.meetModel.findById(meetId);
       if (!meet) {
@@ -28,7 +28,7 @@ export class HoursService {
     }
   }
 
-  async createPeriod(meetId: string, hourId: string, createPeriodsDto: CreatePeriodsDto) {
+  async createPeriod(meetId: string, hourId: string, createPeriodsDto: CreatePeriodDto) {
     try {
       const meet = await this.meetModel.findById(meetId);
       if (!meet) {
@@ -47,7 +47,7 @@ export class HoursService {
     }
   }
 
-  async editPeriod(meetId: string, hourId: string, periodId: string, updatePeriodsDto: UpdatePeriodsDto) {
+  async editPeriod(meetId: string, hourId: string, periodId: string, updatePeriodsDto: UpdatePeriodDto) {
     try {
       const meet = await this.meetModel.findById(meetId);
       if (!meet) {
