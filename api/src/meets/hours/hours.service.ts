@@ -13,7 +13,13 @@ export class HoursService {
   ) {}
   async create(meetId: string, createHoursDto: CreateHoursDto) {
     try {
-      return 'ok';
+      const meet = await this.meetModel.findById(meetId);
+      if (!meet) {
+        throw new NotFoundException('Could not find meet.');
+      }
+      meet.hours.push(createHoursDto);
+      await meet.save();
+      return meet;
     } catch (error) {
       if (error instanceof Error.ValidationError) {
         throw new ForbiddenException(error.message);
