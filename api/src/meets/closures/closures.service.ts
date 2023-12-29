@@ -39,9 +39,9 @@ export class ClosuresService {
         throw new NotFoundException('Could not find closure.');
       }
 
-      closure.name = updateClosureDto.name;
-      closure.from = updateClosureDto.from;
-      closure.to = updateClosureDto.to;
+      closure.name = updateClosureDto.name || closure.name;
+      closure.from = updateClosureDto.from || closure.from;
+      closure.to = updateClosureDto.to || closure.to;
 
       await meet.save();
       return meet;

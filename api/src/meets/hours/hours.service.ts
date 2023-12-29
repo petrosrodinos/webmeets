@@ -64,8 +64,8 @@ export class HoursService {
         throw new NotFoundException('Could not find period.');
       }
 
-      period.from = updatePeriodsDto.from;
-      period.to = updatePeriodsDto.to;
+      period.from = updatePeriodsDto.from || period.from;
+      period.to = updatePeriodsDto.to || period.to;
       await meet.save();
       return meet;
     } catch (error) {
