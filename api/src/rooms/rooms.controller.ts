@@ -3,8 +3,10 @@ import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { DailyService } from 'src/daily/daily.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('rooms')
+@ApiTags('Room')
 export class RoomsController {
   constructor(
     private readonly roomsService: RoomsService,

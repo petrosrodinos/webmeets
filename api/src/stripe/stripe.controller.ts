@@ -3,8 +3,10 @@ import { StripeService } from './stripe.service';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { BookingsService } from 'src/bookings/bookings.service';
 import { BookingStatuses } from 'src/enums/booking';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('stripe')
+@ApiTags('Stripe')
 export class StripeController {
   constructor(
     private readonly stripeService: StripeService,

@@ -1,12 +1,13 @@
 import { Controller, Post, Body, Patch, Param, UseGuards, Delete } from '@nestjs/common';
 import { JwtGuard } from '../../auth/guard';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Meet } from 'src/schemas/meet.schema';
 import { HoursService } from './hours.service';
 import { UpdatePeriodDto } from './dto/update-hour.dto';
 import { CreateHourDto, CreatePeriodDto } from './dto/create-hour.dto';
 
 @Controller('meets/:id/hours')
+@ApiTags('Hour')
 @UseGuards(JwtGuard)
 export class HoursController {
   constructor(private readonly hoursService: HoursService) {}

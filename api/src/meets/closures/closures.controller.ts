@@ -1,12 +1,13 @@
 import { Controller, Post, Body, Patch, Param, UseGuards, Delete } from '@nestjs/common';
 import { JwtGuard } from '../../auth/guard';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Meet } from 'src/schemas/meet.schema';
 import { ClosuresService } from './closures.service';
 import { CreateClosureDto } from './dto/create-closure.dto';
 import { UpdateClosureDto } from './dto/update-closure.dto';
 
 @Controller('meets/:id/closures')
+@ApiTags('Closure')
 @UseGuards(JwtGuard)
 export class ClosuresController {
   constructor(private readonly closuresService: ClosuresService) {}
