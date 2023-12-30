@@ -94,7 +94,7 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, fromProfiles =
               bg: 'primary.600',
             }}
           >
-            Visit
+            {fromProfile ? 'Manage' : 'Visit'}
           </Button>
           {!fromProfile && profileId != meet.profile?.id && (
             <Button
