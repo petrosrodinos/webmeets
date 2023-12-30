@@ -12,14 +12,14 @@ interface Step1Props {
   register: any;
   errors: any;
   setValue: any;
-  onNext: any;
 }
 
-const Step1: FC<Step1Props> = ({ register, errors, setValue, onNext }) => {
+const Step1: FC<Step1Props> = ({ register, errors, setValue }) => {
   const [type, setType] = useState<MeetType>('remote');
 
   const handleChange = (value: any) => {
     setType(value);
+    setValue('type', value);
   };
 
   const handleImageChange = (data: ImagePickerItemData) => {
@@ -34,7 +34,7 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, onNext }) => {
         error={errors.description?.message}
         label="Description"
         register={register('description')}
-        placeholder="Add your meet description here"
+        placeholder="What is your meet about?"
       />
       <Select
         error={errors.category?.message}
@@ -49,7 +49,7 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, onNext }) => {
 
       <FormLabel>Location</FormLabel>
       <Center>
-        <RadioGroup onChange={handleChange} value={type}>
+        <RadioGroup colorScheme="primary" onChange={handleChange} value={type}>
           <Stack direction="row">
             <Radio size="lg" value="remote">
               Remote
@@ -71,7 +71,7 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, onNext }) => {
       )}
 
       {type == 'in-person' && (
-        <VStack>
+        <Stack>
           <Input label="Phone Number" placeholder="Enter Phone" error={errors.phone?.message} register={register('phone')} />
           <Input label="City" placeholder="Enter City" error={errors.city?.message} register={register('city')} />
           <Input label="Area" placeholder="Enter Area" error={errors.area?.message} register={register('area')} />
@@ -84,7 +84,7 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, onNext }) => {
             error={errors.postalCode?.message}
             register={register('postalCode')}
           />
-        </VStack>
+        </Stack>
       )}
 
       {type == 'client-location' && (

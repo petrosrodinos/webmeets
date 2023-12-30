@@ -1,11 +1,11 @@
 'use client';
 
-import { Flex, Stack, Button, useToast, Text, Box } from '@chakra-ui/react';
+import { Stack, Button, useToast, Text, Box } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import Modal from '@/components/ui/Modal';
 import { createMeet, editMeet } from '@/services/meets';
 import { MeetSchema } from '@/validation-schemas/meet';
@@ -37,9 +37,21 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
   const {
     handleSubmit,
     register,
+    trigger,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm({
+    defaultValues: {
+      name: meet?.name || '',
+      description: meet?.description || '',
+      category: meet?.category || '',
+      images: meet?.images || [],
+      type: meet?.type || 'remote',
+      duration: meet?.duration || 0,
+      maxParticipants: meet?.maxParticipants || 0,
+      price: meet?.price || 0,
+    },
     resolver: yupResolver(MeetSchema),
   });
 
@@ -52,17 +64,17 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
     {
       title: 'Step 1',
       description: 'Information',
-      step: <Step1 onNext={handleNext} register={register} setValue={setValue} errors={errors} />,
+      step: <Step1 register={register} setValue={setValue} errors={errors} />,
     },
     {
       title: 'Step 2',
       description: 'Participants/Price/Duration',
-      step: <Step2 onNext={handleNext} register={register} setValue={setValue} errors={errors} />,
+      step: <Step2 register={register} setValue={setValue} errors={errors} />,
     },
     {
       title: 'Step 3',
       description: 'Opening Hours',
-      step: <Step3 onNext={handleNext} register={register} setValue={setValue} errors={errors} />,
+      step: <Step3 register={register} setValue={setValue} errors={errors} />,
     },
   ];
 
@@ -74,8 +86,24 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
     return editMeet(meet?.id as string, data);
   });
 
-  function handleNext() {
-    setActiveStep(activeStep + 1);
+  useEffect(() => {
+    console.log('errorss', errors);
+  }, [errors]);
+
+  async function handleNext() {
+    if (activeStep === steps.length) {
+      return;
+    }
+    if (activeStep === 1) {
+      await trigger(['name', 'description', 'category', 'images']);
+    } else if (activeStep === 2) {
+      await trigger(['duration', 'maxParticipants', 'price']);
+    }
+    console.log(getValues());
+    console.log(errors);
+    if (Object.keys(errors).length == 0) {
+      // setActiveStep(activeStep + 1);
+    }
   }
 
   function onSubmit(values: any) {
@@ -167,31 +195,23 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
           </Step>
         ))}
       </Stepper>
-      {steps[activeStep - 1].step}
-      {/* <Flex>
-        <Stack mx={'auto'} width="100%" spacing={4}>
-          <Box>
-            <form onSubmit={handleSubmit(meet ? onSave : onSubmit)}>
-              <Stack>
+      <Stack mx={'auto'} width="100%" spacing={4}>
+        {steps[activeStep - 1].step}
 
-                <Button
-                  isLoading={isLoading}
-                  type="submit"
-                  loadingText={meet ? 'Updating' : 'Creating'}
-                  size="lg"
-                  bg={'primary.500'}
-                  color={'white'}
-                  _hover={{
-                    bg: 'primary.600',
-                  }}
-                >
-                  {meet ? 'Update' : 'Create'}
-                </Button>
-              </Stack>
-            </form>
-          </Box>
-        </Stack>
-      </Flex> */}
+        <Button
+          isLoading={isLoading}
+          size="md"
+          width={100}
+          onClick={handleNext}
+          bg={'primary.500'}
+          color={'white'}
+          _hover={{
+            bg: 'primary.600',
+          }}
+        >
+          Next
+        </Button>
+      </Stack>
     </>
   );
 };
