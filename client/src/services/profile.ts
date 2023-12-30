@@ -45,7 +45,7 @@ export const getProfileById = async (id: string) => {
 
 export const getFullProfile = async (id: string): Promise<{ profile: Profile; meets: Meet[] }> => {
   try {
-    const result = await axios.get(`${API_URL}profiles/full/${id}`);
+    const result = await axios.get(`${API_URL}profiles/${id}/full`);
     const data = result.data;
     const formattedData: any = {
       profile: formatProfile(data.profile),
