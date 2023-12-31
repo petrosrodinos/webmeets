@@ -21,11 +21,12 @@ interface AdditionalProps {
   register?: any;
   error?: any;
   icon?: any;
+  name?: any;
 }
 
 type InputProps = ChakraInputProps & AdditionalProps;
 
-const Input: FC<InputProps> = ({ label, required = false, password, register, error, icon: Icon, props, ...rest }) => {
+const Input: FC<InputProps> = ({ label, name, required = false, password, register, error, icon: Icon, props, ...rest }) => {
   const [showPassword, setShowPassword] = useState(password ? false : true);
 
   return (
@@ -37,7 +38,7 @@ const Input: FC<InputProps> = ({ label, required = false, password, register, er
             <Icon color="gray.300" />
           </InputLeftElement>
         )}
-        <ChakraInput type={showPassword ? 'text' : 'password'} {...props} {...register} {...rest} />
+        <ChakraInput type={showPassword ? 'text' : 'password'} name={name} {...props} {...register} {...rest} />
         {password && (
           <InputRightElement h={'full'}>
             <Button variant={'ghost'} onClick={() => setShowPassword((prev) => !prev)}>

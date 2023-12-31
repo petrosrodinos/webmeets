@@ -14,4 +14,15 @@ export const MeetSchema = yup.object().shape({
   city: yup.string().optional(),
   area: yup.string().optional(),
   postalCode: yup.string().optional(),
+  hours: yup.array().of(
+    yup.object().shape({
+      day: yup.string().required(),
+      periods: yup.array().of(
+        yup.object().shape({
+          from: yup.string().required(),
+          to: yup.string().required(),
+        }),
+      ),
+    }),
+  ),
 });

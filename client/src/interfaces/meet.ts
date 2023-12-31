@@ -3,6 +3,18 @@ import { User } from './user';
 
 export type MeetType = 'remote' | 'client-location' | 'in-person';
 
+export interface Period {
+  id: string;
+  from: string;
+  to: string;
+}
+
+export interface Hours {
+  day: string;
+  id: string;
+  periods: Period[];
+}
+
 export interface NewMeet extends Address {
   name: string;
   description: string;
@@ -13,6 +25,7 @@ export interface NewMeet extends Address {
   maxParticipants: number;
   price: number;
   type: MeetType;
+  hours: Hours[];
   [key: string]: any;
 }
 

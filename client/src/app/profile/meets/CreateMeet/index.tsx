@@ -1,14 +1,15 @@
 'use client';
 
-import { Stack, Button, useToast, Text, Box } from '@chakra-ui/react';
+import { Stack, Button, useToast, Text, Box, HStack } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState } from 'react';
 import Modal from '@/components/ui/Modal';
 import { createMeet, editMeet } from '@/services/meets';
 import { MeetSchema } from '@/validation-schemas/meet';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Meet } from '@/interfaces/meet';
 import Step1 from './Step1';
 import Step2 from './Step2';
@@ -35,7 +36,6 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
   const router = useRouter();
 
   const {
-    handleSubmit,
     register,
     trigger,
     formState: { errors },
@@ -48,8 +48,8 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
       category: meet?.category || '',
       images: meet?.images || [],
       type: meet?.type || 'remote',
-      duration: meet?.duration || 0,
-      maxParticipants: meet?.maxParticipants || 0,
+      duration: meet?.duration || 60,
+      maxParticipants: meet?.maxParticipants || 5,
       price: meet?.price || 0,
     },
     resolver: yupResolver(MeetSchema),
@@ -86,34 +86,32 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
     return editMeet(meet?.id as string, data);
   });
 
-  useEffect(() => {
-    console.log('errorss', errors);
-  }, [errors]);
-
   async function handleNext() {
+    let fildsToValidate: any[] = [];
     if (activeStep === steps.length) {
+      onSubmit(getValues());
       return;
     }
     if (activeStep === 1) {
-      await trigger(['name', 'description', 'category', 'images']);
+      fildsToValidate = ['name', 'description', 'category'];
+      await trigger(fildsToValidate);
     } else if (activeStep === 2) {
-      await trigger(['duration', 'maxParticipants', 'price']);
+      fildsToValidate = ['duration', 'maxParticipants'];
+      await trigger(fildsToValidate);
     }
-    console.log(getValues());
-    console.log(errors);
-    if (Object.keys(errors).length == 0) {
-      // setActiveStep(activeStep + 1);
+    const isValid = fildsToValidate.every((field: any) => getValues(field));
+    if (isValid) {
+      setActiveStep(activeStep + 1);
     }
   }
 
   function onSubmit(values: any) {
-    console.log(values);
+    console.log('final', values);
 
     // return;
 
     const payload = {
       ...values,
-      // type,
     };
 
     createMeetMutation(payload, {
@@ -139,7 +137,6 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
 
     const payload = {
       ...values,
-      // type,
     };
 
     editMeetMutation(payload, {
@@ -179,7 +176,7 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
       >
         <Text>Now you can manage your meet.</Text>
       </Modal>
-      <Stepper mb={5} colorScheme="primary" index={activeStep}>
+      <Stepper mb={5} colorScheme="primary" index={activeStep - 1}>
         {steps.map((step, index) => (
           <Step key={index}>
             <StepIndicator>
@@ -196,21 +193,40 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
         ))}
       </Stepper>
       <Stack mx={'auto'} width="100%" spacing={4}>
-        {steps[activeStep - 1].step}
+        {steps[2].step}
 
-        <Button
-          isLoading={isLoading}
-          size="md"
-          width={100}
-          onClick={handleNext}
-          bg={'primary.500'}
-          color={'white'}
-          _hover={{
-            bg: 'primary.600',
-          }}
-        >
-          Next
-        </Button>
+        <HStack alignItems="left">
+          {activeStep > 1 && (
+            <Button
+              size="md"
+              leftIcon={<IoIosArrowBack />}
+              width={100}
+              onClick={() => setActiveStep(activeStep - 1)}
+              bg={'secondary.900'}
+              color={'white'}
+              _hover={{
+                bg: 'primary.600',
+              }}
+            >
+              Back
+            </Button>
+          )}
+
+          <Button
+            isLoading={isLoading}
+            rightIcon={<IoIosArrowForward />}
+            size="md"
+            width={100}
+            onClick={handleNext}
+            bg={'primary.500'}
+            color={'white'}
+            _hover={{
+              bg: 'primary.600',
+            }}
+          >
+            {activeStep === steps.length ? 'Create' : 'Next'}
+          </Button>
+        </HStack>
       </Stack>
     </>
   );
