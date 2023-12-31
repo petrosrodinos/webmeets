@@ -3,9 +3,9 @@ import {
   FileAmountLimitValidator,
   FileTypeValidator,
   FileSizeValidator,
-  ImageDimensionsValidator,
+  // ImageDimensionsValidator,
 } from 'use-file-picker/validators';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import Spinner from '@/components/ui/Spinner';
 import { Button, SimpleGrid, useColorModeValue, Box } from '@chakra-ui/react';
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md';
@@ -19,10 +19,19 @@ interface ImagePickerProps {
   multiple?: boolean;
   accept?: string;
   name: string;
+  images: { id: string; file: string }[];
   onChange: (data: ImagePickerItemData) => void;
 }
 
-const ImagePicker: FC<ImagePickerProps> = ({ label, name, onChange, multiple = true, accept = 'image/*', maxFiles = 5 }) => {
+const ImagePicker: FC<ImagePickerProps> = ({
+  images,
+  label,
+  name,
+  onChange,
+  multiple = true,
+  accept = 'image/*',
+  maxFiles = 5,
+}) => {
   const FilePickerButton = ({ label }: { label: string }) => {
     return (
       <Button onClick={() => openFilePicker()} leftIcon={<MdOutlineAddPhotoAlternate />} colorScheme="pink" variant="solid">
@@ -30,6 +39,10 @@ const ImagePicker: FC<ImagePickerProps> = ({ label, name, onChange, multiple = t
       </Button>
     );
   };
+
+  useEffect(() => {
+    console.log('asd', images);
+  }, [images]);
 
   const { openFilePicker, filesContent, loading, errors, removeFileByIndex } = useImperativeFilePicker({
     readAs: 'DataURL',
@@ -75,21 +88,34 @@ const ImagePicker: FC<ImagePickerProps> = ({ label, name, onChange, multiple = t
     return <Spinner loading={true} />;
   }
 
+  const Image = ({ image, index }: { image: string; index: number }) => {
+    return (
+      <div className="image-container">
+        <IoIosCloseCircleOutline className="image-remove-button" onClick={() => removeFileByIndex(index)} />
+        <img className="image-picker-image" alt={'image'} src={image}></img>
+      </div>
+    );
+  };
+
   return (
     <div>
       <FilePickerButton label={label} />
-      {filesContent.length > 0 && (
-        <Box rounded={'sm'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'sm'} p={1}>
+      <Box rounded={'sm'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'sm'} p={1}>
+        {filesContent.length > 0 && (
           <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={2}>
             {filesContent.map((file, index) => (
-              <div className="image-container">
-                <IoIosCloseCircleOutline className="image-remove-button" onClick={() => removeFileByIndex(index)} />
-                <img className="image-picker-image" key={index} alt={file.name} src={file.content}></img>
-              </div>
+              <Image image={file.content} index={index} />
             ))}
           </SimpleGrid>
-        </Box>
-      )}
+        )}
+        {!!images.length && (
+          <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={2}>
+            {images?.map((image, index) => (
+              <Image image={image.file} index={index} />
+            ))}
+          </SimpleGrid>
+        )}
+      </Box>
     </div>
   );
 };

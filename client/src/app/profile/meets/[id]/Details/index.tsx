@@ -71,7 +71,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
     };
 
     editMeetMutation(payload, {
-      onSuccess: (data: any) => {
+      onSuccess: () => {
         toast({
           title: 'Meet updated successfully',
           position: 'top',
@@ -94,6 +94,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
   const handleTabClick = (tab: number) => {
     setActiveTab(tab);
   };
+
   return (
     <Tabs variant="soft-rounded" colorScheme="green">
       <TabList display="flex" flexDirection={{ base: 'column', md: 'row' }}>
@@ -103,7 +104,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
       </TabList>
       <TabPanels>
         <TabPanel onClick={() => handleTabClick(1)}>
-          <Step1 register={register} setValue={setValue} errors={errors} />
+          <Step1 values={getValues()} register={register} setValue={setValue} errors={errors} />
         </TabPanel>
         <TabPanel onClick={() => handleTabClick(1)}>
           <Step2 register={register} setValue={setValue} errors={errors} />
@@ -114,6 +115,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
       </TabPanels>
       <Button
         isLoading={isLoading}
+        loadingText="Saving"
         rightIcon={<FaCheck />}
         width={100}
         ml={4}

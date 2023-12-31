@@ -1,6 +1,6 @@
 'use client';
 
-import { extendTheme, type ThemeConfig } from '@chakra-ui/react';
+import { extendTheme, useColorModeValue, type ThemeConfig } from '@chakra-ui/react';
 import { CacheProvider } from '@chakra-ui/next-js';
 import { ChakraProvider } from '@chakra-ui/react';
 

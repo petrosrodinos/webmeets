@@ -12,9 +12,10 @@ interface Step1Props {
   register: any;
   errors: any;
   setValue: any;
+  values?: any;
 }
 
-const Step1: FC<Step1Props> = ({ register, errors, setValue }) => {
+const Step1: FC<Step1Props> = ({ register, errors, setValue, values }) => {
   const [type, setType] = useState<MeetType>('remote');
 
   const handleChange = (value: any) => {
@@ -45,7 +46,7 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue }) => {
       />
       <FormLabel>Select Images</FormLabel>
 
-      <ImagePicker name="images" label="Select images" onChange={handleImageChange} />
+      <ImagePicker images={values?.images} name="images" label="Select images" onChange={handleImageChange} />
 
       <FormLabel>Location</FormLabel>
       <Center>
