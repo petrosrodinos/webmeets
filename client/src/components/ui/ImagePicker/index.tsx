@@ -34,7 +34,15 @@ const ImagePicker: FC<ImagePickerProps> = ({
 }) => {
   const FilePickerButton = ({ label }: { label: string }) => {
     return (
-      <Button onClick={() => openFilePicker()} leftIcon={<MdOutlineAddPhotoAlternate />} colorScheme="pink" variant="solid">
+      <Button
+        onClick={() => openFilePicker()}
+        leftIcon={<MdOutlineAddPhotoAlternate />}
+        bg={'primary.500'}
+        color={'white'}
+        _hover={{
+          bg: 'primary.600',
+        }}
+      >
         {label}
       </Button>
     );
@@ -100,16 +108,16 @@ const ImagePicker: FC<ImagePickerProps> = ({
   return (
     <div>
       <FilePickerButton label={label} />
-      <Box rounded={'sm'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'sm'} p={1}>
+      <Box rounded={'sm'} boxShadow={'sm'} p={1}>
         {filesContent.length > 0 && (
-          <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={2}>
+          <SimpleGrid mt={2} columns={{ sm: 2, md: 3 }} spacing={2}>
             {filesContent.map((file, index) => (
               <Image image={file.content} index={index} />
             ))}
           </SimpleGrid>
         )}
         {!!images?.length && (
-          <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={2}>
+          <SimpleGrid mt={2} columns={{ sm: 2, md: 3 }} spacing={2}>
             {images?.map((image, index) => (
               <Image image={image.file} index={index} />
             ))}

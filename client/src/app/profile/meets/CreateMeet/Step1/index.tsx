@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Stack, VStack, RadioGroup, Radio, Center, FormLabel } from '@chakra-ui/react';
+import { Stack, VStack, RadioGroup, Radio, Center, FormLabel, useColorMode, useColorModeValue } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import ImagePicker from '@/components/ui/ImagePicker';
 import { ImagePickerItemData } from '@/interfaces/components';
@@ -49,21 +49,19 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, values }) => {
       <ImagePicker images={values?.images} name="images" label="Select images" onChange={handleImageChange} />
 
       <FormLabel>Location</FormLabel>
-      <Center>
-        <RadioGroup colorScheme="primary" onChange={handleChange} value={type}>
-          <Stack direction="row">
-            <Radio size="lg" value="remote">
-              Remote
-            </Radio>
-            <Radio size="lg" value="in-person">
-              In Person
-            </Radio>
-            <Radio size="lg" value="clients-location">
-              Client's Location
-            </Radio>
-          </Stack>
-        </RadioGroup>
-      </Center>
+      <RadioGroup colorScheme={useColorModeValue('primary', 'primary')} onChange={handleChange} value={type}>
+        <Stack direction="row">
+          <Radio size="lg" value="remote">
+            Remote
+          </Radio>
+          <Radio size="lg" value="in-person">
+            In Person
+          </Radio>
+          <Radio size="lg" value="clients-location">
+            Client's Location
+          </Radio>
+        </Stack>
+      </RadioGroup>
 
       {type == 'remote' && (
         <VStack>
