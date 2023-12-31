@@ -34,6 +34,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
   });
 
   useEffect(() => {
+    console.log(meet);
     reset({
       name: meet?.name || '',
       description: meet?.description || '',
@@ -99,7 +100,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
     <Tabs variant="soft-rounded" colorScheme="green">
       <TabList display="flex" flexDirection={{ base: 'column', md: 'row' }}>
         <Tab>Information</Tab>
-        <Tab>Participants/Price/Duration</Tab>
+        <Tab>Pricing</Tab>
         <Tab>Opening Hours</Tab>
       </TabList>
       <TabPanels>

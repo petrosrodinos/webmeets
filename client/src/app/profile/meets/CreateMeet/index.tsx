@@ -72,7 +72,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
     },
     {
       title: 'Step 2',
-      description: 'Participants/Price/Duration',
+      description: 'Pricing',
       step: <Step2 register={register} setValue={setValue} errors={errors} />,
     },
     {

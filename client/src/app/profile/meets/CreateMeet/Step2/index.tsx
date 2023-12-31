@@ -11,21 +11,14 @@ interface Step2Props {
 const Step2: FC<Step2Props> = ({ register, errors, setValue }) => {
   return (
     <Stack>
+      <NumberInput min={1} label="Duration (minutes)" error={errors.duration?.message} register={register('duration')} />
       <NumberInput
         min={1}
-        defaultValue={60}
-        label="Duration (minutes)"
-        error={errors.duration?.message}
-        register={register('duration')}
-      />
-      <NumberInput
-        min={1}
-        defaultValue={1}
         label="Max Participants"
         error={errors.maxParticipants?.message}
         register={register('maxParticipants')}
       />
-      <NumberInput min={0} defaultValue={5} label="Price" error={errors.price?.message} register={register('price')} />
+      <NumberInput min={0} label="Price" error={errors.price?.message} register={register('price')} />
     </Stack>
   );
 };

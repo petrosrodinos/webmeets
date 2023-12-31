@@ -48,10 +48,6 @@ const ImagePicker: FC<ImagePickerProps> = ({
     );
   };
 
-  useEffect(() => {
-    console.log('asd', images);
-  }, [images]);
-
   const { openFilePicker, filesContent, loading, errors, removeFileByIndex } = useImperativeFilePicker({
     readAs: 'DataURL',
     accept: accept,
