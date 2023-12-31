@@ -10,6 +10,7 @@ import { MeetSchema } from '@/validation-schemas/meet';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa';
+import ClosingPeriods from './ClosingPeriods';
 interface DetailsProps {
   meet: Meet | undefined;
 }
@@ -92,43 +93,49 @@ const Details: FC<DetailsProps> = ({ meet }) => {
     });
   }
 
-  const handleTabClick = (tab: number) => {
+  const handleTabChange = (tab: number) => {
     setActiveTab(tab);
   };
 
   return (
-    <Tabs variant="soft-rounded" colorScheme="green">
+    <Tabs index={activeTab} onChange={handleTabChange} variant="soft-rounded" colorScheme="green">
       <TabList display="flex" flexDirection={{ base: 'column', md: 'row' }}>
         <Tab>Information</Tab>
         <Tab>Pricing</Tab>
         <Tab>Opening Hours</Tab>
+        <Tab>Closing Periods</Tab>
       </TabList>
       <TabPanels>
-        <TabPanel onClick={() => handleTabClick(1)}>
+        <TabPanel>
           <Step1 values={getValues()} register={register} setValue={setValue} errors={errors} />
         </TabPanel>
-        <TabPanel onClick={() => handleTabClick(1)}>
+        <TabPanel>
           <Step2 register={register} setValue={setValue} errors={errors} />
         </TabPanel>
-        <TabPanel onClick={() => handleTabClick(1)}>
+        <TabPanel>
           <Step3 setValue={setValue} />
         </TabPanel>
+        <TabPanel>
+          <ClosingPeriods />
+        </TabPanel>
       </TabPanels>
-      <Button
-        isLoading={isLoading}
-        loadingText="Saving"
-        rightIcon={<FaCheck />}
-        width={100}
-        ml={4}
-        onClick={handleSave}
-        bg={'green.500'}
-        color={'white'}
-        _hover={{
-          bg: 'green.600',
-        }}
-      >
-        Save
-      </Button>
+      {activeTab !== 3 && (
+        <Button
+          isLoading={isLoading}
+          loadingText="Saving"
+          rightIcon={<FaCheck />}
+          width={100}
+          ml={4}
+          onClick={handleSave}
+          bg={'green.500'}
+          color={'white'}
+          _hover={{
+            bg: 'green.600',
+          }}
+        >
+          Save
+        </Button>
+      )}
     </Tabs>
   );
 };
