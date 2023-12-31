@@ -108,7 +108,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
             ))}
           </SimpleGrid>
         )}
-        {!!images.length && (
+        {!!images?.length && (
           <SimpleGrid mt={10} columns={{ sm: 2, md: 3 }} spacing={2}>
             {images?.map((image, index) => (
               <Image image={image.file} index={index} />

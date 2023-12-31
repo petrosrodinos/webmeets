@@ -17,7 +17,6 @@ const Service: FC = () => {
   const { data: meet, isLoading } = useQuery(['meet', id], () => getMeet(id as string));
   return (
     <>
-      <Spinner loading={isLoading} />
       <Tabs isFitted variant="enclosed">
         <TabList display="flex" flexDirection={{ base: 'column', md: 'row' }}>
           <Tab>Details</Tab>
@@ -26,22 +25,26 @@ const Service: FC = () => {
           <Tab>Statistics</Tab>
           {/* <Tab>clients</Tab> */}
         </TabList>
-        <TabPanels>
-          <TabPanel>
-            <Details meet={meet} />
-          </TabPanel>
-          <TabPanel>
-            <Bookings />
-          </TabPanel>
+        <Spinner mt={5} loading={isLoading} />
 
-          <TabPanel>
-            <Reviews />
-          </TabPanel>
+        {meet && (
+          <TabPanels>
+            <TabPanel>
+              <Details meet={meet} />
+            </TabPanel>
+            <TabPanel>
+              <Bookings />
+            </TabPanel>
 
-          <TabPanel>
-            <Statistics />
-          </TabPanel>
-        </TabPanels>
+            <TabPanel>
+              <Reviews />
+            </TabPanel>
+
+            <TabPanel>
+              <Statistics />
+            </TabPanel>
+          </TabPanels>
+        )}
       </Tabs>
     </>
   );
