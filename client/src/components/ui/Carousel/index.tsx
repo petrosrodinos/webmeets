@@ -87,7 +87,7 @@ const Carousel: FC<CarouselProps> = ({
       >
         {images.length == 0 && (
           <Box height="210px" position="relative" backgroundPosition="center" backgroundRepeat="no-repeat" backgroundSize="cover">
-            <Image alt="asd" src={MeetPlaceholder} />
+            <Image alt="meet-placeholder-image" src={MeetPlaceholder} />
           </Box>
         )}
 

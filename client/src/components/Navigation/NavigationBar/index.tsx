@@ -79,7 +79,7 @@ const AvatarMenuItems = [
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { isLoggedIn, username, avatar, role, logOut } = authStore((state) => state);
-  const { setSelectedLink, selectedLink } = navigationStore((state) => state);
+  const { selectedLink } = navigationStore((state) => state);
   const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
 

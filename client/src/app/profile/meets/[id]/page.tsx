@@ -20,14 +20,16 @@ const Service: FC = () => {
       <Spinner loading={isLoading} />
       <Tabs isFitted variant="enclosed">
         <TabList>
+          <Tab>Details</Tab>
           <Tab>Bookings</Tab>
           <Tab>Reviews</Tab>
-          <Tab>Details</Tab>
           <Tab>Statistics</Tab>
-          <Tab>Settings</Tab>
           {/* <Tab>clients</Tab> */}
         </TabList>
         <TabPanels>
+          <TabPanel>
+            <Details meet={meet} />
+          </TabPanel>
           <TabPanel>
             <Bookings />
           </TabPanel>
@@ -35,15 +37,9 @@ const Service: FC = () => {
           <TabPanel>
             <Reviews />
           </TabPanel>
-          <TabPanel>
-            <Details meet={meet} />
-          </TabPanel>
-          <TabPanel>
-            <Statistics />
-          </TabPanel>
 
           <TabPanel>
-            <Settings />
+            <Statistics />
           </TabPanel>
         </TabPanels>
       </Tabs>

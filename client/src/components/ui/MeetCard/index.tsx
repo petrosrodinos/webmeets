@@ -58,7 +58,7 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, fromProfiles =
           <Text color={'gray.500'}>{duration} minutes</Text>
           <Text color={'gray.500'}>{maxParticipants} people</Text>
         </Stack>
-        {!fromProfiles && (
+        {(!fromProfiles || !fromProfile) && (
           <Stack
             _hover={{
               cursor: 'pointer',

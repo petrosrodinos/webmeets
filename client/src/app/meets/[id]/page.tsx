@@ -207,7 +207,7 @@ const Meet: FC<MeetProps> = ({ params }) => {
 
               {meet?.profile?.id !== profileId && (
                 <Button
-                  rounded={'none'}
+                  rounded={'lg'}
                   w={'full'}
                   mt={8}
                   size={'lg'}

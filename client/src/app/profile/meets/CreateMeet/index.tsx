@@ -7,7 +7,7 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 import Modal from '@/components/ui/Modal';
-import { createMeet, editMeet } from '@/services/meets';
+import { createMeet } from '@/services/meets';
 import { MeetSchema } from '@/validation-schemas/meet';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Meet } from '@/interfaces/meet';
@@ -30,10 +30,14 @@ interface CreateMeetProps {
   meet?: Meet;
 }
 
-const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
+const CreateMeet: FC<CreateMeetProps> = () => {
   const toast = useToast();
   const [createdMeetId, setCreatedMeetId] = useState<string | null>(null);
   const router = useRouter();
+
+  const { mutate: createMeetMutation, isLoading } = useMutation((data: any) => {
+    return createMeet(data);
+  });
 
   const {
     register,
@@ -43,14 +47,14 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
     getValues,
   } = useForm({
     defaultValues: {
-      name: meet?.name || '',
-      description: meet?.description || '',
-      category: meet?.category || '',
-      images: meet?.images || [],
-      type: meet?.type || 'remote',
-      duration: meet?.duration || 60,
-      maxParticipants: meet?.maxParticipants || 5,
-      price: meet?.price || 0,
+      name: '',
+      description: '',
+      category: '',
+      images: [],
+      type: 'remote',
+      duration: 60,
+      maxParticipants: 5,
+      price: 0,
     },
     resolver: yupResolver(MeetSchema),
   });
@@ -77,14 +81,6 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
       step: <Step3 setValue={setValue} />,
     },
   ];
-
-  const { mutate: createMeetMutation, isLoading } = useMutation((data: any) => {
-    return createMeet(data);
-  });
-
-  const { mutate: editMeetMutation } = useMutation((data: any) => {
-    return editMeet(meet?.id as string, data);
-  });
 
   async function handleNext() {
     let fildsToValidate: any[] = [];
@@ -127,36 +123,6 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
     createMeetMutation(meetValues, {
       onSuccess: (data) => {
         setCreatedMeetId(data._id);
-      },
-      onError: (error: any) => {
-        toast({
-          title: 'Something went wrong',
-          description: error.message,
-          position: 'top',
-          isClosable: true,
-          status: 'error',
-        });
-      },
-    });
-  }
-
-  function onSave(values: any) {
-    console.log(values);
-
-    // return;
-
-    const payload = {
-      ...values,
-    };
-
-    editMeetMutation(payload, {
-      onSuccess: (data: any) => {
-        toast({
-          title: 'Meet updated successfully',
-          position: 'top',
-          isClosable: true,
-          status: 'success',
-        });
       },
       onError: (error: any) => {
         toast({

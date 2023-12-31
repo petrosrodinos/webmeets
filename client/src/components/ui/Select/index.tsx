@@ -18,8 +18,8 @@ const Select: FC<SelectProps> = ({ placeholder, register, error, required, label
     <FormControl isInvalid={!!error} isRequired={required}>
       {label && <FormLabel>{label}</FormLabel>}
       <ChakraSelect onChange={onChange} placeholder={placeholder} {...register} {...props} {...rest}>
-        {options?.map((option: OptionItem) => (
-          <option key={option.value} value={option.value}>
+        {options?.map((option: OptionItem, index: number) => (
+          <option key={index} value={option.value}>
             {option.label}
           </option>
         ))}

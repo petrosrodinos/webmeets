@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Flex, Stack, Button, useToast, VStack, Text, Box, RadioGroup, Radio, Center, FormLabel } from '@chakra-ui/react';
+import { Stack, VStack, RadioGroup, Radio, Center, FormLabel } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import ImagePicker from '@/components/ui/ImagePicker';
 import { ImagePickerItemData } from '@/interfaces/components';
@@ -38,7 +38,7 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue }) => {
       />
       <Select
         error={errors.category?.message}
-        placeholder="Category"
+        placeholder="Select Category"
         options={SERVICE_CATEGORIES}
         label="Category"
         register={register('category')}
