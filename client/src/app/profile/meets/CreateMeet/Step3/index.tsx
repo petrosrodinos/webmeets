@@ -5,8 +5,6 @@ import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIco
 import { v4 as uuid } from 'uuid';
 import PeriodInput from './Period';
 interface Step3Props {
-  register: any;
-  errors: any;
   setValue: any;
 }
 
@@ -18,12 +16,8 @@ const emptyHours: Hours[] = days.map((day) => ({
   periods: [],
 }));
 
-const Step3: FC<Step3Props> = ({ register, errors, setValue }) => {
+const Step3: FC<Step3Props> = ({ setValue }) => {
   const [hours, setHours] = useState<Hours[]>(emptyHours);
-
-  useEffect(() => {
-    console.log(hours);
-  }, [hours]);
 
   const handleAddPeriod = (day: string, period: Period) => {
     const periodToAdd = {
@@ -40,6 +34,7 @@ const Step3: FC<Step3Props> = ({ register, errors, setValue }) => {
       return hour;
     });
     setHours(updatedHours);
+    setValue('hours', updatedHours);
   };
 
   const hanleEditPeriod = (day: string, period: Period) => {

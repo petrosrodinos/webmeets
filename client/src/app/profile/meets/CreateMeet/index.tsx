@@ -74,7 +74,7 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
     {
       title: 'Step 3',
       description: 'Opening Hours',
-      step: <Step3 register={register} setValue={setValue} errors={errors} />,
+      step: <Step3 setValue={setValue} />,
     },
   ];
 
@@ -106,15 +106,25 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
   }
 
   function onSubmit(values: any) {
-    console.log('final', values);
+    const meetValues = {
+      ...values,
+      hours: values.hours.map((hour: any) => {
+        delete hour.id;
+        const periods = hour.periods.map((period: any) => {
+          delete period.id;
+          return period;
+        });
+        return {
+          ...hour,
+          periods,
+        };
+      }),
+    };
+    console.log('final', meetValues);
 
     // return;
 
-    const payload = {
-      ...values,
-    };
-
-    createMeetMutation(payload, {
+    createMeetMutation(meetValues, {
       onSuccess: (data) => {
         setCreatedMeetId(data._id);
       },
@@ -171,7 +181,7 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
         title="Your meet is created"
         isOpen={!!createdMeetId}
         onClose={() => setCreatedMeetId(null)}
-        actionTitle="VISIT"
+        actionTitle="Visit"
         onAction={handleActionClick}
       >
         <Text>Now you can manage your meet.</Text>
@@ -193,7 +203,7 @@ const CreateMeet: FC<CreateMeetProps> = ({ meet }) => {
         ))}
       </Stepper>
       <Stack mx={'auto'} width="100%" spacing={4}>
-        {steps[2].step}
+        {steps[activeStep - 1].step}
 
         <HStack alignItems="left">
           {activeStep > 1 && (

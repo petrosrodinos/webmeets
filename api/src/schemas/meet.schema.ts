@@ -19,7 +19,6 @@ export class Hour {
 
   @Prop({
     type: [PeriodsSchema],
-    required: true,
   })
   periods: Period[];
 }
