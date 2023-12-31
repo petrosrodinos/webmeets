@@ -1,9 +1,11 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { Box, IconButton, useBreakpointValue } from '@chakra-ui/react';
+import { Box, IconButton, useBreakpointValue, Img } from '@chakra-ui/react';
 import { MdArrowForwardIos, MdArrowBackIosNew } from 'react-icons/md';
 import Slider from 'react-slick';
+import MeetPlaceholder from '../../../../public/meet-placeholder.jpg';
+import Image from 'next/image';
 
 interface CarouselProps {
   images: string[];
@@ -83,17 +85,24 @@ const Carousel: FC<CarouselProps> = ({
         slidesToScroll={slidesToScroll}
         ref={(slider: any) => setSlider(slider)}
       >
-        {images.map((image: string, index: number) => (
-          <Box
-            key={index}
-            height="210px"
-            position="relative"
-            backgroundPosition="center"
-            backgroundRepeat="no-repeat"
-            backgroundSize="cover"
-            backgroundImage={`url(${image})`}
-          ></Box>
-        ))}
+        {images.length == 0 && (
+          <Box height="210px" position="relative" backgroundPosition="center" backgroundRepeat="no-repeat" backgroundSize="cover">
+            <Image alt="asd" src={MeetPlaceholder} />
+          </Box>
+        )}
+
+        {images.length >= 1 &&
+          images.map((image: string, index: number) => (
+            <Box
+              key={index}
+              height="210px"
+              position="relative"
+              backgroundPosition="center"
+              backgroundRepeat="no-repeat"
+              backgroundSize="cover"
+              backgroundImage={`url(${image})`}
+            ></Box>
+          ))}
       </Slider>
     </Box>
   );
