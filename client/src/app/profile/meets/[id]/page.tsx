@@ -19,7 +19,7 @@ const Service: FC = () => {
     <>
       <Spinner loading={isLoading} />
       <Tabs isFitted variant="enclosed">
-        <TabList>
+        <TabList display="flex" flexDirection={{ base: 'column', md: 'row' }}>
           <Tab>Details</Tab>
           <Tab>Bookings</Tab>
           <Tab>Reviews</Tab>

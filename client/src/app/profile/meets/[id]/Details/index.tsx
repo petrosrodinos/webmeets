@@ -94,10 +94,9 @@ const Details: FC<DetailsProps> = ({ meet }) => {
   const handleTabClick = (tab: number) => {
     setActiveTab(tab);
   };
-
   return (
     <Tabs variant="soft-rounded" colorScheme="green">
-      <TabList>
+      <TabList display="flex" flexDirection={{ base: 'column', md: 'row' }}>
         <Tab>Information</Tab>
         <Tab>Participants/Price/Duration</Tab>
         <Tab>Opening Hours</Tab>
