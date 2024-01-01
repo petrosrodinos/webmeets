@@ -57,6 +57,7 @@ export class CreateMeetDto {
   closures: CreateClosureDto[];
 }
 
-export class AddImagesDto {
-  images: Express.Multer.File[];
+export class RemoveImagesDto {
+  @IsArray()
+  images: string[];
 }

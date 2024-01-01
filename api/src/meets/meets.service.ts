@@ -119,4 +119,24 @@ export class MeetService {
       throw error;
     }
   }
+
+  async removeImages(meetId: string, images: string[]) {
+    try {
+      const meet = await this.meetModel.findById(meetId);
+      if (!meet) {
+        throw new NotFoundException('Could not find meet.');
+      }
+
+      meet.images = meet.images.filter((image: any) => !images.includes(image._id.toString()));
+
+      await meet.save();
+
+      return meet.populate('userId profileId', '-password -email -phone');
+    } catch (error) {
+      if (error instanceof Error.ValidationError) {
+        throw new ForbiddenException(error.message);
+      }
+      throw error;
+    }
+  }
 }
