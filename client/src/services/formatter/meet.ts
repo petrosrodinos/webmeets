@@ -19,6 +19,7 @@ export const formatMeet = (meet: any): Meet => ({
   area: meet.area,
   postalCode: meet.postalCode,
   rating: meet?.rating || 0,
+  hours: meet.hours,
   images: meet.images.map((certificate: any) => ({
     id: certificate._id,
     file: certificate.file,

@@ -16,9 +16,11 @@ export const MeetSchema = yup.object().shape({
   postalCode: yup.string().optional(),
   hours: yup.array().of(
     yup.object().shape({
+      id: yup.string().required(),
       day: yup.string().required(),
       periods: yup.array().of(
         yup.object().shape({
+          id: yup.string().required(),
           from: yup.string().required(),
           to: yup.string().required(),
         }),

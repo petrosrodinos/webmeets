@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { Meet } from '@/interfaces/meet';
+import { Hours, Meet } from '@/interfaces/meet';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, useToast, Button } from '@chakra-ui/react';
 import Step1 from '../../CreateMeet/Step1';
 import Step2 from '../../CreateMeet/Step2';
@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa';
 import ClosingPeriods from './ClosingPeriods';
 import Settings from './Settings';
+
 interface DetailsProps {
   meet: Meet | undefined;
 }
@@ -46,6 +47,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
       duration: meet?.duration || 60,
       maxParticipants: meet?.maxParticipants || 5,
       price: meet?.price || 0,
+      hours: meet?.hours || [],
     });
   }, [meet]);
 
@@ -111,7 +113,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
           <Step2 register={register} setValue={setValue} errors={errors} />
         </TabPanel>
         <TabPanel>
-          <Step3 setValue={setValue} />
+          <Step3 values={getValues('hours') as Hours[]} setValue={setValue} />
         </TabPanel>
         <TabPanel>
           <ClosingPeriods />

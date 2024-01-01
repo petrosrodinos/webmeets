@@ -10,8 +10,8 @@ export interface Period {
 }
 
 export interface Hours {
-  day: string;
   id: string;
+  day: string;
   periods: Period[];
 }
 

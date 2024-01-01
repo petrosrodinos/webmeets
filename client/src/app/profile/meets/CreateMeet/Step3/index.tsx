@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import PeriodInput from './Period';
 interface Step3Props {
   setValue: any;
+  values?: Hours[];
 }
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -16,8 +17,14 @@ const emptyHours: Hours[] = days.map((day) => ({
   periods: [],
 }));
 
-const Step3: FC<Step3Props> = ({ setValue }) => {
+const Step3: FC<Step3Props> = ({ setValue, values }) => {
   const [hours, setHours] = useState<Hours[]>(emptyHours);
+
+  useEffect(() => {
+    if (values && values.length > 0) {
+      setHours(values);
+    }
+  }, [values]);
 
   const handleAddPeriod = (day: string, period: Period) => {
     const periodToAdd = {
