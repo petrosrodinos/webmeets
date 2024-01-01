@@ -13,7 +13,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { MeetService } from './meets.service';
-import { CreateMeetDto } from './dto/create-meet.dto';
+import { AddImagesDto, CreateMeetDto } from './dto/create-meet.dto';
 import { UpdateMeetDto } from './dto/update-meet.dto';
 import { JwtGuard } from '../auth/guard';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -66,5 +66,14 @@ export class MeetController {
   @ApiOkResponse({ type: Meet })
   remove(@Param('id') id: string) {
     return this.meetService.remove(id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('/:id/images')
+  @UseInterceptors(AnyFilesInterceptor())
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Meet })
+  async addImages(@Param('id') meetId: string, @UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.meetService.addImages(meetId, files);
   }
 }

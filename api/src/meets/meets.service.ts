@@ -60,7 +60,7 @@ export class MeetService {
     try {
       const meet = await this.meetModel.findById(id).populate('userId profileId', '-password -email -phone');
       if (!meet) {
-        throw new NotFoundException('Could not find profile.');
+        throw new NotFoundException('Could not find meet.');
       }
       return meet;
     } catch (error) {
@@ -89,6 +89,34 @@ export class MeetService {
       return deletedMeet;
     } catch (error) {
       throw new NotFoundException(error.message);
+    }
+  }
+
+  async addImages(meetId: string, files: Express.Multer.File[]) {
+    try {
+      const meet = await this.meetModel.findById(meetId);
+      if (!meet) {
+        throw new NotFoundException('Could not find meet.');
+      }
+
+      const images = [];
+      for (let i = 0; i < files?.length; i++) {
+        const uploadedFileUrl = await this.s3Service.uploadFile(files[i]);
+        images.push({
+          file: uploadedFileUrl,
+        });
+      }
+
+      meet.images.push(...images);
+
+      await meet.save();
+
+      return meet.populate('userId profileId', '-password -email -phone');
+    } catch (error) {
+      if (error instanceof Error.ValidationError) {
+        throw new ForbiddenException(error.message);
+      }
+      throw error;
     }
   }
 }
