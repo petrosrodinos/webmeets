@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { Stack, Button } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import NumberInput from '@/components/ui/NumberInput';
+import Input from '@/components/ui/Input';
 
 interface Step2Props {
   register: any;
@@ -11,6 +12,8 @@ interface Step2Props {
 const Step2: FC<Step2Props> = ({ register, errors, setValue }) => {
   return (
     <Stack>
+      <Input placeholder="Enter meet name" label="Name" error={errors.name?.message} register={register('name')} />
+
       <NumberInput min={1} label="Duration (minutes)" error={errors.duration?.message} register={register('duration')} />
       <NumberInput
         min={1}

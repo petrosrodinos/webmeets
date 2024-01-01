@@ -44,7 +44,11 @@ export const getMeet = async (id: string): Promise<Meet> => {
 
 export const editMeet = async (id: string, payload: NewMeet) => {
   try {
-    const result = await axios.put(`${API_URL}meets/${id}`, payload, getHeaders());
+    const result = await axios.patch(`${API_URL}meets/${id}`, payload, {
+      headers: {
+        Authorization: `Bearer ${getAuthState().token}`,
+      },
+    });
     return result.data;
   } catch (err: any) {
     throw err?.response?.data;

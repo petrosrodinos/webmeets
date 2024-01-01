@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Stack, VStack, RadioGroup, Radio, Center, FormLabel, useColorMode, useColorModeValue } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import ImagePicker from '@/components/ui/ImagePicker';
@@ -17,6 +17,10 @@ interface Step1Props {
 
 const Step1: FC<Step1Props> = ({ register, errors, setValue, values }) => {
   const [type, setType] = useState<MeetType>('remote');
+
+  useEffect(() => {
+    setType(values?.type || 'remote');
+  }, [values]);
 
   const handleChange = (value: any) => {
     setType(value);

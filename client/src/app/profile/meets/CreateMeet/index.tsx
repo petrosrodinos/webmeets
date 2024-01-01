@@ -52,9 +52,9 @@ const CreateMeet: FC<CreateMeetProps> = () => {
       category: '',
       images: [],
       type: 'remote',
-      duration: 60,
-      maxParticipants: 5,
-      price: 0,
+      duration: '60',
+      maxParticipants: '5',
+      price: '0',
     },
     resolver: yupResolver(MeetSchema),
   });

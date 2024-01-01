@@ -3,13 +3,13 @@ import { FC } from 'react';
 import { useParams } from 'next/navigation';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
-import Settings from './Settings';
 import { getMeet } from '@/services/meets';
 import Bookings from './Bookings';
 import Details from './Details';
 import Statistics from './Statistics';
 import Reviews from './Reviews';
 import Spinner from '@/components/ui/Spinner';
+import Clients from './Clients';
 
 const Service: FC = () => {
   const { id } = useParams();
@@ -23,7 +23,7 @@ const Service: FC = () => {
           <Tab>Bookings</Tab>
           <Tab>Reviews</Tab>
           <Tab>Statistics</Tab>
-          {/* <Tab>clients</Tab> */}
+          <Tab>Clients</Tab>
         </TabList>
         <Spinner mt={5} loading={isLoading} />
 
@@ -42,6 +42,10 @@ const Service: FC = () => {
 
             <TabPanel>
               <Statistics />
+            </TabPanel>
+
+            <TabPanel>
+              <Clients meet={meet} />
             </TabPanel>
           </TabPanels>
         )}

@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa';
 import ClosingPeriods from './ClosingPeriods';
+import Settings from './Settings';
 interface DetailsProps {
   meet: Meet | undefined;
 }
@@ -64,15 +65,11 @@ const Details: FC<DetailsProps> = ({ meet }) => {
   }
 
   function saveValues(values: any) {
-    console.log(values);
-
     // return;
 
-    const payload = {
-      ...values,
-    };
+    console.log('update', values);
 
-    editMeetMutation(payload, {
+    editMeetMutation(values, {
       onSuccess: () => {
         toast({
           title: 'Meet updated successfully',
@@ -98,12 +95,13 @@ const Details: FC<DetailsProps> = ({ meet }) => {
   };
 
   return (
-    <Tabs index={activeTab} onChange={handleTabChange} variant="soft-rounded" colorScheme="green">
+    <Tabs onChange={handleTabChange} variant="soft-rounded" colorScheme="green">
       <TabList display="flex" flexDirection={{ base: 'column', md: 'row' }}>
         <Tab>Information</Tab>
         <Tab>Pricing</Tab>
         <Tab>Opening Hours</Tab>
         <Tab>Closing Periods</Tab>
+        <Tab>Settings</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
@@ -117,6 +115,9 @@ const Details: FC<DetailsProps> = ({ meet }) => {
         </TabPanel>
         <TabPanel>
           <ClosingPeriods />
+        </TabPanel>
+        <TabPanel>
+          <Settings />
         </TabPanel>
       </TabPanels>
       {activeTab !== 3 && (

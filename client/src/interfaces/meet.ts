@@ -40,8 +40,10 @@ export interface Meet extends Address {
   maxParticipants: number;
   images: { id: string; file: string }[];
   price: number;
+  hours: Hours[];
   type: MeetType;
   profile: Profile | null;
   user: User | null;
   createdAt: string;
+  [key: string]: any;
 }

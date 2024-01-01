@@ -1,7 +1,8 @@
-import { IsOptional, IsString, IsArray } from 'class-validator';
+import { IsOptional, IsString, IsArray, Validate } from 'class-validator';
 import { MeetType } from 'src/types/meet';
 import { CreateHourDto } from '../hours/dto/create-hour.dto';
 import { CreateClosureDto } from '../closures/dto/create-closure.dto';
+import { IsNumberOrString } from 'src/validators/IsNumberOrString';
 
 export class CreateMeetDto {
   @IsString()
@@ -16,13 +17,13 @@ export class CreateMeetDto {
   @IsOptional()
   images: Express.Multer.File[];
 
-  @IsString()
+  @Validate(IsNumberOrString)
   duration: string;
 
-  @IsString()
+  @Validate(IsNumberOrString)
   maxParticipants: string;
 
-  @IsString()
+  @Validate(IsNumberOrString)
   price: string;
 
   @IsString()
