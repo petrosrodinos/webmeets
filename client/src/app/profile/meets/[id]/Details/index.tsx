@@ -20,6 +20,7 @@ interface DetailsProps {
 const Details: FC<DetailsProps> = ({ meet }) => {
   const toast = useToast();
   const [activeTab, setActiveTab] = useState(1);
+  const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
 
   const { mutate: editMeetMutation, isLoading } = useMutation((data: any) => {
     return editMeet(meet?.id as string, data);
@@ -66,10 +67,15 @@ const Details: FC<DetailsProps> = ({ meet }) => {
     }
   }
 
-  function saveValues(values: any) {
-    // return;
-
+  const saveValues = (values: any) => {
     console.log('update', values);
+    console.log('delete', imagesToDelete);
+
+    const newImages = values.images.filter((image: any) => !image.id);
+
+    console.log('newImages', newImages);
+
+    return;
 
     editMeetMutation(values, {
       onSuccess: () => {
@@ -90,10 +96,14 @@ const Details: FC<DetailsProps> = ({ meet }) => {
         });
       },
     });
-  }
+  };
 
   const handleTabChange = (tab: number) => {
     setActiveTab(tab);
+  };
+
+  const handleImageDelete = (imageId: string) => {
+    setImagesToDelete((prev) => [...prev, imageId]);
   };
 
   return (
@@ -107,7 +117,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
       </TabList>
       <TabPanels>
         <TabPanel>
-          <Step1 values={getValues()} register={register} setValue={setValue} errors={errors} />
+          <Step1 values={getValues()} register={register} setValue={setValue} errors={errors} onImageDelete={handleImageDelete} />
         </TabPanel>
         <TabPanel>
           <Step2 register={register} setValue={setValue} errors={errors} />

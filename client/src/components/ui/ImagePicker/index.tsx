@@ -5,7 +5,7 @@ import {
   FileSizeValidator,
   // ImageDimensionsValidator,
 } from 'use-file-picker/validators';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Spinner from '@/components/ui/Spinner';
 import { Button, SimpleGrid, useColorModeValue, Box } from '@chakra-ui/react';
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md';
@@ -19,8 +19,14 @@ interface ImagePickerProps {
   multiple?: boolean;
   accept?: string;
   name: string;
-  images: { id: string; file: string }[];
+  images?: Image[];
   onChange: (data: ImagePickerItemData) => void;
+  onImageDelete?: (data: string) => void;
+}
+
+interface Image {
+  id: string;
+  file: string;
 }
 
 const ImagePicker: FC<ImagePickerProps> = ({
@@ -28,10 +34,19 @@ const ImagePicker: FC<ImagePickerProps> = ({
   label,
   name,
   onChange,
+  onImageDelete,
   multiple = true,
   accept = 'image/*',
   maxFiles = 5,
 }) => {
+  const [filteredImages, setFilteredImages] = useState<Image[]>([]);
+
+  useEffect(() => {
+    if (images && images.length > 0 && filteredImages.length == 0) {
+      setFilteredImages(images);
+    }
+  }, [images]);
+
   const FilePickerButton = ({ label }: { label: string }) => {
     return (
       <Button
@@ -48,7 +63,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
     );
   };
 
-  const { openFilePicker, filesContent, loading, errors, removeFileByIndex } = useImperativeFilePicker({
+  const { openFilePicker, filesContent, loading, plainFiles, errors, removeFileByIndex } = useImperativeFilePicker({
     readAs: 'DataURL',
     accept: accept,
     multiple: multiple,
@@ -63,7 +78,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
       //     minWidth: 768,
       //   }),
     ],
-    onFilesSuccessfullySelected: ({ plainFiles, filesContent }) => {
+    onFilesSuccessfullySelected: ({ plainFiles }) => {
       onChange({
         name,
         files: plainFiles,
@@ -92,10 +107,23 @@ const ImagePicker: FC<ImagePickerProps> = ({
     return <Spinner loading={true} />;
   }
 
-  const Image = ({ image, index }: { image: string; index: number }) => {
+  const removeImage = (index: number, imageId?: string) => {
+    if (imageId) {
+      setFilteredImages((prev) => prev.filter((image: Image) => image.id != imageId));
+      onImageDelete?.(imageId);
+    } else {
+      removeFileByIndex(index);
+      onChange({
+        name,
+        files: plainFiles,
+      });
+    }
+  };
+
+  const ImageContainer = ({ image, index, imageId }: { image: string; index: number; imageId?: string }) => {
     return (
       <div className="image-container">
-        <IoIosCloseCircleOutline className="image-remove-button" onClick={() => removeFileByIndex(index)} />
+        <IoIosCloseCircleOutline className="image-remove-button" onClick={() => removeImage(index, imageId)} />
         <img className="image-picker-image" alt={'image'} src={image}></img>
       </div>
     );
@@ -108,14 +136,14 @@ const ImagePicker: FC<ImagePickerProps> = ({
         {filesContent.length > 0 && (
           <SimpleGrid mt={2} columns={{ sm: 2, md: 3 }} spacing={2}>
             {filesContent.map((file, index) => (
-              <Image image={file.content} index={index} />
+              <ImageContainer image={file.content} index={index} />
             ))}
           </SimpleGrid>
         )}
-        {!!images?.length && (
+        {!!filteredImages?.length && (
           <SimpleGrid mt={2} columns={{ sm: 2, md: 3 }} spacing={2}>
-            {images?.map((image, index) => (
-              <Image image={image.file} index={index} />
+            {filteredImages?.map((image, index) => (
+              <ImageContainer imageId={image.id} image={image.file} index={index} />
             ))}
           </SimpleGrid>
         )}

@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { Stack, VStack, RadioGroup, Radio, Center, FormLabel, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { Stack, VStack, RadioGroup, Radio, FormLabel, useColorModeValue } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import ImagePicker from '@/components/ui/ImagePicker';
 import { ImagePickerItemData } from '@/interfaces/components';
@@ -13,9 +13,10 @@ interface Step1Props {
   errors: any;
   setValue: any;
   values?: any;
+  onImageDelete?: (data: string) => void;
 }
 
-const Step1: FC<Step1Props> = ({ register, errors, setValue, values }) => {
+const Step1: FC<Step1Props> = ({ register, errors, setValue, values, onImageDelete }) => {
   const [type, setType] = useState<MeetType>('remote');
 
   useEffect(() => {
@@ -28,7 +29,10 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, values }) => {
   };
 
   const handleImageChange = (data: ImagePickerItemData) => {
-    setValue(data.name as 'images', data.files);
+    const prevImages = values?.images || [];
+    const images = [...prevImages, ...data.files];
+    console.log('selected', images);
+    setValue('images', images);
   };
 
   return (
@@ -50,7 +54,13 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, values }) => {
       />
       <FormLabel>Select Images</FormLabel>
 
-      <ImagePicker images={values?.images} name="images" label="Select images" onChange={handleImageChange} />
+      <ImagePicker
+        images={values?.images}
+        name="images"
+        label="Select images"
+        onChange={handleImageChange}
+        onImageDelete={onImageDelete}
+      />
 
       <FormLabel>Location</FormLabel>
       <RadioGroup colorScheme={useColorModeValue('primary', 'primary')} onChange={handleChange} value={type}>
