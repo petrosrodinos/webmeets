@@ -69,7 +69,6 @@ const Details: FC<DetailsProps> = ({ meet }) => {
 
   const saveValues = (values: any) => {
     console.log('update', values);
-    console.log('delete', imagesToDelete);
 
     const newImages = values.images.filter((image: any) => !image.id);
 

@@ -29,10 +29,8 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, values, onImageDele
   };
 
   const handleImageChange = (data: ImagePickerItemData) => {
-    const prevImages = values?.images || [];
-    const images = [...prevImages, ...data.files];
-    console.log('selected', images);
-    setValue('images', images);
+    const filesToStore = data.files.map((image: any) => image.file);
+    setValue('images', filesToStore);
   };
 
   return (

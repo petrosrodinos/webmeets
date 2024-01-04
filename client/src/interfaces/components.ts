@@ -17,9 +17,14 @@ export interface MultiFilePickerItemData {
   file: File;
 }
 
+export interface ImagePickerFile {
+  id: string;
+  file: File;
+}
+
 export interface ImagePickerItemData {
   name: string;
-  files: File[];
+  files: ImagePickerFile[];
 }
 
 export interface BookingCalendarEvent {

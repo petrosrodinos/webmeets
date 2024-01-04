@@ -10,7 +10,7 @@ import Spinner from '@/components/ui/Spinner';
 import { Button, SimpleGrid, useColorModeValue, Box } from '@chakra-ui/react';
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
-import { ImagePickerItemData } from '@/interfaces/components';
+import { ImagePickerFile, ImagePickerItemData } from '@/interfaces/components';
 import './style.css';
 
 interface ImagePickerProps {
@@ -40,6 +40,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
   maxFiles = 5,
 }) => {
   const [filteredImages, setFilteredImages] = useState<Image[]>([]);
+  const [selectedImages, setSelectedImages] = useState<ImagePickerFile[]>([]);
 
   useEffect(() => {
     if (images && images.length > 0 && filteredImages.length == 0) {
@@ -79,9 +80,15 @@ const ImagePicker: FC<ImagePickerProps> = ({
       //   }),
     ],
     onFilesSuccessfullySelected: ({ plainFiles }) => {
+      const filesWithIds = plainFiles.map((file, index) => ({
+        id: index.toString(),
+        file: file,
+      }));
+      setSelectedImages((prev) => [...prev, ...filesWithIds]);
+
       onChange({
         name,
-        files: plainFiles,
+        files: filesWithIds,
       });
     },
   });
@@ -113,9 +120,12 @@ const ImagePicker: FC<ImagePickerProps> = ({
       onImageDelete?.(imageId);
     } else {
       removeFileByIndex(index);
+      const newImages = selectedImages.filter((_, i) => i != index);
+      setSelectedImages(newImages);
+
       onChange({
         name,
-        files: plainFiles,
+        files: newImages,
       });
     }
   };
