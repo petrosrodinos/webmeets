@@ -12,6 +12,7 @@ import {
   NewMeet,
 } from '@/interfaces/meet';
 import { formatClosingPeriods, formatHours, formatMeet } from './formatter/meet';
+import { formatDateToUTC } from '@/lib/date';
 
 export const getHeaders = () => {
   return {
@@ -53,6 +54,7 @@ export const getMeet = async (id: string): Promise<Meet> => {
   try {
     const result = await axios.get(`${API_URL}meets/${id}`);
     const formattedData = formatMeet(result.data);
+    console.log(formattedData.closingPeriods);
     return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
@@ -110,7 +112,12 @@ export const deletePeriod = async (payload: DeletePeriod) => {
 export const addClosingPeriod = async (payload: AddClosingPeriod) => {
   try {
     const { meetId } = payload;
-    const closingPeriod = { name: payload.name, description: payload.description, from: payload.from, to: payload.to };
+    const closingPeriod = {
+      name: payload.name,
+      description: payload.description,
+      from: formatDateToUTC(payload.from),
+      to: formatDateToUTC(payload.to),
+    };
     const result = await axios.post(`${API_URL}meets/${meetId}/closures`, closingPeriod, getAuthHeaders());
     const formattedData = formatClosingPeriods(result.data.closures);
     return formattedData;

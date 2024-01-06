@@ -28,7 +28,6 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
 
   useEffect(() => {
     if (values && values.length > 0) {
-      console.log('closing', values);
       setPeriods(values);
     }
   }, [values]);
@@ -36,7 +35,6 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
   const handleAddPeriod = (period: AddClosingPeriod) => {
     addPeriodMutation(period, {
       onSuccess: (data) => {
-        console.log('data', data);
         setPeriods(data);
         toast({
           title: 'Success',

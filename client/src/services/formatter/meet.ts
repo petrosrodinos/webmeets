@@ -1,5 +1,5 @@
 import { Meet } from '@/interfaces/meet';
-import { formatDate } from '@/lib/date';
+import { formatDate, formatDateFromUTC } from '@/lib/date';
 import { formatProfile } from './profile';
 import { formatUser } from './user';
 
@@ -43,8 +43,8 @@ export const formatClosingPeriods = (closingPeriods: any) => {
     id: closingPeriod._id,
     name: closingPeriod.name,
     description: closingPeriod.description,
-    from: closingPeriod.from,
-    to: closingPeriod.to,
+    from: formatDateFromUTC(closingPeriod.from),
+    to: formatDateFromUTC(closingPeriod.to),
   }));
 };
 

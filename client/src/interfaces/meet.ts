@@ -34,7 +34,6 @@ export interface NewMeet extends Address {
   price: number;
   type: MeetType;
   hours: Hours[];
-  closingPeriods: ClosingPeriod[];
   [key: string]: any;
 }
 
@@ -50,6 +49,7 @@ export interface Meet extends Address {
   images: { id: string; file: string }[];
   price: number;
   hours: Hours[];
+  closingPeriods: ClosingPeriod[];
   type: MeetType;
   profile: Profile | null;
   user: User | null;
