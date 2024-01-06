@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { DeletePeriod, EditPeriod, Hours, Meet, AddPeriod } from '@/interfaces/meet';
+import { DeletePeriod, EditPeriod, Hours, Meet, AddPeriod, ClosingPeriod } from '@/interfaces/meet';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, useToast, Button } from '@chakra-ui/react';
 import Step1 from '../../CreateMeet/Step1';
 import Step2 from '../../CreateMeet/Step2';
@@ -61,6 +61,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
       maxParticipants: meet?.maxParticipants || 5,
       price: meet?.price || 0,
       hours: meet?.hours || [],
+      closingPeriods: meet?.closingPeriods || [],
     });
   }, [meet]);
 
@@ -217,7 +218,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
           />
         </TabPanel>
         <TabPanel>
-          <ClosingPeriods />
+          <ClosingPeriods values={getValues('closingPeriods') as ClosingPeriod[]} />
         </TabPanel>
         <TabPanel>
           <Settings />

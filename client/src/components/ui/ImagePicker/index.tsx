@@ -146,14 +146,14 @@ const ImagePicker: FC<ImagePickerProps> = ({
         {filesContent.length > 0 && (
           <SimpleGrid mt={2} columns={{ sm: 2, md: 3 }} spacing={2}>
             {filesContent.map((file, index) => (
-              <ImageContainer image={file.content} index={index} />
+              <ImageContainer key={index} image={file.content} index={index} />
             ))}
           </SimpleGrid>
         )}
         {!!filteredImages?.length && (
           <SimpleGrid mt={2} columns={{ sm: 2, md: 3 }} spacing={2}>
             {filteredImages?.map((image, index) => (
-              <ImageContainer imageId={image.id} image={image.file} index={index} />
+              <ImageContainer key={index} imageId={image.id} image={image.file} index={index} />
             ))}
           </SimpleGrid>
         )}

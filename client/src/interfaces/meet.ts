@@ -15,6 +15,14 @@ export interface Hours {
   periods: Period[];
 }
 
+export interface ClosingPeriod {
+  id: string;
+  name: string;
+  description?: string;
+  from: string;
+  to: string;
+}
+
 export interface NewMeet extends Address {
   name: string;
   description: string;
@@ -26,6 +34,7 @@ export interface NewMeet extends Address {
   price: number;
   type: MeetType;
   hours: Hours[];
+  closingPeriods: ClosingPeriod[];
   [key: string]: any;
 }
 
