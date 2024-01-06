@@ -8,6 +8,9 @@ interface Step3Props {
   setValue?: any;
   values?: Hours[];
   meetId?: string;
+  isAdding?: boolean;
+  isEditing?: boolean;
+  isDeleting?: boolean;
   onAddPeriod?: (data: AddPeriod) => void;
   onEditPeriod?: (data: EditPeriod) => void;
   onDeletePeriod?: (data: DeletePeriod) => void;
@@ -21,8 +24,21 @@ const emptyHours: Hours[] = days.map((day) => ({
   periods: [],
 }));
 
-const Step3: FC<Step3Props> = ({ setValue, values, meetId, onAddPeriod, onEditPeriod, onDeletePeriod }) => {
+const Step3: FC<Step3Props> = ({
+  setValue,
+  values,
+  meetId,
+  isAdding,
+  isEditing,
+  isDeleting,
+  onAddPeriod,
+  onEditPeriod,
+  onDeletePeriod,
+}) => {
   const [hours, setHours] = useState<Hours[]>(emptyHours);
+  const [addingId, setAddingId] = useState<string>();
+  const [editingId, setEditingId] = useState<string>();
+  const [deletingId, setDeletingId] = useState<string>();
 
   useEffect(() => {
     if (values && values.length > 0) {
@@ -48,6 +64,7 @@ const Step3: FC<Step3Props> = ({ setValue, values, meetId, onAddPeriod, onEditPe
     setValue('hours', updatedHours);
 
     if (values) {
+      setAddingId(dayId);
       onAddPeriod?.({ meetId: meetId as string, hourId: dayId, from: periodToAdd.from, to: periodToAdd.to });
     }
   };
@@ -70,13 +87,14 @@ const Step3: FC<Step3Props> = ({ setValue, values, meetId, onAddPeriod, onEditPe
     setHours(updatedHours);
     setValue('hours', updatedHours);
     if (values) {
+      setEditingId(period.id);
       onEditPeriod?.({ meetId: meetId as string, hourId: dayId, periodId: period.id, from: period.from, to: period.to });
     }
   };
 
   const handleRemovePeriod = (dayId: string, id: string) => {
     const updatedHours = hours.map((hour) => {
-      if (hour.day === dayId) {
+      if (hour.id === dayId) {
         return {
           ...hour,
           periods: hour.periods.filter((period) => period.id !== id),
@@ -87,6 +105,7 @@ const Step3: FC<Step3Props> = ({ setValue, values, meetId, onAddPeriod, onEditPe
     setHours(updatedHours);
     setValue('hours', updatedHours);
     if (values) {
+      setDeletingId(id);
       onDeletePeriod?.({ meetId: meetId as string, hourId: dayId, periodId: id });
     }
   };
@@ -106,9 +125,24 @@ const Step3: FC<Step3Props> = ({ setValue, values, meetId, onAddPeriod, onEditPe
             </h2>
             <AccordionPanel pb={4}>
               {hour.periods.map((period, index) => (
-                <PeriodInput key={index} dayId={hour.id} values={period} onEdit={hanleEditPeriod} onRemove={handleRemovePeriod} />
+                <PeriodInput
+                  key={index}
+                  dayId={hour.id}
+                  values={period}
+                  onEdit={hanleEditPeriod}
+                  onRemove={handleRemovePeriod}
+                  isAdding={isAdding && addingId === period.id}
+                  isEditing={isEditing && editingId === period.id}
+                  isDeleting={isDeleting && deletingId === period.id}
+                />
               ))}
-              <PeriodInput dayId={hour.id} onAdd={handleAddPeriod} />
+              <PeriodInput
+                dayId={hour.id}
+                onAdd={handleAddPeriod}
+                isAdding={isAdding && addingId === hour.id}
+                isEditing={isEditing && editingId === hour.id}
+                isDeleting={isDeleting && deletingId === hour.id}
+              />
             </AccordionPanel>
           </AccordionItem>
         ))}

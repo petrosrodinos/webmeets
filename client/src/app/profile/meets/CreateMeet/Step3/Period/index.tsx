@@ -9,6 +9,9 @@ interface PeriodProps {
   onRemove?: (day: string, id: string) => void;
   onEdit?: (day: string, period: Period) => void;
   onAdd?: (day: string, period: Period) => void;
+  isAdding?: boolean;
+  isEditing?: boolean;
+  isDeleting?: boolean;
   values?: Period;
   dayId: string;
 }
@@ -19,7 +22,7 @@ const defaultPeriod: Period = {
   to: '',
 };
 
-const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, dayId }) => {
+const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, dayId, isAdding, isEditing, isDeleting }) => {
   const toast = useToast();
 
   const [period, setPeriod] = useState<Period>(values || defaultPeriod);
@@ -59,7 +62,14 @@ const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, dayId }) => 
       <Input name="from" onChange={handleChange} value={period.from} label="From" type="time" />
       <Input name="to" onChange={handleChange} value={period.to} label="To" type="time" />
       {onAdd && (
-        <IconButton onClick={handleAdd} colorScheme="green" aria-label="add-period" icon={<FaPlus />} alignSelf={'flex-end'} />
+        <IconButton
+          onClick={handleAdd}
+          isLoading={isAdding}
+          colorScheme="green"
+          aria-label="add-period"
+          icon={<FaPlus />}
+          alignSelf={'flex-end'}
+        />
       )}
       {!onAdd && (
         <>
@@ -69,6 +79,7 @@ const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, dayId }) => 
             aria-label="edit-period"
             icon={<MdEdit />}
             alignSelf={'flex-end'}
+            isLoading={isEditing}
           />
           <IconButton
             aria-label="remove-period"
@@ -76,6 +87,7 @@ const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, dayId }) => 
             onClick={handleRemove}
             colorScheme="red"
             alignSelf={'flex-end'}
+            isLoading={isDeleting}
           />
         </>
       )}

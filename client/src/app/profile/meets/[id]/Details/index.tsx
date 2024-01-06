@@ -207,6 +207,9 @@ const Details: FC<DetailsProps> = ({ meet }) => {
             onAddPeriod={handleAddPeriod}
             onEditPeriod={hanleEditPeriod}
             onDeletePeriod={handleRemovePeriod}
+            isAdding={isAddingPeriod}
+            isEditing={isEditingPeriod}
+            isDeleting={isDeletingPeriod}
           />
         </TabPanel>
         <TabPanel>
