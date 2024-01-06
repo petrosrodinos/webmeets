@@ -1,10 +1,10 @@
 import { FC, useState, useEffect } from 'react';
-import { Hours, Meet } from '@/interfaces/meet';
+import { DeletePeriod, EditPeriod, Hours, Meet, AddPeriod } from '@/interfaces/meet';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, useToast, Button } from '@chakra-ui/react';
 import Step1 from '../../CreateMeet/Step1';
 import Step2 from '../../CreateMeet/Step2';
 import Step3 from '../../CreateMeet/Step3';
-import { editMeet } from '@/services/meets';
+import { addPeriod, deletePeriod, editMeet, editPeriod } from '@/services/meets';
 import { useMutation } from 'react-query';
 import { MeetSchema } from '@/validation-schemas/meet';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -24,6 +24,18 @@ const Details: FC<DetailsProps> = ({ meet }) => {
 
   const { mutate: editMeetMutation, isLoading } = useMutation((data: any) => {
     return editMeet(meet?.id as string, data);
+  });
+
+  const { mutate: addPeriodMutation, isLoading: isAddingPeriod } = useMutation((data: AddPeriod) => {
+    return addPeriod(data);
+  });
+
+  const { mutate: editPeriodMutation, isLoading: isEditingPeriod } = useMutation((data: EditPeriod) => {
+    return editPeriod(data);
+  });
+
+  const { mutate: deletePeriodMutation, isLoading: isDeletingPeriod } = useMutation((data: DeletePeriod) => {
+    return deletePeriod(data);
   });
 
   const {
@@ -97,6 +109,72 @@ const Details: FC<DetailsProps> = ({ meet }) => {
     });
   };
 
+  const handleAddPeriod = (data: AddPeriod) => {
+    addPeriodMutation(data, {
+      onSuccess: () => {
+        toast({
+          title: 'Period added successfully',
+          position: 'top',
+          isClosable: true,
+          status: 'success',
+        });
+      },
+      onError: (error: any) => {
+        toast({
+          title: 'Something went wrong',
+          description: error.message,
+          position: 'top',
+          isClosable: true,
+          status: 'error',
+        });
+      },
+    });
+  };
+
+  const hanleEditPeriod = (data: EditPeriod) => {
+    editPeriodMutation(data, {
+      onSuccess: () => {
+        toast({
+          title: 'Period edited successfully',
+          position: 'top',
+          isClosable: true,
+          status: 'success',
+        });
+      },
+      onError: (error: any) => {
+        toast({
+          title: 'Something went wrong',
+          description: error.message,
+          position: 'top',
+          isClosable: true,
+          status: 'error',
+        });
+      },
+    });
+  };
+
+  const handleRemovePeriod = (data: DeletePeriod) => {
+    deletePeriodMutation(data, {
+      onSuccess: () => {
+        toast({
+          title: 'Period deleted successfully',
+          position: 'top',
+          isClosable: true,
+          status: 'success',
+        });
+      },
+      onError: (error: any) => {
+        toast({
+          title: 'Something went wrong',
+          description: error.message,
+          position: 'top',
+          isClosable: true,
+          status: 'error',
+        });
+      },
+    });
+  };
+
   const handleTabChange = (tab: number) => {
     setActiveTab(tab);
   };
@@ -122,7 +200,14 @@ const Details: FC<DetailsProps> = ({ meet }) => {
           <Step2 register={register} setValue={setValue} errors={errors} />
         </TabPanel>
         <TabPanel>
-          <Step3 values={getValues('hours') as Hours[]} setValue={setValue} />
+          <Step3
+            values={getValues('hours') as Hours[]}
+            setValue={setValue}
+            meetId={meet?.id}
+            onAddPeriod={handleAddPeriod}
+            onEditPeriod={hanleEditPeriod}
+            onDeletePeriod={handleRemovePeriod}
+          />
         </TabPanel>
         <TabPanel>
           <ClosingPeriods />

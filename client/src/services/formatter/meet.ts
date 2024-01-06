@@ -19,11 +19,27 @@ export const formatMeet = (meet: any): Meet => ({
   area: meet.area,
   postalCode: meet.postalCode,
   rating: meet?.rating || 0,
-  hours: meet.hours,
-  images: meet.images.map((certificate: any) => ({
-    id: certificate._id,
-    file: certificate.file,
-  })),
+  hours: formatHours(meet.hours),
+  images: formatImages(meet.images),
   profile: formatProfile(meet.profileId),
   user: formatUser(meet.userId),
 });
+
+export const formatHours = (hours: any) => {
+  return hours.map((hour: any) => ({
+    id: hour._id,
+    day: hour.day,
+    periods: hour.periods.map((period: any) => ({
+      id: period._id,
+      from: period.from,
+      to: period.to,
+    })),
+  }));
+};
+
+export const formatImages = (images: any) => {
+  return images.map((image: any) => ({
+    id: image._id,
+    file: image.file,
+  }));
+};

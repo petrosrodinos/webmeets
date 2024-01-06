@@ -1,12 +1,16 @@
-import { Hours, Period } from '@/interfaces/meet';
+import { AddPeriod, DeletePeriod, EditPeriod, Hours, Period } from '@/interfaces/meet';
 import { Box } from '@chakra-ui/react';
 import { FC, useState, useEffect } from 'react';
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react';
 import { v4 as uuid } from 'uuid';
 import PeriodInput from './Period';
 interface Step3Props {
-  setValue: any;
+  setValue?: any;
   values?: Hours[];
+  meetId?: string;
+  onAddPeriod?: (data: AddPeriod) => void;
+  onEditPeriod?: (data: EditPeriod) => void;
+  onDeletePeriod?: (data: DeletePeriod) => void;
 }
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -17,7 +21,7 @@ const emptyHours: Hours[] = days.map((day) => ({
   periods: [],
 }));
 
-const Step3: FC<Step3Props> = ({ setValue, values }) => {
+const Step3: FC<Step3Props> = ({ setValue, values, meetId, onAddPeriod, onEditPeriod, onDeletePeriod }) => {
   const [hours, setHours] = useState<Hours[]>(emptyHours);
 
   useEffect(() => {
@@ -26,13 +30,13 @@ const Step3: FC<Step3Props> = ({ setValue, values }) => {
     }
   }, [values]);
 
-  const handleAddPeriod = (day: string, period: Period) => {
+  const handleAddPeriod = (dayId: string, period: Period) => {
     const periodToAdd = {
       ...period,
       id: uuid(),
     };
     const updatedHours = hours.map((hour) => {
-      if (hour.day === day) {
+      if (hour.id === dayId) {
         return {
           ...hour,
           periods: [...hour.periods, periodToAdd],
@@ -42,11 +46,15 @@ const Step3: FC<Step3Props> = ({ setValue, values }) => {
     });
     setHours(updatedHours);
     setValue('hours', updatedHours);
+
+    if (values) {
+      onAddPeriod?.({ meetId: meetId as string, hourId: dayId, from: periodToAdd.from, to: periodToAdd.to });
+    }
   };
 
-  const hanleEditPeriod = (day: string, period: Period) => {
+  const hanleEditPeriod = (dayId: string, period: Period) => {
     const updatedHours = hours.map((hour) => {
-      if (hour.day === day) {
+      if (hour.id === dayId) {
         return {
           ...hour,
           periods: hour.periods.map((p) => {
@@ -59,13 +67,16 @@ const Step3: FC<Step3Props> = ({ setValue, values }) => {
       }
       return hour;
     });
-
     setHours(updatedHours);
+    setValue('hours', updatedHours);
+    if (values) {
+      onEditPeriod?.({ meetId: meetId as string, hourId: dayId, periodId: period.id, from: period.from, to: period.to });
+    }
   };
 
-  const handleRemovePeriod = (day: string, id: string) => {
+  const handleRemovePeriod = (dayId: string, id: string) => {
     const updatedHours = hours.map((hour) => {
-      if (hour.day === day) {
+      if (hour.day === dayId) {
         return {
           ...hour,
           periods: hour.periods.filter((period) => period.id !== id),
@@ -74,6 +85,10 @@ const Step3: FC<Step3Props> = ({ setValue, values }) => {
       return hour;
     });
     setHours(updatedHours);
+    setValue('hours', updatedHours);
+    if (values) {
+      onDeletePeriod?.({ meetId: meetId as string, hourId: dayId, periodId: id });
+    }
   };
 
   return (
@@ -91,9 +106,9 @@ const Step3: FC<Step3Props> = ({ setValue, values }) => {
             </h2>
             <AccordionPanel pb={4}>
               {hour.periods.map((period, index) => (
-                <PeriodInput key={index} day={hour.day} values={period} onEdit={hanleEditPeriod} onRemove={handleRemovePeriod} />
+                <PeriodInput key={index} dayId={hour.id} values={period} onEdit={hanleEditPeriod} onRemove={handleRemovePeriod} />
               ))}
-              <PeriodInput day={hour.day} onAdd={handleAddPeriod} />
+              <PeriodInput dayId={hour.id} onAdd={handleAddPeriod} />
             </AccordionPanel>
           </AccordionItem>
         ))}

@@ -10,7 +10,7 @@ interface PeriodProps {
   onEdit?: (day: string, period: Period) => void;
   onAdd?: (day: string, period: Period) => void;
   values?: Period;
-  day: string;
+  dayId: string;
 }
 
 const defaultPeriod: Period = {
@@ -19,7 +19,7 @@ const defaultPeriod: Period = {
   to: '',
 };
 
-const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, day }) => {
+const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, dayId }) => {
   const toast = useToast();
 
   const [period, setPeriod] = useState<Period>(values || defaultPeriod);
@@ -42,16 +42,16 @@ const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, day }) => {
         status: 'warning',
       });
     }
-    onAdd?.(day, period);
+    onAdd?.(dayId, period);
     setPeriod(defaultPeriod);
   };
 
   const handleEdit = () => {
-    onEdit?.(day, period);
+    onEdit?.(dayId, period);
   };
 
   const handleRemove = () => {
-    onRemove?.(day, period.id);
+    onRemove?.(dayId, period.id);
   };
 
   return (

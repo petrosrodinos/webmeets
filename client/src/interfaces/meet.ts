@@ -47,3 +47,24 @@ export interface Meet extends Address {
   createdAt: string;
   [key: string]: any;
 }
+
+export interface AddPeriod {
+  meetId: string;
+  hourId: string;
+  from: string;
+  to: string;
+}
+
+export interface EditPeriod {
+  meetId: string;
+  hourId: string;
+  periodId: string;
+  from: string;
+  to: string;
+}
+
+export interface DeletePeriod {
+  meetId: string;
+  hourId: string;
+  periodId: string;
+}
