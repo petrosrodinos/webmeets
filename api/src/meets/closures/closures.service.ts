@@ -42,6 +42,7 @@ export class ClosuresService {
       closure.name = updateClosureDto.name || closure.name;
       closure.from = updateClosureDto.from || closure.from;
       closure.to = updateClosureDto.to || closure.to;
+      closure.description = updateClosureDto.description || closure.description;
 
       await meet.save();
       return meet;

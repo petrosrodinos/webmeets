@@ -218,7 +218,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
           />
         </TabPanel>
         <TabPanel>
-          <ClosingPeriods values={getValues('closingPeriods') as ClosingPeriod[]} />
+          <ClosingPeriods meetId={meet?.id} values={getValues('closingPeriods') as ClosingPeriod[]} />
         </TabPanel>
         <TabPanel>
           <Settings />

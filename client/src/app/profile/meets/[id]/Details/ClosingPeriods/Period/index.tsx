@@ -2,26 +2,26 @@ import { Button, HStack, VStack } from '@chakra-ui/react';
 import { FC, useEffect } from 'react';
 import { MdEdit } from 'react-icons/md';
 import Input from '@/components/ui/Input';
-import { ClosingPeriod } from '@/interfaces/meet';
+import { AddClosingPeriod, ClosingPeriod, DeleteClosingPeriod, EditClosingPeriod } from '@/interfaces/meet';
 import { FaRegTrashAlt, FaPlus } from 'react-icons/fa';
 import { ClosingPeriodSchema } from '@/validation-schemas/meet';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { v4 as uuid } from 'uuid';
 import TextArea from '@/components/ui/TextArea';
 
 interface PeriodProps {
-  onRemove?: (id: string) => void;
-  onEdit?: (id: string, period: ClosingPeriod) => void;
-  onAdd?: (period: ClosingPeriod) => void;
+  onRemove?: (value: DeleteClosingPeriod) => void;
+  onEdit?: (value: EditClosingPeriod) => void;
+  onAdd?: (period: AddClosingPeriod) => void;
   id?: string;
   values?: ClosingPeriod;
+  meetId: string;
   isAdding?: boolean;
   isEditing?: boolean;
   isDeleting?: boolean;
 }
 
-const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, id, isAdding, isEditing, isDeleting }) => {
+const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, id, meetId, isAdding, isEditing, isDeleting }) => {
   const {
     register,
     reset,
@@ -46,17 +46,25 @@ const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, id, isAdding
   const handleAdd = (data: any) => {
     onAdd?.({
       ...data,
-      id: uuid(),
+      meetId: meetId,
     });
     reset();
   };
 
   const handleEdit = () => {
-    onEdit?.(id as string, getValues() as ClosingPeriod);
+    const period: EditClosingPeriod = {
+      ...getValues(),
+      meetId: meetId as string,
+      closingPeriodId: id as string,
+    };
+    onEdit?.(period);
   };
 
   const handleRemove = () => {
-    onRemove?.(id as string);
+    onRemove?.({
+      meetId: meetId as string,
+      closingPeriodId: id as string,
+    });
   };
 
   return (

@@ -20,6 +20,7 @@ export const formatMeet = (meet: any): Meet => ({
   postalCode: meet.postalCode,
   rating: meet?.rating || 0,
   hours: formatHours(meet.hours),
+  closingPeriods: formatClosingPeriods(meet?.closures || []),
   images: formatImages(meet.images),
   profile: formatProfile(meet.profileId),
   user: formatUser(meet.userId),
@@ -34,6 +35,16 @@ export const formatHours = (hours: any) => {
       from: period.from,
       to: period.to,
     })),
+  }));
+};
+
+export const formatClosingPeriods = (closingPeriods: any) => {
+  return closingPeriods.map((closingPeriod: any) => ({
+    id: closingPeriod._id,
+    name: closingPeriod.name,
+    description: closingPeriod.description,
+    from: closingPeriod.from,
+    to: closingPeriod.to,
   }));
 };
 

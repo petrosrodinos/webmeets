@@ -77,3 +77,25 @@ export interface DeletePeriod {
   hourId: string;
   periodId: string;
 }
+
+export interface AddClosingPeriod {
+  meetId: string;
+  name: string;
+  description?: string;
+  from: string;
+  to: string;
+}
+
+export interface EditClosingPeriod {
+  meetId: string;
+  closingPeriodId: string;
+  name: string;
+  description?: string;
+  from: string;
+  to: string;
+}
+
+export interface DeleteClosingPeriod {
+  meetId: string;
+  closingPeriodId: string;
+}

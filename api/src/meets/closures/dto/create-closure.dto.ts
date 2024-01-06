@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateClosureDto {
   @IsString()
@@ -8,4 +8,8 @@ export class CreateClosureDto {
   from: string;
   @IsString()
   to: string;
+
+  @IsString()
+  @IsOptional()
+  description: string;
 }

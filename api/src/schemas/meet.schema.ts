@@ -33,6 +33,8 @@ export class Closure {
   from: string;
   @Prop()
   to: string;
+  @Prop()
+  description: string;
 }
 
 const ClosureSchema = SchemaFactory.createForClass(Closure);
