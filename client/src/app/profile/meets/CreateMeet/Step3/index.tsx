@@ -42,6 +42,7 @@ const Step3: FC<Step3Props> = ({
 
   useEffect(() => {
     if (values && values.length > 0) {
+      console.log('asd', values);
       setHours(values);
     }
   }, [values]);
@@ -92,7 +93,7 @@ const Step3: FC<Step3Props> = ({
     }
   };
 
-  const handleRemovePeriod = (dayId: string, id: string) => {
+  const handleRemovePeriod = async (dayId: string, id: string) => {
     const updatedHours = hours.map((hour) => {
       if (hour.id === dayId) {
         return {
@@ -104,6 +105,7 @@ const Step3: FC<Step3Props> = ({
     });
     setHours(updatedHours);
     setValue('hours', updatedHours);
+    console.log('updated', updatedHours);
     if (values) {
       setDeletingId(id);
       onDeletePeriod?.({ meetId: meetId as string, hourId: dayId, periodId: id });

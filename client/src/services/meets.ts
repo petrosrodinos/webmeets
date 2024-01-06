@@ -2,7 +2,7 @@ import { API_URL } from '@/constants/api';
 import axios from 'axios';
 import { getAuthState } from '../store/authStore';
 import { AddPeriod, DeletePeriod, EditPeriod, Meet, NewMeet } from '@/interfaces/meet';
-import { formatMeet } from './formatter/meet';
+import { formatHours, formatMeet } from './formatter/meet';
 
 export const getHeaders = () => {
   return {
@@ -64,7 +64,8 @@ export const addPeriod = async (payload: AddPeriod) => {
         Authorization: `Bearer ${getAuthState().token}`,
       },
     });
-    return result.data;
+    const formattedData = formatHours(result.data.hours);
+    return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
   }
@@ -79,7 +80,8 @@ export const editPeriod = async (payload: EditPeriod) => {
         Authorization: `Bearer ${getAuthState().token}`,
       },
     });
-    return result.data;
+    const formattedData = formatHours(result.data.hours);
+    return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
   }
@@ -93,7 +95,8 @@ export const deletePeriod = async (payload: DeletePeriod) => {
         Authorization: `Bearer ${getAuthState().token}`,
       },
     });
-    return result.data;
+    const formattedData = formatHours(result.data.hours);
+    return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
   }

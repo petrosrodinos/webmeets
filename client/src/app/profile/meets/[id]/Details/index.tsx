@@ -111,7 +111,8 @@ const Details: FC<DetailsProps> = ({ meet }) => {
 
   const handleAddPeriod = (data: AddPeriod) => {
     addPeriodMutation(data, {
-      onSuccess: () => {
+      onSuccess: (data: any) => {
+        setValue('hours', data);
         toast({
           title: 'Period added successfully',
           position: 'top',
@@ -133,7 +134,9 @@ const Details: FC<DetailsProps> = ({ meet }) => {
 
   const hanleEditPeriod = (data: EditPeriod) => {
     editPeriodMutation(data, {
-      onSuccess: () => {
+      onSuccess: (data: any) => {
+        setValue('hours', data);
+
         toast({
           title: 'Period edited successfully',
           position: 'top',
@@ -155,7 +158,8 @@ const Details: FC<DetailsProps> = ({ meet }) => {
 
   const handleRemovePeriod = (data: DeletePeriod) => {
     deletePeriodMutation(data, {
-      onSuccess: () => {
+      onSuccess: (data: any) => {
+        setValue('hours', data);
         toast({
           title: 'Period deleted successfully',
           position: 'top',
@@ -219,7 +223,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
           <Settings />
         </TabPanel>
       </TabPanels>
-      {activeTab !== 3 && (
+      {activeTab !== 3 && activeTab !== 2 && (
         <Button
           isLoading={isLoading}
           loadingText="Saving"
