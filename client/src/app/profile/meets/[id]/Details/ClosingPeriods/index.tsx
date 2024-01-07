@@ -1,10 +1,11 @@
 import { AddClosingPeriod, ClosingPeriod, DeleteClosingPeriod, EditClosingPeriod } from '@/interfaces/meet';
 import { Box, useToast } from '@chakra-ui/react';
 import { FC, useState, useEffect } from 'react';
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react';
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Text } from '@chakra-ui/react';
 import PeriodInput from './Period';
 import { useMutation } from 'react-query';
 import { addClosingPeriod, editClosingPeriod, deleteClosingPeriod } from '@/services/meets';
+import Modal from '@/components/ui/Modal';
 interface Step3Props {
   values: ClosingPeriod[];
   meetId?: string;
@@ -14,6 +15,7 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
   const [periods, setPeriods] = useState<ClosingPeriod[]>([]);
   const [periodEditing, setPeriodEditing] = useState<string>();
   const [periodDeleting, setPeriodDeleting] = useState<string>();
+  const [periodToDelete, setPeriodToDelete] = useState<DeleteClosingPeriod | null>(null);
   const toast = useToast();
 
   const { mutate: addPeriodMutation, isLoading: isAddingPeriod } = useMutation((data: AddClosingPeriod) => {
@@ -87,9 +89,10 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
     });
   };
 
-  const handleRemovePeriod = async (period: DeleteClosingPeriod) => {
-    setPeriodDeleting(period.closingPeriodId);
-    deletePeriodMutation(period, {
+  const removePeriod = async () => {
+    if (!periodToDelete) return;
+    setPeriodDeleting(periodToDelete.closingPeriodId);
+    deletePeriodMutation(periodToDelete, {
       onSuccess: (data) => {
         setPeriods(data);
         toast({
@@ -114,8 +117,23 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
     });
   };
 
+  const handleRemovePeriod = () => {
+    removePeriod();
+    setPeriodToDelete(null);
+  };
+
   return (
-    <div>
+    <>
+      <Modal
+        title="Do you want to delete this closing period?"
+        isOpen={!!periodToDelete}
+        onClose={() => setPeriodToDelete(null)}
+        onAction={handleRemovePeriod}
+        actionTitle="Delete"
+        closeTitle="Cancel"
+      >
+        <Text h={10}>This action cannot be undone!</Text>
+      </Modal>
       <PeriodInput meetId={meetId as string} onAdd={handleAddPeriod} isAdding={isAddingPeriod} />
       {periods.length > 0 && (
         <Accordion mt={5} allowMultiple>
@@ -135,7 +153,7 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
                   id={period.id}
                   values={period}
                   onEdit={hanleEditPeriod}
-                  onRemove={handleRemovePeriod}
+                  onRemove={(value) => setPeriodToDelete(value)}
                   isEditing={isEditingPeriod && periodEditing === period.id}
                   isDeleting={isDeletingPeriod && periodDeleting === period.id}
                 />
@@ -144,7 +162,7 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
           ))}
         </Accordion>
       )}
-    </div>
+    </>
   );
 };
 
