@@ -54,7 +54,6 @@ export const getMeet = async (id: string): Promise<Meet> => {
   try {
     const result = await axios.get(`${API_URL}meets/${id}`);
     const formattedData = formatMeet(result.data);
-    console.log(formattedData.closingPeriods);
     return formattedData;
   } catch (err: any) {
     throw err?.response?.data;

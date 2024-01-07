@@ -12,6 +12,8 @@ interface Step3Props {
 
 const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
   const [periods, setPeriods] = useState<ClosingPeriod[]>([]);
+  const [periodEditing, setPeriodEditing] = useState<string>();
+  const [periodDeleting, setPeriodDeleting] = useState<string>();
   const toast = useToast();
 
   const { mutate: addPeriodMutation, isLoading: isAddingPeriod } = useMutation((data: AddClosingPeriod) => {
@@ -59,6 +61,7 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
   };
 
   const hanleEditPeriod = (period: EditClosingPeriod) => {
+    setPeriodEditing(period.closingPeriodId);
     editPeriodMutation(period, {
       onSuccess: (data) => {
         setPeriods(data);
@@ -85,6 +88,7 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
   };
 
   const handleRemovePeriod = async (period: DeleteClosingPeriod) => {
+    setPeriodDeleting(period.closingPeriodId);
     deletePeriodMutation(period, {
       onSuccess: (data) => {
         setPeriods(data);
@@ -112,7 +116,7 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
 
   return (
     <div>
-      <PeriodInput meetId={meetId as string} onAdd={handleAddPeriod} />
+      <PeriodInput meetId={meetId as string} onAdd={handleAddPeriod} isAdding={isAddingPeriod} />
       {periods.length > 0 && (
         <Accordion mt={5} allowMultiple>
           {periods.map((period: ClosingPeriod, index) => (
@@ -132,6 +136,8 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
                   values={period}
                   onEdit={hanleEditPeriod}
                   onRemove={handleRemovePeriod}
+                  isEditing={isEditingPeriod && periodEditing === period.id}
+                  isDeleting={isDeletingPeriod && periodDeleting === period.id}
                 />
               </AccordionPanel>
             </AccordionItem>

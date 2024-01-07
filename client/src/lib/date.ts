@@ -11,13 +11,8 @@ export const formatDateToUTC = (date: string) => {
   return newDate.toISOString();
 };
 
-//toLocaleString,toDateString,toISOString,toLocaleDateString,toUTCString
 export const formatDateFromUTC = (date: string) => {
-  return convertToCustomFormat(date);
-};
-
-function convertToCustomFormat(inputDate: string): string {
-  const inputDateTime = new Date(inputDate);
+  const inputDateTime = new Date(date);
 
   const year = inputDateTime.getFullYear();
   const month = String(inputDateTime.getMonth() + 1).padStart(2, '0');
@@ -28,4 +23,4 @@ function convertToCustomFormat(inputDate: string): string {
   const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
 
   return formattedDate;
-}
+};
