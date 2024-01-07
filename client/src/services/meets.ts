@@ -64,12 +64,20 @@ export const getMeet = async (id: string): Promise<Meet> => {
 
 export const editMeet = async (id: string, payload: NewMeet) => {
   try {
+    if (payload.imagesToDelete.length > 0) {
+      await deleteImages({ meetId: id, images: payload.imagesToDelete });
+    }
+    if (payload.newImages.length > 0) {
+      await addImages({ meetId: id, images: payload.newImages });
+    }
+
     const result = await axios.patch(`${API_URL}meets/${id}`, payload, {
       headers: {
         Authorization: `Bearer ${getAuthState().token}`,
       },
     });
-    return result.data;
+    const formattedData = formatMeet(result.data);
+    return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
   }
@@ -163,7 +171,7 @@ export const addImages = async (payload: AddImages) => {
 export const deleteImages = async (payload: DeleteImages) => {
   try {
     const { meetId, images } = payload;
-    const result = await axios.patch(`${API_URL}meets/${meetId}/images`, images, getAuthHeaders());
+    const result = await axios.patch(`${API_URL}meets/${meetId}/images`, { images }, getAuthHeaders());
     return result.data;
   } catch (err: any) {
     throw err?.response?.data;

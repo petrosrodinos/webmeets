@@ -1,10 +1,10 @@
 import { FC, useState, useEffect } from 'react';
-import { DeletePeriod, EditPeriod, Hours, Meet, AddPeriod, ClosingPeriod } from '@/interfaces/meet';
+import { DeletePeriod, EditPeriod, Hours, Meet, AddPeriod, ClosingPeriod, DeleteImages, AddImages } from '@/interfaces/meet';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, useToast, Button } from '@chakra-ui/react';
 import Step1 from '../../CreateMeet/Step1';
 import Step2 from '../../CreateMeet/Step2';
 import Step3 from '../../CreateMeet/Step3';
-import { addPeriod, deletePeriod, editMeet, editPeriod } from '@/services/meets';
+import { addPeriod, deletePeriod, editMeet, editPeriod, deleteImages, addImages } from '@/services/meets';
 import { useMutation } from 'react-query';
 import { MeetSchema } from '@/validation-schemas/meet';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -36,6 +36,14 @@ const Details: FC<DetailsProps> = ({ meet }) => {
 
   const { mutate: deletePeriodMutation, isLoading: isDeletingPeriod } = useMutation((data: DeletePeriod) => {
     return deletePeriod(data);
+  });
+
+  const { mutate: deleteImagesMutation, isLoading: isDeletingImages } = useMutation((data: DeleteImages) => {
+    return deleteImages(data);
+  });
+
+  const { mutate: addImagesMutation, isLoading: isAddingImages } = useMutation((data: AddImages) => {
+    return addImages(data);
   });
 
   const {
@@ -80,16 +88,21 @@ const Details: FC<DetailsProps> = ({ meet }) => {
     }
   }
 
-  const saveValues = (values: any) => {
-    console.log('update', values);
-
+  const saveValues = async (values: any) => {
     const newImages = values.images.filter((image: any) => !image.id);
 
     console.log('newImages', newImages);
 
-    return;
+    const payload = {
+      ...values,
+      newImages: newImages,
+      imagesToDelete,
+    };
+    console.log('update', payload);
 
-    editMeetMutation(values, {
+    // return;
+
+    editMeetMutation(payload, {
       onSuccess: () => {
         toast({
           title: 'Meet updated successfully',
