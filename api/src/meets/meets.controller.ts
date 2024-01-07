@@ -77,7 +77,7 @@ export class MeetController {
     return this.meetService.addImages(meetId, files);
   }
 
-  @Delete(':id/images')
+  @Patch(':id/images')
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: Meet })

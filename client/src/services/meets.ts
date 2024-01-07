@@ -3,8 +3,10 @@ import axios from 'axios';
 import { getAuthState } from '../store/authStore';
 import {
   AddClosingPeriod,
+  AddImages,
   AddPeriod,
   DeleteClosingPeriod,
+  DeleteImages,
   DeletePeriod,
   EditClosingPeriod,
   EditPeriod,
@@ -143,6 +145,26 @@ export const deleteClosingPeriod = async (payload: DeleteClosingPeriod) => {
     const result = await axios.delete(`${API_URL}meets/${meetId}/closures/${closingPeriodId}`, getAuthHeaders());
     const formattedData = formatClosingPeriods(result.data.closures);
     return formattedData;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
+export const addImages = async (payload: AddImages) => {
+  try {
+    const { meetId, images } = payload;
+    const result = await axios.post(`${API_URL}meets/${meetId}/images`, images, getHeaders());
+    return result.data;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
+export const deleteImages = async (payload: DeleteImages) => {
+  try {
+    const { meetId, images } = payload;
+    const result = await axios.patch(`${API_URL}meets/${meetId}/images`, images, getAuthHeaders());
+    return result.data;
   } catch (err: any) {
     throw err?.response?.data;
   }

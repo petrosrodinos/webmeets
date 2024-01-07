@@ -99,3 +99,13 @@ export interface DeleteClosingPeriod {
   meetId: string;
   closingPeriodId: string;
 }
+
+export interface AddImages {
+  meetId: string;
+  images: File[];
+}
+
+export interface DeleteImages {
+  meetId: string;
+  images: string[];
+}
