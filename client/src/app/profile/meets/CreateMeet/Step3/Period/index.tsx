@@ -1,14 +1,15 @@
-import { HStack, IconButton, useToast } from '@chakra-ui/react';
+import { HStack, IconButton, useToast, Text } from '@chakra-ui/react';
 import { FC, useState, useEffect } from 'react';
 import { MdEdit } from 'react-icons/md';
 import Input from '@/components/ui/Input';
 import { Period } from '@/interfaces/meet';
 import { FaRegTrashAlt, FaPlus } from 'react-icons/fa';
+import Modal from '@/components/ui/Modal';
 
 interface PeriodProps {
-  onRemove?: (day: string, id: string) => void;
-  onEdit?: (day: string, period: Period) => void;
-  onAdd?: (day: string, period: Period) => void;
+  onRemove?: (dayId: string, id: string) => void;
+  onEdit?: (dayId: string, period: Period) => void;
+  onAdd?: (dayId: string, period: Period) => void;
   isAdding?: boolean;
   isEditing?: boolean;
   isDeleting?: boolean;
@@ -24,8 +25,8 @@ const defaultPeriod: Period = {
 
 const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, dayId, isAdding, isEditing, isDeleting }) => {
   const toast = useToast();
-
   const [period, setPeriod] = useState<Period>(values || defaultPeriod);
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
 
   useEffect(() => {
     setPeriod(values || defaultPeriod);
@@ -58,40 +59,52 @@ const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, dayId, isAdd
   };
 
   return (
-    <HStack mb={5}>
-      <Input name="from" onChange={handleChange} value={period.from} label="From" type="time" />
-      <Input name="to" onChange={handleChange} value={period.to} label="To" type="time" />
-      {onAdd && (
-        <IconButton
-          onClick={handleAdd}
-          isLoading={isAdding}
-          colorScheme="green"
-          aria-label="add-period"
-          icon={<FaPlus />}
-          alignSelf={'flex-end'}
-        />
-      )}
-      {!onAdd && (
-        <>
+    <>
+      <Modal
+        title="Do you want to delete this period?"
+        isOpen={deleteModal}
+        onClose={() => setDeleteModal(false)}
+        onAction={handleRemove}
+        actionTitle="Delete"
+        closeTitle="Cancel"
+      >
+        <Text h={10}>This action cannot be undone!</Text>
+      </Modal>
+      <HStack mb={5}>
+        <Input name="from" onChange={handleChange} value={period.from} label="From" type="time" />
+        <Input name="to" onChange={handleChange} value={period.to} label="To" type="time" />
+        {onAdd && (
           <IconButton
-            onClick={handleEdit}
+            onClick={handleAdd}
+            isLoading={isAdding}
             colorScheme="green"
-            aria-label="edit-period"
-            icon={<MdEdit />}
+            aria-label="add-period"
+            icon={<FaPlus />}
             alignSelf={'flex-end'}
-            isLoading={isEditing}
           />
-          <IconButton
-            aria-label="remove-period"
-            icon={<FaRegTrashAlt />}
-            onClick={handleRemove}
-            colorScheme="red"
-            alignSelf={'flex-end'}
-            isLoading={isDeleting}
-          />
-        </>
-      )}
-    </HStack>
+        )}
+        {!onAdd && (
+          <>
+            <IconButton
+              onClick={handleEdit}
+              colorScheme="green"
+              aria-label="edit-period"
+              icon={<MdEdit />}
+              alignSelf={'flex-end'}
+              isLoading={isEditing}
+            />
+            <IconButton
+              aria-label="remove-period"
+              icon={<FaRegTrashAlt />}
+              onClick={() => setDeleteModal(true)}
+              colorScheme="red"
+              alignSelf={'flex-end'}
+              isLoading={isDeleting}
+            />
+          </>
+        )}
+      </HStack>
+    </>
   );
 };
 
