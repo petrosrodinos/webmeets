@@ -42,7 +42,6 @@ const Step3: FC<Step3Props> = ({
 
   useEffect(() => {
     if (values && values.length > 0) {
-      console.log('asd', values);
       setHours(values);
     }
   }, [values]);

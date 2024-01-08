@@ -71,7 +71,9 @@ export const editMeet = async (id: string, payload: NewMeet) => {
       await addImages({ meetId: id, images: payload.newImages });
     }
 
-    const result = await axios.patch(`${API_URL}meets/${id}`, payload, {
+    const { images, ...newPayload } = payload;
+
+    const result = await axios.patch(`${API_URL}meets/${id}`, newPayload, {
       headers: {
         Authorization: `Bearer ${getAuthState().token}`,
       },
