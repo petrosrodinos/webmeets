@@ -6,6 +6,7 @@ import Carousel from '../Carousel';
 import Rating from '../Rating';
 import Tag from '../Tag';
 import { authStore } from '@/store/authStore';
+import Link from 'next/link';
 
 interface MeetCardProps {
   meet: Meet;
@@ -19,46 +20,60 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, fromProfiles =
   const router = useRouter();
   const { id, name, description, images, createdAt, price, maxParticipants, duration, category, rating, profile, user } = meet;
 
-  const handleVisitClick = () => {
+  // const handleVisitClick = () => {
+  //   if (fromProfile) {
+  //     router.push(`/profile/meets/${id}`);
+  //   } else {
+  //     router.push(`/meets/${id}`);
+  //   }
+  // };
+
+  const getVisitUrl = () => {
     if (fromProfile) {
-      router.push(`/profile/meets/${id}`);
+      return `/profile/meets/${id}`;
     } else {
-      router.push(`/meets/${id}`);
+      return `/meets/${id}`;
     }
   };
 
-  const handleUserClick = () => {
-    router.push(`/profiles/${profile?.id}`);
-  };
+  // const handleUserClick = () => {
+  //   router.push(`/profiles/${profile?.id}`);
+  // };
 
   return (
-    <>
-      <Box
-        maxW={'445px'}
-        w={'full'}
-        bg={useColorModeValue('white', 'gray.900')}
-        boxShadow={'2xl'}
-        rounded={'md'}
-        p={6}
-        overflow={'hidden'}
-      >
+    <Box
+      maxW={'445px'}
+      w={'full'}
+      bg={useColorModeValue('white', 'gray.900')}
+      boxShadow={'2xl'}
+      rounded={'md'}
+      p={6}
+      overflow={'hidden'}
+      _hover={{
+        cursor: 'pointer',
+        boxShadow: '0px 1px 25px -5px pink, 0 10px 10px -5px pink',
+      }}
+    >
+      {images.length > 0 && (
         <Box h={'210px'} bg={'gray.100'} mt={-6} mx={-6} mb={6} pos={'relative'}>
           <Carousel images={images.map((image) => image.file)} />
         </Box>
+      )}
+      <Link href={getVisitUrl()}>
         <Stack>
-          <Text color={'primary.500'} textTransform={'uppercase'} fontWeight={800} fontSize={'sm'} letterSpacing={1.1}>
-            ${price}
-          </Text>
           <Heading color={useColorModeValue('gray.700', 'white')} fontSize={'2xl'} fontFamily={'body'}>
             {name}
           </Heading>
+          <Text color={'primary.500'} textTransform={'uppercase'} fontWeight={800} fontSize={'sm'} letterSpacing={1.1}>
+            ${price}
+          </Text>
           <Tag maxWidth="fit-content" value={category} />
           <Rating value={rating} />
           <Text color={'gray.500'}>{description}</Text>
           <Text color={'gray.500'}>{duration} minutes</Text>
           <Text color={'gray.500'}>{maxParticipants} people</Text>
         </Stack>
-        {(!fromProfiles || !fromProfile) && (
+        {/* {(!fromProfiles || !fromProfile) && (
           <Stack
             _hover={{
               cursor: 'pointer',
@@ -80,9 +95,9 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, fromProfiles =
               <Text color={'gray.500'}>{createdAt}</Text>
             </Stack>
           </Stack>
-        )}
+        )} */}
 
-        <Stack mt={8} direction={'row'} spacing={4}>
+        {/* <Stack mt={8} direction={'row'} spacing={4}>
           <Button
             onClick={handleVisitClick}
             flex={1}
@@ -108,9 +123,9 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false, fromProfiles =
               Quick Book
             </Button>
           )}
-        </Stack>
-      </Box>
-    </>
+        </Stack> */}
+      </Link>
+    </Box>
   );
 };
 

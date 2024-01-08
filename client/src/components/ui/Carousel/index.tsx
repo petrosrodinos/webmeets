@@ -39,12 +39,6 @@ const Carousel: FC<CarouselProps> = ({
 
   return (
     <Box position={'relative'} height={'max-content'} width={'full'} overflow={'hidden'}>
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
-      <link
-        rel="stylesheet"
-        type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-      />
       {images.length > 1 && (
         <IconButton
           aria-label="left-arrow"
@@ -54,7 +48,11 @@ const Carousel: FC<CarouselProps> = ({
           top={top}
           transform={'translate(0%, -50%)'}
           zIndex={2}
-          onClick={() => slider?.slickPrev()}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.nativeEvent.stopImmediatePropagation();
+            slider?.slickPrev();
+          }}
         >
           <MdArrowBackIosNew size="20px" />
         </IconButton>
@@ -68,7 +66,11 @@ const Carousel: FC<CarouselProps> = ({
           top={top}
           transform={'translate(0%, -50%)'}
           zIndex={2}
-          onClick={() => slider?.slickNext()}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.nativeEvent.stopImmediatePropagation();
+            slider?.slickNext();
+          }}
         >
           <MdArrowForwardIos size="20px" />
         </IconButton>

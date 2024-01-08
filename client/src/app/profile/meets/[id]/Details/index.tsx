@@ -50,7 +50,6 @@ const Details: FC<DetailsProps> = ({ meet }) => {
   });
 
   useEffect(() => {
-    console.log(meet);
     reset({
       name: meet?.name || '',
       description: meet?.description || '',
@@ -83,14 +82,11 @@ const Details: FC<DetailsProps> = ({ meet }) => {
   const saveValues = async (values: any) => {
     const newImages = values.images.filter((image: any) => !image.id);
 
-    console.log('newImages', newImages);
-
     const payload = {
       ...values,
       newImages: newImages,
       imagesToDelete,
     };
-    console.log('update', payload);
 
     // return;
 
