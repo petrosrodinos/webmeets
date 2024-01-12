@@ -15,23 +15,7 @@ import {
 } from '@/interfaces/meet';
 import { formatClosingPeriods, formatHours, formatMeet } from './formatter/meet';
 import { formatDateToUTC } from '@/lib/date';
-
-export const getHeaders = () => {
-  return {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${getAuthState().token}`,
-    },
-  };
-};
-
-export const getAuthHeaders = () => {
-  return {
-    headers: {
-      Authorization: `Bearer ${getAuthState().token}`,
-    },
-  };
-};
+import { getAuthHeaders, getHeaders } from './utils/utils';
 
 export const createMeet = async (payload: NewMeet) => {
   try {

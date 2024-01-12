@@ -3,7 +3,7 @@ export const formatDate = (date: string) => {
   const month = newDate.toLocaleString('default', { month: 'long' });
   const day = newDate.toLocaleString('default', { day: 'numeric' });
   const year = newDate.toLocaleString('default', { year: 'numeric' });
-  return `${month} ${day}, ${year}`;
+  return `${month} ${parseInt(day) - 1}, ${year}`;
 };
 
 export const formatDateToUTC = (date: string) => {
@@ -21,6 +21,18 @@ export const formatDateFromUTC = (date: string) => {
   const minutes = String(inputDateTime.getMinutes()).padStart(2, '0');
 
   const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+  return formattedDate;
+};
+
+export const formatDateAndTime = (dateString: string, timeString: string): string => {
+  const inputDate = new Date(dateString);
+  const [hours, minutes] = timeString.split(':').map(Number);
+
+  inputDate.setUTCHours(hours);
+  inputDate.setUTCMinutes(minutes);
+
+  const formattedDate = inputDate.toISOString();
 
   return formattedDate;
 };

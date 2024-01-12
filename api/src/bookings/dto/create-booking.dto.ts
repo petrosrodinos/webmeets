@@ -26,3 +26,17 @@ export class CreateBookingDto {
   @IsNotEmpty()
   participants: string;
 }
+
+export class FindAvailabilityDto {
+  @IsString()
+  @IsNotEmpty()
+  meetId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  from: string;
+
+  @IsString()
+  @IsNotEmpty()
+  to: string;
+}

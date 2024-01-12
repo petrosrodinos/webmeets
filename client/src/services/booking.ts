@@ -1,16 +1,8 @@
 import { API_URL } from '@/constants/api';
 import axios from 'axios';
-import { getAuthState } from '../store/authStore';
-import { Booking, NewBooking } from '@/interfaces/booking';
-import { formatBooking } from './formatter/booking';
-
-export const getHeaders = () => {
-  return {
-    headers: {
-      Authorization: `Bearer ${getAuthState().token}`,
-    },
-  };
-};
+import { Booking, BookingAvailability, BookingPeriod, NewBooking } from '@/interfaces/booking';
+import { formatAvailablePeriods, formatBooking } from './formatter/booking';
+import { createParams, getHeaders } from './utils/utils';
 
 export const createBooking = async (payload: NewBooking) => {
   try {
@@ -25,7 +17,7 @@ export const createBooking = async (payload: NewBooking) => {
 //{userId} for getting user bookings
 export const getBookings = async (query: { [key: string]: string }): Promise<Booking[]> => {
   try {
-    const result = await axios.get(`${API_URL}bookings?${new URLSearchParams(query).toString()}`, getHeaders());
+    const result = await axios.get(`${API_URL}bookings?${createParams(query)}`, getHeaders());
     const formattedData = result.data.map((booking: any) => formatBooking(booking));
     return formattedData;
   } catch (err: any) {
@@ -37,6 +29,16 @@ export const editBooking = async (payload: Booking) => {
   try {
     const result = await axios.patch(`${API_URL}bookings/${payload.id}`, payload, getHeaders());
     return result.data;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
+export const bookingAvailability = async (query: BookingAvailability): Promise<BookingPeriod[]> => {
+  try {
+    const result = await axios.get(`${API_URL}bookings/availability?${createParams(query)}`, getHeaders());
+    const formattedData = formatAvailablePeriods(result.data.availability);
+    return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
   }

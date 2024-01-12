@@ -1,15 +1,18 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { CreateBookingDto } from './dto/create-booking.dto';
+import { CreateBookingDto, FindAvailabilityDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Booking } from 'src/schemas/booking.schema';
 import { Model, Error } from 'mongoose';
+import { Meet } from 'src/schemas/meet.schema';
 
 @Injectable()
 export class BookingsService {
   constructor(
     @InjectModel(Booking.name)
     private bookingModel: Model<Booking>,
+    @InjectModel(Meet.name)
+    private meetModel: Model<Meet>,
   ) {}
 
   async create(createBookingDto: CreateBookingDto, paymentId: string, userId: string) {
@@ -79,5 +82,47 @@ export class BookingsService {
     } catch (error) {
       throw new NotFoundException(error.message);
     }
+  }
+
+  async findAvailability(query: FindAvailabilityDto) {
+    const { meetId, from, to } = query;
+
+    const meet = await this.meetModel.findById(meetId);
+
+    if (!meet) {
+      throw new NotFoundException('Could not find meet.');
+    }
+
+    const bookings = await this.bookingModel.find({
+      meetId,
+      // date: { $gte: from, $lte: to },
+    });
+
+    const openingHours = meet.hours;
+    const closures = meet?.closures || [];
+
+    const availability = [
+      {
+        date: '2024-01-19T22:00:00.000Z',
+        periods: ['12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00'],
+      },
+      {
+        date: '2024-01-20T22:00:00.000Z',
+        periods: ['12:30-13:30', '13:30-14:30', '14:30-15:30', '15:30-16:30'],
+      },
+      {
+        date: '2024-01-21T22:00:00.000Z',
+        periods: ['12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00'],
+      },
+      {
+        date: '2024-01-22T22:00:00.000Z',
+        periods: ['12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00'],
+      },
+    ];
+
+    return {
+      availability,
+      query,
+    };
   }
 }

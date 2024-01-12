@@ -22,3 +22,18 @@ export interface Booking {
   participants: number;
   createdAt: string;
 }
+
+export interface BookingAvailability {
+  meetId: string;
+  from: string;
+  to: string;
+  [key: string]: string;
+}
+
+export interface BookingPeriod {
+  date: string;
+  periods: {
+    id: string;
+    value: string;
+  }[];
+}

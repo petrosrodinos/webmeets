@@ -4,7 +4,7 @@ import Navigation from '@/components/Navigation';
 import { ReactQueryProvider } from '@/components/providers/ReactQuery';
 import { ChakraUIProvider } from '@/components/providers/ChakraUI';
 import './globals.css';
-
+import 'react-calendar/dist/Calendar.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {

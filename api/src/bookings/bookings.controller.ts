@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req, ForbiddenException } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-import { CreateBookingDto } from './dto/create-booking.dto';
+import { CreateBookingDto, FindAvailabilityDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Booking } from 'src/schemas/booking.schema';
@@ -16,6 +16,12 @@ export class BookingsController {
     private meetService: MeetService,
     private stripeService: StripeService,
   ) {}
+
+  @ApiOkResponse({ type: Booking })
+  @Get('availability')
+  findAvailability(@Query() query: FindAvailabilityDto) {
+    return this.bookingsService.findAvailability(query);
+  }
 
   @UseGuards(JwtGuard)
   @ApiBearerAuth()

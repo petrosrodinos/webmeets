@@ -10,8 +10,8 @@ import { S3Service } from 'src/aws-s3/aws-s3.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Booking', schema: BookingSchema }]),
     MongooseModule.forFeature([{ name: 'Meet', schema: MeetSchema }]),
+    MongooseModule.forFeature([{ name: 'Booking', schema: BookingSchema }]),
   ],
   controllers: [BookingsController],
   providers: [BookingsService, StripeService, MeetService, S3Service],

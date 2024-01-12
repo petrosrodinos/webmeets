@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 export const BookingSchema = yup.object().shape({
   notes: yup.string().optional(),
-  participants: yup.string().required(),
+  participants: yup.string().optional(),
   date: yup.string().required(),
 });
 
@@ -13,5 +13,8 @@ export const EditBookingProfileSchema = yup.object().shape({
 export const EditBookingUserSchema = yup.object().shape({
   notes: yup.string().required(),
   participants: yup.string().required(),
-  date: yup.string().required(),
+  date: yup.object().shape({
+    from: yup.string(),
+    to: yup.string(),
+  }),
 });
