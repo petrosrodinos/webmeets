@@ -25,12 +25,14 @@ import {
   StepTitle,
   Stepper,
   useSteps,
+  useMediaQuery,
 } from '@chakra-ui/react';
 interface CreateMeetProps {
   meet?: Meet;
 }
 
 const CreateMeet: FC<CreateMeetProps> = () => {
+  const [isLargerThan470] = useMediaQuery('(min-width: 470px)');
   const toast = useToast();
   const [createdMeetId, setCreatedMeetId] = useState<string | null>(null);
   const router = useRouter();
@@ -152,7 +154,13 @@ const CreateMeet: FC<CreateMeetProps> = () => {
       >
         <Text>Now you can manage your meet.</Text>
       </Modal>
-      <Stepper mb={5} colorScheme="primary" index={activeStep - 1}>
+      <Stepper
+        orientation={isLargerThan470 ? 'horizontal' : 'vertical'}
+        flexDirection={{ base: 'column', md: 'row' }}
+        mb={5}
+        colorScheme="primary"
+        index={activeStep - 1}
+      >
         {steps.map((step, index) => (
           <Step key={index}>
             <StepIndicator>
