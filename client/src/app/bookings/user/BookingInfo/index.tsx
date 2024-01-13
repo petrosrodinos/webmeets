@@ -38,7 +38,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
         value: booking?.profile?.phone,
       },
       {
-        label: 'Name',
+        label: 'Meet',
         value: booking?.meet?.name,
       },
       {
@@ -70,30 +70,25 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   });
 
   const handleEditBooking = (data: any) => {
-    editBookingMutation(
-      {
-        ...data,
+    editBookingMutation(data, {
+      onSuccess: () => {
+        toast({
+          title: 'Booking edited successfully',
+          position: 'top',
+          isClosable: true,
+          status: 'success',
+        });
       },
-      {
-        onSuccess: () => {
-          toast({
-            title: 'Booking edited successfully',
-            position: 'top',
-            isClosable: true,
-            status: 'success',
-          });
-        },
-        onError: (error: any) => {
-          toast({
-            title: 'Could not edit booking',
-            description: error.message,
-            position: 'top',
-            isClosable: true,
-            status: 'error',
-          });
-        },
+      onError: (error: any) => {
+        toast({
+          title: 'Could not edit booking',
+          description: error.message,
+          position: 'top',
+          isClosable: true,
+          status: 'error',
+        });
       },
-    );
+    });
   };
 
   const handleCancelBooking = () => {
@@ -147,13 +142,13 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
             ))}
           </List>
         </Box>
-        <NumberInput
+        {/* <NumberInput
           min={1}
           max={booking?.meet?.maxParticipants}
           error={errors.participants?.message}
           label="Participants"
           register={register('participants')}
-        />
+        /> */}
 
         <Input
           label="Date"

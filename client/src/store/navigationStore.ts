@@ -22,7 +22,7 @@ export const navigationStore = create<NavigationState>()(
         },
       }),
       {
-        name: 'navigation-webmeets',
+        name: 'webmeets-navigation',
       },
     ),
   ),

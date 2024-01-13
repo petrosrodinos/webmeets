@@ -19,12 +19,13 @@ import {
   useColorMode,
 } from '@chakra-ui/react';
 import { FiMenu, FiChevronDown } from 'react-icons/fi';
-import { BsMoonFill, BsSun } from 'react-icons/bs';
+import { BsMoonFill, BsSun, BsToggles2 } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
 import { authStore } from '@/store/authStore';
 import { FiHome, FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
 import { LinkItemProps, NavItemProps } from '..';
 import { navigationStore } from '@/store/navigationStore';
+import { preferencesStore } from '@/store/preferencesStore';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -82,6 +83,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { selectedLink } = navigationStore((state) => state);
   const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
+  const { setPreferences, roleView } = preferencesStore((state) => state);
+
+  const toggleRoleView = () => {
+    const newRoleView = roleView === 'admin' ? 'user' : 'admin';
+    setPreferences({ roleView: newRoleView });
+  };
 
   const handleSignOut = () => {
     logOut();
@@ -129,6 +136,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             aria-label="open menu"
             icon={colorMode === 'light' ? <BsSun /> : <BsMoonFill />}
           />
+          {isLoggedIn && <IconButton onClick={toggleRoleView} size="lg" aria-label="open menu" icon={<BsToggles2 />} />}
 
           {!isLoggedIn && (
             <Stack flex={{ base: 1, md: 0 }} justify={'flex-end'} direction={'row'} spacing={6}>

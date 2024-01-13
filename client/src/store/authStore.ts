@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-interface AuthState {
+interface AuthStoreState {
   isLoggedIn: boolean;
   token: string;
   username: string;
@@ -26,7 +26,7 @@ const initialStateValues = {
   exp: 0,
 };
 
-export const authStore = create<AuthState>()(
+export const authStore = create<AuthStoreState>()(
   devtools(
     persist(
       (set) => ({
@@ -54,12 +54,12 @@ export const authStore = create<AuthState>()(
           })),
       }),
       {
-        name: 'webmeets',
+        name: 'webmeets-auth',
       },
     ),
   ),
 );
 
-export const getAuthState = (): AuthState => {
+export const getAuthState = (): AuthStoreState => {
   return authStore.getState();
 };

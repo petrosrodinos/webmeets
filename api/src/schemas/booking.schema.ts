@@ -30,7 +30,10 @@ export class Booking {
   })
   date: Date;
 
-  @Prop()
+  @Prop({
+    type: Number,
+    default: 1,
+  })
   participants: number;
 
   @Prop()
