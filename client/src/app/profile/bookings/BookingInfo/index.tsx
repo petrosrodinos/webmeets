@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
+import { formatDate } from '@/lib/date';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -43,7 +44,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
       },
       {
         label: 'Created',
-        value: booking.createdAt,
+        value: formatDate(booking.createdAt),
       },
       {
         label: 'Meet URL',

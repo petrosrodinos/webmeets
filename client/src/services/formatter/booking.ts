@@ -15,7 +15,7 @@ export const formatBooking = (booking: any): Booking => {
     notes: booking.notes,
     status: booking.status,
     participants: booking.participants,
-    createdAt: formatDate(booking.createdAt),
+    createdAt: booking.createdAt,
   };
 };
 

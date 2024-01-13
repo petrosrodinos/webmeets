@@ -1,7 +1,7 @@
 import { Address, Profile } from './profile';
 import { User } from './user';
 
-export type MeetType = 'remote' | 'client-location' | 'in-person';
+export type MeetType = 'remote' | 'clients-location' | 'in-person';
 
 export interface Period {
   id: string;

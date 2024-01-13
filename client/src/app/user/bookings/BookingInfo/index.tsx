@@ -9,14 +9,22 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 // import NumberInput from '@/components/ui/NumberInput';
 import TextArea from '@/components/ui/TextArea';
+import { formatDate } from '@/lib/date';
+import { MeetType } from '@/interfaces/meet';
 
 interface BookingInfoProps {
   booking: Booking;
 }
 
+interface BookingInfoItem {
+  label: string;
+  value: string;
+  type?: MeetType;
+}
+
 const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   const toast = useToast();
-  const [bookingInfo, setBookingInfo] = useState<any[]>();
+  const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
 
   useEffect(() => {
@@ -30,32 +38,46 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   useEffect(() => {
     setBookingInfo([
       {
-        label: 'Booking Creation Date',
-        value: booking.createdAt,
+        label: 'Meet',
+        value: booking?.meet?.name || 'NOT-SET',
+      },
+      {
+        label: 'Created at',
+        value: formatDate(booking.createdAt, true),
+      },
+      {
+        label: 'Price',
+        value: `${booking?.meet?.price}€`,
       },
       {
         label: 'Phone Number',
-        value: booking?.profile?.phone,
-      },
-      {
-        label: 'Meet',
-        value: booking?.meet?.name,
+        value: booking?.meet?.phone || 'NOT-SET',
+        type: 'in-person',
       },
       {
         label: 'City',
-        value: booking?.meet?.city,
+        value: booking?.meet?.city || 'NOT-SET',
+        type: 'in-person',
       },
       {
         label: 'Address',
-        value: booking?.meet?.address,
+        value: booking?.meet?.address || 'NOT-SET',
+        type: 'in-person',
       },
       {
         label: 'Postal Code',
-        value: booking?.meet?.postalCode,
+        value: booking?.meet?.postalCode || 'NOT-SET',
+        type: 'in-person',
       },
       {
         label: 'Meet URL',
         value: 'http:someurl',
+        type: 'remote',
+      },
+      {
+        label: 'Location',
+        value: booking?.meet?.location || 'my place',
+        type: 'clients-location',
       },
     ]);
   }, []);
@@ -132,14 +154,20 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
         >
           <Avatar alignSelf="center" size="xl" src={booking?.profile?.avatar} mb={4} />
           <List spacing={2}>
-            {bookingInfo?.map((info) => (
-              <ListItem key={info.label}>
-                <HStack>
-                  <Text fontWeight="bold">{info.label}:</Text>
-                  <Text>{info.value}</Text>
-                </HStack>
-              </ListItem>
-            ))}
+            {bookingInfo?.map((info, index) => {
+              return (
+                <>
+                  {!info?.type || info.type == booking?.meet?.type ? (
+                    <ListItem key={index}>
+                      <HStack>
+                        <Text fontWeight="bold">{info.label}:</Text>
+                        <Text>{info?.value || 'NOT-SET'}</Text>
+                      </HStack>
+                    </ListItem>
+                  ) : null}
+                </>
+              );
+            })}
           </List>
         </Box>
         {/* <NumberInput

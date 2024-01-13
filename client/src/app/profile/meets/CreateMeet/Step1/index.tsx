@@ -98,7 +98,7 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, values, onImageDele
         </Stack>
       )}
 
-      {type == 'client-location' && (
+      {type == 'clients-location' && (
         <VStack>
           <Input label="Max visited area" error={errors.phone?.message} register={register('phone')} />
         </VStack>
