@@ -26,7 +26,7 @@ import { FiHome, FiTrendingUp, FiCompass, FiSettings } from 'react-icons/fi';
 import { LinkItemProps, NavItemProps } from '..';
 import { navigationStore } from '@/store/navigationStore';
 import { preferencesStore } from '@/store/preferencesStore';
-
+import { Roles } from 'enums/roles';
 interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
@@ -140,7 +140,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             aria-label="open menu"
             icon={colorMode === 'light' ? <BsSun /> : <BsMoonFill />}
           />
-          {isLoggedIn && <IconButton onClick={toggleRoleView} size="lg" aria-label="open menu" icon={<BsToggles2 />} />}
+          {isLoggedIn && role == Roles.ADMIN && (
+            <IconButton onClick={toggleRoleView} size="lg" aria-label="open menu" icon={<BsToggles2 />} />
+          )}
 
           {!isLoggedIn && (
             <Stack flex={{ base: 1, md: 0 }} justify={'flex-end'} direction={'row'} spacing={6}>
@@ -173,7 +175,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                     <VStack display={{ base: 'none', md: 'flex' }} alignItems="flex-start" spacing="1px" ml="0">
                       <Text>{username}</Text>
                       <Text fontSize="xs" color="primary.500">
-                        {role}
+                        {roleView}
                       </Text>
                     </VStack>
                     <FiChevronDown />

@@ -9,11 +9,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/navigation';
+import { preferencesStore } from '@/store/preferencesStore';
+import { Roles } from 'enums/roles';
 
 export default function SignIn() {
   const router = useRouter();
   const toast = useToast();
   const { logIn } = authStore((state) => state);
+  const { setPreferences } = preferencesStore((state) => state);
   const {
     handleSubmit,
     register,
@@ -36,6 +39,11 @@ export default function SignIn() {
           userId: data.user._id,
           profileId: data.user?.profileId,
         });
+        if (data.user.role == Roles.USER) {
+          setPreferences({
+            roleView: data.user.role,
+          });
+        }
         // if(data.user.role === 'admin'){
         //   router.push('/admin');
         //   return;
