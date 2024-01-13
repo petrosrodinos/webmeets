@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import NumberInput from '@/components/ui/NumberInput';
+// import NumberInput from '@/components/ui/NumberInput';
 import TextArea from '@/components/ui/TextArea';
 
 interface BookingInfoProps {

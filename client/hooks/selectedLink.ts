@@ -1,12 +1,19 @@
 import { useEffect } from 'react';
 import { navigationStore } from '@/store/navigationStore';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { DrawerLinks } from '@/components/Navigation';
+import { HeaderLinks } from '@/components/Navigation/NavigationBar';
 
 export const selectedLink = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { setSelectedLink } = navigationStore((state) => state);
+  const allLinks = [...DrawerLinks, ...HeaderLinks];
   useEffect(() => {
-    setSelectedLink(pathname);
+    const selectedLinkId = allLinks.findIndex((link) => link.path === pathname);
+    if (selectedLinkId > -1) {
+      setSelectedLink((selectedLinkId + 1).toString());
+      return;
+    }
   }, [pathname, searchParams]);
 };

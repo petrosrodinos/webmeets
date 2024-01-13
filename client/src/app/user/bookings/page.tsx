@@ -7,11 +7,10 @@ import { authStore } from '@/store/authStore';
 import Spinner from '@/components/ui/Spinner';
 import { Booking } from '@/interfaces/booking';
 import Modal from '@/components/ui/Modal';
-import BookingInfo from './BookingInfo';
 import { BookingCalendarEvent } from '@/interfaces/components';
-import '../style.css';
+import BookingInfo from './BookingInfo';
 
-const User: FC = () => {
+const UserBookings: FC = () => {
   const { userId } = authStore();
   const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -65,4 +64,4 @@ const User: FC = () => {
   );
 };
 
-export default User;
+export default UserBookings;

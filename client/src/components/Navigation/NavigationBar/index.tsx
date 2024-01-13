@@ -37,23 +37,27 @@ interface AvatarMenuItemProps {
   path?: string;
 }
 
-export const NavigationLinks: LinkItemProps[] = [
+export const HeaderLinks: LinkItemProps[] = [
   {
+    id: '7',
     name: 'Home',
     path: '/home',
     icon: FiHome,
   },
   {
+    id: '8',
     name: 'Meets',
     path: '/meets',
     icon: FiTrendingUp,
   },
   {
+    id: '9',
     name: 'Contact',
     path: '/contact',
     icon: FiCompass,
   },
   {
+    id: '10',
     name: 'About',
     path: '/about',
     icon: FiSettings,
@@ -120,8 +124,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       </Text>
       <HStack spacing={8} alignItems={'center'}>
         <HStack as={'nav'} spacing={4} marginLeft={{ base: '50px', md: '250px' }} display={{ base: 'none', md: 'flex' }}>
-          {NavigationLinks.map((link, index) => (
-            <NavLink selectedLink={selectedLink} key={index} path={link.path} icon={link?.icon}>
+          {HeaderLinks.map((link, index) => (
+            <NavLink selected={selectedLink == link.id} key={index} path={link.path} icon={link?.icon}>
               {link.name}
             </NavLink>
           ))}
@@ -196,14 +200,14 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   );
 };
 
-const NavLink = ({ icon, path, selectedLink, children, ...rest }: NavItemProps) => {
+const NavLink = ({ icon, path, selected, children, ...rest }: NavItemProps) => {
   return (
     <Box
       as="a"
       px={2}
       py={1}
       rounded={'md'}
-      bg={selectedLink == path ? 'primary.500' : 'transparent'}
+      bg={selected ? 'primary.500' : 'transparent'}
       _hover={{
         textDecoration: 'none',
         bg: 'primary.400',

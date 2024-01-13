@@ -10,7 +10,7 @@ import { BookingCalendarEvent } from '@/interfaces/components';
 import { Booking } from '@/interfaces/booking';
 import BookingInfo from './BookingInfo';
 
-const Profile: FC = () => {
+const ProfileBookings: FC = () => {
   const { profileId } = authStore();
   const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -63,4 +63,4 @@ const Profile: FC = () => {
   );
 };
 
-export default Profile;
+export default ProfileBookings;
