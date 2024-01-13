@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Meet } from './meet';
+import { Meet, MeetType } from './meet';
 import { Profile } from './profile';
 import { User } from './user';
 
@@ -36,4 +36,10 @@ export interface BookingPeriod {
     id: string;
     value: string;
   }[];
+}
+
+export interface BookingInfoItem {
+  label: string;
+  value: string;
+  type?: MeetType;
 }

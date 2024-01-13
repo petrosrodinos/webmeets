@@ -1,4 +1,4 @@
-import { Booking } from '@/interfaces/booking';
+import { Booking, BookingInfoItem } from '@/interfaces/booking';
 import { editBooking } from '@/services/booking';
 import { EditBookingUserSchema } from '@/validation-schemas/booking';
 import { useToast, Stack, Text, Button, List, ListItem, Box, useColorModeValue, HStack, Avatar } from '@chakra-ui/react';
@@ -10,16 +10,9 @@ import { useMutation } from 'react-query';
 // import NumberInput from '@/components/ui/NumberInput';
 import TextArea from '@/components/ui/TextArea';
 import { formatDate } from '@/lib/date';
-import { MeetType } from '@/interfaces/meet';
 
 interface BookingInfoProps {
   booking: Booking;
-}
-
-interface BookingInfoItem {
-  label: string;
-  value: string;
-  type?: MeetType;
 }
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
@@ -40,6 +33,14 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
       {
         label: 'Meet',
         value: booking?.meet?.name || 'NOT-SET',
+      },
+      {
+        label: 'Notes',
+        value: booking?.notes || '',
+      },
+      {
+        label: 'Duration',
+        value: booking?.meet?.duration.toString() || 'NOT-SET',
       },
       {
         label: 'Created at',
@@ -161,7 +162,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
                     <ListItem key={index}>
                       <HStack>
                         <Text fontWeight="bold">{info.label}:</Text>
-                        <Text>{info?.value || 'NOT-SET'}</Text>
+                        <Text>{info.value}</Text>
                       </HStack>
                     </ListItem>
                   ) : null}

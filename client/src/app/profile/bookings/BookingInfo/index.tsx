@@ -1,4 +1,4 @@
-import { Booking } from '@/interfaces/booking';
+import { Booking, BookingInfoItem } from '@/interfaces/booking';
 import { editBooking } from '@/services/booking';
 import { EditBookingProfileSchema } from '@/validation-schemas/booking';
 import { useToast, Stack, Text, Button, List, ListItem, Box, useColorModeValue, HStack, Avatar } from '@chakra-ui/react';
@@ -7,7 +7,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { formatDate } from '@/lib/date';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -15,7 +14,7 @@ interface BookingInfoProps {
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   const toast = useToast();
-  const [bookingInfo, setBookingInfo] = useState<any[]>();
+  const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
 
   useEffect(() => {
@@ -36,19 +35,21 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
       },
       {
         label: 'Duration',
-        value: booking.meet.duration,
+        value: String(booking?.meet?.duration) || 'NOT-SET',
       },
       {
         label: 'Participants',
-        value: booking.participants,
-      },
-      {
-        label: 'Created',
-        value: formatDate(booking.createdAt),
+        value: String(booking?.participants) || '1',
       },
       {
         label: 'Meet URL',
         value: 'http:someurl',
+        type: 'remote',
+      },
+      {
+        label: 'Location',
+        value: 'some location',
+        type: 'clients-location',
       },
     ]);
   }, []);
@@ -131,14 +132,20 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
           <Avatar alignSelf="center" size="xl" src={booking?.user?.avatar} mb={4} />
 
           <List spacing={2}>
-            {bookingInfo?.map((info) => (
-              <ListItem key={info.label}>
-                <HStack>
-                  <Text fontWeight="bold">{info.label}:</Text>
-                  <Text>{info.value}</Text>
-                </HStack>
-              </ListItem>
-            ))}
+            {bookingInfo?.map((info, index) => {
+              return (
+                <>
+                  {!info?.type || info.type == booking?.meet?.type ? (
+                    <ListItem key={index}>
+                      <HStack>
+                        <Text fontWeight="bold">{info.label}:</Text>
+                        <Text>{info.value}</Text>
+                      </HStack>
+                    </ListItem>
+                  ) : null}
+                </>
+              );
+            })}
           </List>
         </Box>
         <Input label="Date" error={errors.date?.message} type="datetime-local" register={register('date')} />
