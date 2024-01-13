@@ -56,7 +56,7 @@ const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({ meetId, onPeriodSel
 
   return (
     <div>
-      <Calendar className="date-picker" selectRange view="month" onChange={handleDateChange} value={date} />
+      <Calendar minDate={new Date()} className="date-picker" selectRange view="month" onChange={handleDateChange} value={date} />
       <Spinner mt={5} loading={isFindingAvailability} />
       {availablePeriods?.map((period: BookingPeriod, index: number) => (
         <div key={index}>
