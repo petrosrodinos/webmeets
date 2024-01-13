@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { Stack, VStack, RadioGroup, Radio, FormLabel, useColorModeValue } from '@chakra-ui/react';
+import { Stack, VStack, RadioGroup, Radio, FormLabel, useColorModeValue, Alert, AlertIcon } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import ImagePicker from '@/components/ui/ImagePicker';
 import { ImagePickerItemData } from '@/interfaces/components';
@@ -76,9 +76,10 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, values, onImageDele
       </RadioGroup>
 
       {type == 'remote' && (
-        <VStack>
-          <Input label="Url" error={errors.phone?.message} register={register('phone')} />
-        </VStack>
+        <Alert status="info">
+          <AlertIcon />
+          You can join the meet from your calendar.
+        </Alert>
       )}
 
       {type == 'in-person' && (
@@ -99,9 +100,10 @@ const Step1: FC<Step1Props> = ({ register, errors, setValue, values, onImageDele
       )}
 
       {type == 'clients-location' && (
-        <VStack>
-          <Input label="Max visited area" error={errors.phone?.message} register={register('phone')} />
-        </VStack>
+        <Alert status="info">
+          <AlertIcon />
+          The client will provide the location.
+        </Alert>
       )}
     </Stack>
   );
