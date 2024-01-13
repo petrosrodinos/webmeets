@@ -24,9 +24,15 @@ import { LuBookMarked } from 'react-icons/lu';
 import { BsShop } from 'react-icons/bs';
 import { HiOutlineVideoCamera } from 'react-icons/hi2';
 import Link from 'next/link';
+import { preferencesStore } from '@/store/preferencesStore';
+import { useEffect, useState } from 'react';
+import { CiChat2 } from 'react-icons/ci';
+import { Roles } from 'enums/roles';
 export interface LinkItemProps {
   name: string;
   path: string;
+  role: Roles;
+  auth?: boolean;
   icon?: IconType;
 }
 
@@ -42,14 +48,26 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Personal Booking', path: '/bookings/user', icon: IoBookOutline },
-  { name: 'Profile Bookings', path: '/bookings/profile', icon: LuBookMarked },
-  { name: 'Meets', path: '/profile/meets', icon: HiOutlineVideoCamera },
-  { name: 'Profile', path: '/profile', icon: BsShop },
+  { name: 'Bookings', path: '/bookings/user', role: Roles.USER, icon: IoBookOutline },
+  { name: 'Bookings', path: '/bookings/profile', role: Roles.ADMIN, icon: LuBookMarked },
+  { name: 'Messages', path: '/profile/messages', role: Roles.ADMIN, icon: CiChat2 },
+  { name: 'Messages', path: '/user/messages', role: Roles.USER, icon: CiChat2 },
+  { name: 'Meets', path: '/profile/meets', role: Roles.ADMIN, icon: HiOutlineVideoCamera },
+  { name: 'Profile', path: '/profile', role: Roles.ADMIN, icon: BsShop },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   const { selectedLink } = navigationStore((state) => state);
+  const { roleView } = preferencesStore((state) => state);
+  const [linkItems, setLinkItemsState] = useState<LinkItemProps[]>([]);
+
+  useEffect(() => {
+    if (roleView === Roles.ADMIN) {
+      setLinkItemsState(LinkItems.filter((link) => link.role === Roles.ADMIN));
+    } else {
+      setLinkItemsState(LinkItems.filter((link) => link.role === Roles.USER));
+    }
+  }, [roleView]);
 
   return (
     <Box
@@ -77,7 +95,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           </Box>
         ))}
       </VStack>
-      {LinkItems.map((link, index) => (
+      {linkItems.map((link, index) => (
         <NavItem selectedLink={selectedLink} key={index} path={link.path} icon={link?.icon}>
           {link.name}
         </NavItem>
@@ -97,12 +115,12 @@ const NavItem = ({ icon, children, path, selectedLink, ...rest }: NavItemProps) 
           borderRadius="lg"
           role="group"
           cursor="pointer"
+          bg={selectedLink.includes(path) ? 'primary.500' : 'transparent'}
           _hover={{
             bg: 'primary.400',
             color: 'white',
             // height: '40px',
           }}
-          bg={selectedLink == path ? 'primary.500' : 'transparent'}
           {...rest}
         >
           {icon && (
