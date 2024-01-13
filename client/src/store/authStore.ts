@@ -54,7 +54,7 @@ export const authStore = create<AuthState>()(
           })),
       }),
       {
-        name: 'webmeets',
+        name: 'webmeets-auth',
       },
     ),
   ),

@@ -16,6 +16,8 @@ import {
   Text,
   HStack,
   VStack,
+  ListItem,
+  List,
 } from '@chakra-ui/react';
 import MeetCard from '@/components/ui/MeetCard';
 import { Meet } from '@/interfaces/meet';
@@ -24,14 +26,49 @@ import CreateBooking from 'app/meets/[id]/CreateBooking';
 import Rating from '@/components/ui/Rating';
 import Tag from '@/components/ui/Tag';
 
+interface ProfileInfo {
+  label: string;
+  value?: string;
+}
+
 const Profile: FC = () => {
   const { id } = useParams();
   const { isLoggedIn } = authStore((state) => state);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [selectedMeet, setSelectedMeet] = useState<Meet>();
+  const [profileInfo, setProfileInfo] = useState<ProfileInfo[]>();
   const toast = useToast();
 
-  const { data: profile, isLoading } = useQuery(['profile', id], () => getFullProfile(id as string));
+  const { data: profile, isLoading } = useQuery(['profile', id], () => getFullProfile(id as string), {
+    onSuccess: (data) => {
+      setProfileInfo([
+        {
+          label: 'Country',
+          value: data.profile.country,
+        },
+        {
+          label: 'Address',
+          value: data.profile.address,
+        },
+        {
+          label: 'City',
+          value: data.profile.city,
+        },
+        {
+          label: 'Area',
+          value: data.profile.area,
+        },
+        {
+          label: 'Postal Code',
+          value: data.profile.postalCode,
+        },
+        {
+          label: 'Phone',
+          value: data.profile.phone,
+        },
+      ]);
+    },
+  });
 
   const handleBook = (meet: Meet) => {
     if (!isLoggedIn) {
@@ -91,14 +128,22 @@ const Profile: FC = () => {
               ))}
             </SimpleGrid>
             <Box>
-              <Text fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-                Country
-              </Text>
-              <Box mt="1">{profile.profile.country}</Box>
-              <Text fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-                Address
-              </Text>
-              <Box mt="1">{profile.profile.address}</Box>
+              <List>
+                {profileInfo?.map((info, index) => {
+                  return (
+                    <div key={index}>
+                      {info.value ? (
+                        <ListItem>
+                          <HStack>
+                            <Text fontWeight="bold">{info.label}:</Text>
+                            <Text>{info.value}</Text>
+                          </HStack>
+                        </ListItem>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </List>
             </Box>
           </Box>
           <SimpleGrid mt={30} columns={{ sm: 2, md: 3 }} spacing={3}>
