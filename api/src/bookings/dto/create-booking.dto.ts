@@ -23,7 +23,7 @@ export class CreateBookingDto {
   date: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   participants: string;
 }
 

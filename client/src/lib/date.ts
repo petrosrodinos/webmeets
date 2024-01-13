@@ -3,7 +3,7 @@ export const formatDate = (date: string) => {
   const month = newDate.toLocaleString('default', { month: 'long' });
   const day = newDate.toLocaleString('default', { day: 'numeric' });
   const year = newDate.toLocaleString('default', { year: 'numeric' });
-  return `${month} ${parseInt(day) - 1}, ${year}`;
+  return `${month} ${day}, ${year}`;
 };
 
 export const formatDateToUTC = (date: string) => {

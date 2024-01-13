@@ -24,9 +24,10 @@ const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({ periods, onPeriodSe
       {periods.map((period: BookingPeriod, index: number) => (
         <div>
           <Text>{formatDate(period.date)}</Text>
-          <SimpleGrid columns={[2, null, 3]} spacing="10px">
+          <SimpleGrid columns={[1, 2, 3]} gridTemplateColumns={['1fr', '1fr', 'repeat(3, 1fr)']} spacing="10px">
             {period.periods.map((item, index) => (
               <Tag
+                style={{ height: '40px' }}
                 key={index}
                 value={item.value}
                 id={item.id}

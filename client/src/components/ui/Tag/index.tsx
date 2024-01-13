@@ -7,10 +7,11 @@ type TagProps = {
   id?: string;
   onClose?: (value: string) => void;
   onTagClick?: (id: string, value: string) => void;
+  style?: any;
   props?: any;
 } & React.ComponentProps<typeof ChakraTag>;
 
-const Tag: FC<TagProps> = ({ value, onClose, onTagClick, active = false, id, props, ...rest }) => {
+const Tag: FC<TagProps> = ({ value, onClose, onTagClick, style, active = false, id, props, ...rest }) => {
   const handleClose = () => {
     onClose?.(value);
   };
@@ -22,6 +23,7 @@ const Tag: FC<TagProps> = ({ value, onClose, onTagClick, active = false, id, pro
     <>
       <ChakraTag
         style={{
+          ...style,
           backgroundColor: active ? '#ea4896' : '',
           cursor: !!handleTagClick ? 'pointer' : 'default',
           color: active ? 'white' : '',

@@ -9,10 +9,10 @@ import { Meet } from 'src/schemas/meet.schema';
 @Injectable()
 export class BookingsService {
   constructor(
-    @InjectModel(Booking.name)
-    private bookingModel: Model<Booking>,
     @InjectModel(Meet.name)
     private meetModel: Model<Meet>,
+    @InjectModel(Booking.name)
+    private bookingModel: Model<Booking>,
   ) {}
 
   async create(createBookingDto: CreateBookingDto, paymentId: string, userId: string) {

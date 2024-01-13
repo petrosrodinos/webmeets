@@ -52,7 +52,6 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
   });
 
   const handleCreateBooking = (data: any) => {
-    console.log('data', data);
     // return;
     createBookingMutation(
       {
@@ -64,8 +63,6 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
         onSuccess: (data: any) => {
           const paymentUrl = data.payment.url;
           window.open(paymentUrl, '_blank');
-          reset();
-          onClose();
         },
         onError: (error: any) => {
           toast({
