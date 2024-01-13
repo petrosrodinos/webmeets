@@ -18,6 +18,9 @@ export class Booking {
   @Prop()
   notes: string;
 
+  @Prop()
+  location: string;
+
   @Prop({
     type: String,
     enum: Object.values(BookingStatuses),

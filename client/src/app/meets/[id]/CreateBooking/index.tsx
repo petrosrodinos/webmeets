@@ -20,6 +20,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { BookingSchema } from '@/validation-schemas/booking';
 import AvailabilityPeriods from './AvailabilityPeriods';
+import Input from '@/components/ui/Input';
 import './style.css';
 interface CreateBookingProps {
   isOpen: boolean;
@@ -35,7 +36,6 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
   const {
     handleSubmit,
     register,
-    reset,
     setValue,
     formState: { errors },
   } = useForm({
@@ -43,7 +43,16 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
   });
 
   const handleCreateBooking = (data: any) => {
-    // return;
+    if (meet.type == 'clients-location' && !data.location) {
+      toast({
+        title: 'Location is required',
+        description: 'Please enter a location',
+        position: 'top',
+        isClosable: true,
+        status: 'error',
+      });
+      return;
+    }
     createBookingMutation(
       {
         ...data,
@@ -85,15 +94,17 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
               <Stack spacing="20px">
                 <Text>Select a date to find you a booking</Text>
 
-                {/* <Input
-                  label="Date"
-                  placeholder="Enter Date"
-                  error={errors.date?.message}
-                  type="datetime-local"
-                  register={register('date')}
-                /> */}
-
                 <AvailabilityPeriods onPeriodSelected={handlePeriodSelected} meetId={meet?.id as string} />
+
+                {meet.type == 'clients-location' && (
+                  <Input
+                    label="Location"
+                    placeholder="Enter Location"
+                    error={errors.location?.message}
+                    register={register('location')}
+                  />
+                )}
+
                 <TextArea label="Notes (Optional)" placeholder="Add some notes for the host" register={register('notes')} />
 
                 <DrawerFooter borderTopWidth="1px">
@@ -102,7 +113,6 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
                       bg: 'primary.600',
                     }}
                     mr={3}
-                    onClick={handleCreateBooking}
                     textColor="white"
                     type="submit"
                     bg="primary.500"
