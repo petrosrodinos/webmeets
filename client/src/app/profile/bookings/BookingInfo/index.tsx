@@ -12,6 +12,7 @@ import { MeetTypes } from 'enums/meet';
 import { Roles } from 'enums/roles';
 import Modal from '@/components/ui/Modal';
 import TextArea from '@/components/ui/TextArea';
+import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -22,7 +23,8 @@ interface BookingInfoProps {
 const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
   const toast = useToast();
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isEditDateModalOpen, setIsEditDateModalOpen] = useState(false);
   const [reason, setReason] = useState('');
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
   const { mutate: cancelBookingMutation, isLoading: isCanceling } = useMutation(cancelBooking);
@@ -131,15 +133,26 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
     });
   };
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const handlePeriodSelected = (date: string) => {
+    console.log(date);
+    reset({
+      date,
+    });
+  };
+
+  const toggleCancelModal = () => {
+    setIsCancelModalOpen(!isCancelModalOpen);
+  };
+
+  const toggleEditDateModal = () => {
+    setIsEditDateModalOpen(!isEditDateModalOpen);
   };
 
   return (
     <>
       <Modal
-        isOpen={isModalOpen}
-        onClose={toggleModal}
+        isOpen={isCancelModalOpen}
+        onClose={toggleCancelModal}
         title="Are you sure you want to cancel this booking?"
         actionTitle="Cancel"
         onAction={handleCancelBooking}
@@ -151,6 +164,15 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
           label="Reason (optional)"
           placeholder="Why are you canceling this booking?"
         />
+      </Modal>
+      <Modal
+        isOpen={isEditDateModalOpen}
+        onClose={toggleEditDateModal}
+        title="Find availability for this date"
+        actionTitle="Save"
+        onAction={toggleEditDateModal}
+      >
+        <AvailabilityPeriods onPeriodSelected={handlePeriodSelected} meetId={booking?.meet?.id as string} />
       </Modal>
       <form onSubmit={handleSubmit(handleEditBooking)}>
         <Stack spacing="20px">
@@ -188,6 +210,9 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             type="datetime-local"
             register={register('date')}
           />
+          <Button onClick={toggleEditDateModal}>
+            <Text>Find availability for this date</Text>
+          </Button>
           {booking.status != BookingStatuses.CANCELLED && (
             <>
               <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
