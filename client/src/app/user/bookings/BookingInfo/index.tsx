@@ -11,11 +11,13 @@ import TextArea from '@/components/ui/TextArea';
 import { formatDate } from '@/lib/date';
 import { MeetTypes } from 'enums/meet';
 import { FaCheck } from 'react-icons/fa6';
+
 interface BookingInfoProps {
   booking: Booking;
+  onDateChange?: (bookingId: string, date: string) => void;
 }
 
-const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
+const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange }) => {
   const toast = useToast();
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
@@ -132,6 +134,9 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
           return info;
         });
         setBookingInfo(updatedBookingInfo);
+        if (data.date != booking.date) {
+          onDateChange?.(booking.id, data.date);
+        }
         toast({
           title: 'Booking edited successfully',
           position: 'top',

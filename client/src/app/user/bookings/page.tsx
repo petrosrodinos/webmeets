@@ -15,7 +15,11 @@ const UserBookings: FC = () => {
   const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
-  const { data: bookings, isLoading } = useQuery('user-bookings', () => getBookings({ userId }), {
+  const {
+    data: bookings,
+    isLoading,
+    refetch,
+  } = useQuery('user-bookings', () => getBookings({ userId }), {
     onSuccess: (data) => {
       if (data) {
         const events = data.map((booking) => {
@@ -48,6 +52,10 @@ const UserBookings: FC = () => {
     }
   };
 
+  const handleDateChange = () => {
+    refetch();
+  };
+
   return (
     <>
       <Spinner loading={isLoading} />
@@ -57,7 +65,7 @@ const UserBookings: FC = () => {
         onClose={() => setSelectedBooking(null)}
         closeTitle="Close"
       >
-        <BookingInfo booking={selectedBooking as Booking} />
+        <BookingInfo onDateChange={handleDateChange} booking={selectedBooking as Booking} />
       </Modal>
       <Calendar onDateClick={handleDateClick} onEventClick={handleEventClick} view="user" events={events} />
     </>
