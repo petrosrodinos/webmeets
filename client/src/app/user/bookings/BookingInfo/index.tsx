@@ -89,10 +89,6 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         value: booking?.location || 'NOT-SET',
         type: MeetTypes.CLIENTS_LOCATION,
       },
-      {
-        label: 'status',
-        value: booking?.status || 'NOT-SET',
-      },
     ]);
   }, []);
 

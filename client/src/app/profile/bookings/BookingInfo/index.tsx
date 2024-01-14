@@ -1,5 +1,5 @@
 import { Booking, BookingInfoItem } from '@/interfaces/booking';
-import { editBooking } from '@/services/booking';
+import { cancelBooking, editBooking } from '@/services/booking';
 import { EditBookingProfileSchema } from '@/validation-schemas/booking';
 import { useToast, Stack, Text, Button, List, ListItem, Box, useColorModeValue, HStack, Avatar } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
@@ -7,15 +7,25 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
+import { BookingStatuses } from 'enums/booking';
+import { MeetTypes } from 'enums/meet';
+import { Roles } from 'enums/roles';
+import Modal from '@/components/ui/Modal';
+import TextArea from '@/components/ui/TextArea';
 
 interface BookingInfoProps {
   booking: Booking;
+  onDateChange?: (bookingId: string, date: string) => void;
+  onCancel?: (bookingId: string) => void;
 }
 
-const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
+const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
   const toast = useToast();
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reason, setReason] = useState('');
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
+  const { mutate: cancelBookingMutation, isLoading: isCanceling } = useMutation(cancelBooking);
 
   useEffect(() => {
     reset({
@@ -44,12 +54,12 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
       {
         label: 'Meet URL',
         value: 'http:someurl',
-        type: 'remote',
+        type: MeetTypes.REMOTE,
       },
       {
         label: 'Location',
         value: 'some location',
-        type: 'clients-location',
+        type: MeetTypes.CLIENTS_LOCATION,
       },
     ]);
   }, []);
@@ -64,99 +74,133 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   });
 
   const handleEditBooking = (data: any) => {
-    editBookingMutation(
-      {
-        ...data,
+    const payload = {
+      bookingId: booking.id,
+      ...data,
+    };
+    editBookingMutation(payload, {
+      onSuccess: () => {
+        if (data.date != booking.date) {
+          onDateChange?.(booking.id, data.date);
+        }
+        toast({
+          title: 'Booking edited successfully',
+          position: 'top',
+          isClosable: true,
+          status: 'success',
+        });
       },
-      {
-        onSuccess: () => {
-          toast({
-            title: 'Booking edited successfully',
-            position: 'top',
-            isClosable: true,
-            status: 'success',
-          });
-        },
-        onError: (error: any) => {
-          toast({
-            title: 'Could not edit booking',
-            description: error.message,
-            position: 'top',
-            isClosable: true,
-            status: 'error',
-          });
-        },
+      onError: (error: any) => {
+        toast({
+          title: 'Could not edit booking',
+          description: error.message,
+          position: 'top',
+          isClosable: true,
+          status: 'error',
+        });
       },
-    );
+    });
   };
 
   const handleCancelBooking = () => {
-    editBookingMutation(
-      {
-        ...booking,
+    const payload = {
+      bookingId: booking.id,
+      reason,
+      role: Roles.USER,
+    };
+    cancelBookingMutation(payload, {
+      onSuccess: () => {
+        onCancel?.(booking.id);
+        toast({
+          title: 'Booking cancelled successfully',
+          description: "We've cancelled your booking for you.",
+          position: 'top',
+          isClosable: true,
+          status: 'success',
+        });
       },
-      {
-        onSuccess: () => {
-          toast({
-            title: 'Booking cancelled successfully',
-            description: "We've cancelled your booking for you.",
-            position: 'top',
-            isClosable: true,
-            status: 'success',
-          });
-        },
-        onError: (error: any) => {
-          toast({
-            title: 'Could not cancel booking',
-            description: error.message,
-            position: 'top',
-            isClosable: true,
-            status: 'error',
-          });
-        },
+      onError: (error: any) => {
+        toast({
+          title: 'Could not cancel booking',
+          description: error.message,
+          position: 'top',
+          isClosable: true,
+          status: 'error',
+        });
       },
-    );
+    });
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
-    <form onSubmit={handleSubmit(handleEditBooking)}>
-      <Stack spacing="20px">
-        <Box
-          display="flex"
-          flexDirection="column"
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={3}
-        >
-          <Avatar alignSelf="center" size="xl" src={booking?.user?.avatar} mb={4} />
+    <>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={toggleModal}
+        title="Are you sure you want to cancel this booking?"
+        actionTitle="Cancel"
+        onAction={handleCancelBooking}
+        closeTitle="Close"
+        actionTitleLoading={isCanceling}
+      >
+        <TextArea
+          onChange={(e: any) => setReason(e.target.value)}
+          label="Reason (optional)"
+          placeholder="Why are you canceling this booking?"
+        />
+      </Modal>
+      <form onSubmit={handleSubmit(handleEditBooking)}>
+        <Stack spacing="20px">
+          <Box
+            display="flex"
+            flexDirection="column"
+            rounded={'lg'}
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'lg'}
+            p={3}
+          >
+            <Avatar alignSelf="center" size="xl" src={booking?.user?.avatar} mb={4} />
 
-          <List spacing={2}>
-            {bookingInfo?.map((info, index) => {
-              return (
-                <>
-                  {!info?.type || info.type == booking?.meet?.type ? (
-                    <ListItem key={index}>
-                      <HStack>
-                        <Text fontWeight="bold">{info.label}:</Text>
-                        <Text>{info.value}</Text>
-                      </HStack>
-                    </ListItem>
-                  ) : null}
-                </>
-              );
-            })}
-          </List>
-        </Box>
-        <Input label="Date" error={errors.date?.message} type="datetime-local" register={register('date')} />
-        <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
-          Save
-        </Button>
-        <Button colorScheme="red" variant="outline" onClick={handleCancelBooking}>
-          Cancel Booking
-        </Button>
-      </Stack>
-    </form>
+            <List spacing={2}>
+              {bookingInfo?.map((info, index) => {
+                return (
+                  <>
+                    {!info?.type || info.type == booking?.meet?.type ? (
+                      <ListItem key={index}>
+                        <HStack>
+                          <Text fontWeight="bold">{info.label}:</Text>
+                          <Text>{info.value}</Text>
+                        </HStack>
+                      </ListItem>
+                    ) : null}
+                  </>
+                );
+              })}
+            </List>
+          </Box>
+          <Input
+            disabled={booking.status == BookingStatuses.CANCELLED}
+            label="Date"
+            error={errors.date?.message}
+            type="datetime-local"
+            register={register('date')}
+          />
+          {booking.status != BookingStatuses.CANCELLED && (
+            <>
+              <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
+                Save
+              </Button>
+              <Button colorScheme="red" variant="outline" onClick={handleCancelBooking}>
+                Cancel Booking
+              </Button>
+            </>
+          )}
+        </Stack>
+      </form>
+    </>
   );
 };
 

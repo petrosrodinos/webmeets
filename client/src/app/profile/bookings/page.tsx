@@ -9,13 +9,18 @@ import Modal from '@/components/ui/Modal';
 import { BookingCalendarEvent } from '@/interfaces/components';
 import { Booking } from '@/interfaces/booking';
 import BookingInfo from './BookingInfo';
+import { BookingStatuses } from 'enums/booking';
 
 const ProfileBookings: FC = () => {
   const { profileId } = authStore();
   const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
-  const { data: bookings, isLoading } = useQuery('profile-bookings', () => getBookings({ profileId }), {
+  const {
+    data: bookings,
+    isLoading,
+    refetch,
+  } = useQuery('profile-bookings', () => getBookings({ profileId }), {
     onSuccess: (data) => {
       if (data) {
         const events: BookingCalendarEvent[] = data.map((booking) => {
@@ -26,6 +31,8 @@ const ProfileBookings: FC = () => {
             date: booking.date,
             startEditable: true,
             durationEditable: true,
+            color: booking.status == BookingStatuses.CANCELLED ? 'red' : '',
+
             // start: booking.start,
             // end: booking.end,
           };
@@ -47,6 +54,15 @@ const ProfileBookings: FC = () => {
     }
   };
 
+  const handleDateChange = () => {
+    refetch();
+  };
+
+  const handleCancel = () => {
+    refetch();
+    setSelectedBooking(null);
+  };
+
   return (
     <>
       <Spinner loading={isLoading} />
@@ -56,7 +72,7 @@ const ProfileBookings: FC = () => {
         onClose={() => setSelectedBooking(null)}
         closeTitle="Close"
       >
-        <BookingInfo booking={selectedBooking as Booking} />
+        <BookingInfo onCancel={handleCancel} onDateChange={handleDateChange} booking={selectedBooking as Booking} />
       </Modal>
       <Calendar onDateClick={handleDateClick} onEventClick={handleEventClick} view="profile" events={events} />
     </>
