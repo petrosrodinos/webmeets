@@ -66,7 +66,7 @@ export class BookingsService {
       if (!updatedBooking) {
         throw new NotFoundException(`Booking with id ${id} not found.`);
       }
-      return updatedBooking;
+      return updatedBooking.populate('userId meetId profileId', '-password');
     } catch (error) {
       throw new NotFoundException(error.message);
     }

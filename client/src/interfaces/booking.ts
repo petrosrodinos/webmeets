@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import { Meet, MeetType } from './meet';
+import { Meet } from './meet';
 import { Profile } from './profile';
 import { User } from './user';
+import { MeetTypes } from 'enums/meet';
 
 export interface NewBooking {
   profileId: string;
@@ -17,10 +18,18 @@ export interface Booking {
   profile: Profile | null;
   meet: Meet;
   notes: string;
+  location?: string;
   date: Date;
   status: 'pending' | 'accepted' | 'rejected' | 'cancelled' | 'completed';
   participants: number;
   createdAt: string;
+}
+
+export interface EditBooking {
+  notes?: string;
+  location?: string;
+  date?: string;
+  meetId: string;
 }
 
 export interface BookingAvailability {
@@ -41,5 +50,5 @@ export interface BookingPeriod {
 export interface BookingInfoItem {
   label: string;
   value: string;
-  type?: MeetType;
+  type?: MeetTypes;
 }

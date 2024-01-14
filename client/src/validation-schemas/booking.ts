@@ -13,7 +13,6 @@ export const EditBookingProfileSchema = yup.object().shape({
 
 export const EditBookingUserSchema = yup.object().shape({
   notes: yup.string().optional(),
-  participants: yup.string().required(),
   date: yup.string().required(),
   location: yup.string().optional(),
 });

@@ -25,6 +25,7 @@ import Tag from '@/components/ui/Tag';
 import CreateBooking from './CreateBooking';
 import { authStore } from '@/store/authStore';
 import Link from 'next/link';
+import { MeetTypes } from 'enums/meet';
 
 // export async function generateStaticParams() {
 //   return [
@@ -157,7 +158,7 @@ const Meet: FC<MeetProps> = ({ params }) => {
                     textTransform={'uppercase'}
                     mb={'4'}
                   >
-                    Meet Details
+                    Business Info
                   </Text>
 
                   <List spacing={2}>
@@ -173,7 +174,7 @@ const Meet: FC<MeetProps> = ({ params }) => {
                       </Text>{' '}
                       {meet.maxParticipants}
                     </ListItem>
-                    {meet.type == 'in-person' && (
+                    {meet.type == MeetTypes.IN_PERSON && (
                       <>
                         <ListItem>
                           <Text as={'span'} fontWeight={'bold'}>

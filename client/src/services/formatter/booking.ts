@@ -12,6 +12,7 @@ export const formatBooking = (booking: any): Booking => {
     profile: formatProfile(booking.profileId),
     meet: formatMeet(booking.meetId),
     date: booking.date,
+    location: booking.location,
     notes: booking.notes,
     status: booking.status,
     participants: booking.participants,

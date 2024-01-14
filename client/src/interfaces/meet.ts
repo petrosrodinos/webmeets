@@ -1,7 +1,6 @@
+import { MeetTypes } from 'enums/meet';
 import { Address, Profile } from './profile';
 import { User } from './user';
-
-export type MeetType = 'remote' | 'clients-location' | 'in-person';
 
 export interface Period {
   id: string;
@@ -32,7 +31,7 @@ export interface NewMeet extends Address {
   duration: number;
   maxParticipants: number;
   price: number;
-  type: MeetType;
+  type: MeetTypes;
   hours: Hours[];
   [key: string]: any;
 }
@@ -50,7 +49,7 @@ export interface Meet extends Address {
   price: number;
   hours: Hours[];
   closingPeriods: ClosingPeriod[];
-  type: MeetType;
+  type: MeetTypes;
   profile: Profile | null;
   user: User | null;
   createdAt: string;

@@ -7,10 +7,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-// import NumberInput from '@/components/ui/NumberInput';
 import TextArea from '@/components/ui/TextArea';
 import { formatDate } from '@/lib/date';
-
+import { MeetTypes } from 'enums/meet';
+import { FaCheck } from 'react-icons/fa6';
 interface BookingInfoProps {
   booking: Booking;
 }
@@ -23,7 +23,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   useEffect(() => {
     reset({
       date: new Date(booking.date).toISOString().slice(0, 16),
-      participants: String(booking.participants),
+      location: booking.location,
       notes: booking.notes,
     });
   }, []);
@@ -53,32 +53,32 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
       {
         label: 'Phone Number',
         value: booking?.meet?.phone || 'NOT-SET',
-        type: 'in-person',
+        type: MeetTypes.IN_PERSON,
       },
       {
         label: 'City',
         value: booking?.meet?.city || 'NOT-SET',
-        type: 'in-person',
+        type: MeetTypes.IN_PERSON,
       },
       {
         label: 'Address',
         value: booking?.meet?.address || 'NOT-SET',
-        type: 'in-person',
+        type: MeetTypes.IN_PERSON,
       },
       {
         label: 'Postal Code',
         value: booking?.meet?.postalCode || 'NOT-SET',
-        type: 'in-person',
+        type: MeetTypes.IN_PERSON,
       },
       {
         label: 'Meet URL',
         value: 'http:someurl',
-        type: 'remote',
+        type: MeetTypes.REMOTE,
       },
       {
         label: 'Location',
-        value: booking?.meet?.location || 'my place',
-        type: 'clients-location',
+        value: booking?.location || 'NOT-SET',
+        type: MeetTypes.CLIENTS_LOCATION,
       },
     ]);
   }, []);
@@ -93,8 +93,45 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   });
 
   const handleEditBooking = (data: any) => {
-    editBookingMutation(data, {
+    if (booking.meet.type == MeetTypes.CLIENTS_LOCATION && !data.location) {
+      toast({
+        title: 'Location is required',
+        description: 'Please enter a location',
+        position: 'top',
+        isClosable: true,
+        status: 'error',
+      });
+      return;
+    }
+    const payload = {
+      meetId: booking.id,
+      ...data,
+    };
+    editBookingMutation(payload, {
       onSuccess: () => {
+        const updatedBookingInfo = bookingInfo?.map((info) => {
+          if (info.label == 'Date') {
+            return {
+              ...info,
+              value: formatDate(data.date, true),
+            };
+          }
+          if (info.label == 'Location') {
+            return {
+              ...info,
+              value: data.location,
+            };
+          }
+          if (info.label == 'Notes') {
+            return {
+              ...info,
+              value: data.notes,
+            };
+          }
+
+          return info;
+        });
+        setBookingInfo(updatedBookingInfo);
         toast({
           title: 'Booking edited successfully',
           position: 'top',
@@ -115,31 +152,31 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
   };
 
   const handleCancelBooking = () => {
-    editBookingMutation(
-      {
-        ...booking,
-      },
-      {
-        onSuccess: () => {
-          toast({
-            title: 'Booking cancelled successfully',
-            description: "We've cancelled your booking for you.",
-            position: 'top',
-            isClosable: true,
-            status: 'success',
-          });
-        },
-        onError: (error: any) => {
-          toast({
-            title: 'Could not cancel booking',
-            description: error.message,
-            position: 'top',
-            isClosable: true,
-            status: 'error',
-          });
-        },
-      },
-    );
+    // editBookingMutation(
+    //   {
+    //     ...booking,
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       toast({
+    //         title: 'Booking cancelled successfully',
+    //         description: "We've cancelled your booking for you.",
+    //         position: 'top',
+    //         isClosable: true,
+    //         status: 'success',
+    //       });
+    //     },
+    //     onError: (error: any) => {
+    //       toast({
+    //         title: 'Could not cancel booking',
+    //         description: error.message,
+    //         position: 'top',
+    //         isClosable: true,
+    //         status: 'error',
+    //       });
+    //     },
+    //   },
+    // );
   };
 
   return (
@@ -157,7 +194,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
           <List spacing={2}>
             {bookingInfo?.map((info, index) => {
               return (
-                <>
+                <div key={index}>
                   {!info?.type || info.type == booking?.meet?.type ? (
                     <ListItem key={index}>
                       <HStack>
@@ -166,18 +203,11 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
                       </HStack>
                     </ListItem>
                   ) : null}
-                </>
+                </div>
               );
             })}
           </List>
         </Box>
-        {/* <NumberInput
-          min={1}
-          max={booking?.meet?.maxParticipants}
-          error={errors.participants?.message}
-          label="Participants"
-          register={register('participants')}
-        /> */}
 
         <Input
           label="Date"
@@ -187,8 +217,12 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking }) => {
           register={register('date')}
         />
 
+        {booking.meet.type == MeetTypes.CLIENTS_LOCATION && (
+          <Input label="Location" placeholder="Enter location" error={errors.location?.message} register={register('location')} />
+        )}
+
         <TextArea label="Notes" placeholder="Add some notes" register={register('notes')} />
-        <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
+        <Button rightIcon={<FaCheck />} isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
           Save
         </Button>
         <Button colorScheme="red" variant="outline" onClick={handleCancelBooking}>
