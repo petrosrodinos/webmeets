@@ -1,6 +1,6 @@
 import { API_URL } from '@/constants/api';
 import axios from 'axios';
-import { Booking, BookingAvailability, BookingPeriod, EditBooking, NewBooking } from '@/interfaces/booking';
+import { Booking, BookingAvailability, BookingPeriod, CancelBooking, EditBooking, NewBooking } from '@/interfaces/booking';
 import { formatAvailablePeriods, formatBooking } from './formatter/booking';
 import { createParams, getAuthHeaders, getHeaders } from './utils/utils';
 
@@ -27,8 +27,18 @@ export const getBookings = async (query: { [key: string]: string }): Promise<Boo
 
 export const editBooking = async (payload: EditBooking): Promise<Booking> => {
   try {
-    const { meetId, ...restPayload } = payload;
-    const result = await axios.patch(`${API_URL}bookings/${payload.meetId}`, restPayload, getAuthHeaders());
+    const { bookingId, ...restPayload } = payload;
+    const result = await axios.patch(`${API_URL}bookings/${payload.bookingId}`, restPayload, getAuthHeaders());
+    const formattedData = formatBooking(result.data);
+    return formattedData;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
+export const cancelBooking = async (payload: CancelBooking): Promise<Booking> => {
+  try {
+    const result = await axios.post(`${API_URL}bookings/${payload.bookingId}/cancel`, payload, getAuthHeaders());
     const formattedData = formatBooking(result.data);
     return formattedData;
   } catch (err: any) {

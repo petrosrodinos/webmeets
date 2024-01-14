@@ -3,6 +3,7 @@ import { Meet } from './meet';
 import { Profile } from './profile';
 import { User } from './user';
 import { MeetTypes } from 'enums/meet';
+import { Roles } from 'enums/roles';
 
 export interface NewBooking {
   profileId: string;
@@ -29,7 +30,13 @@ export interface EditBooking {
   notes?: string;
   location?: string;
   date?: string;
-  meetId: string;
+  bookingId: string;
+}
+
+export interface CancelBooking {
+  bookingId: string;
+  reason?: string;
+  role: Roles;
 }
 
 export interface BookingAvailability {

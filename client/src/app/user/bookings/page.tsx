@@ -9,6 +9,7 @@ import { Booking } from '@/interfaces/booking';
 import Modal from '@/components/ui/Modal';
 import { BookingCalendarEvent } from '@/interfaces/components';
 import BookingInfo from './BookingInfo';
+import { BookingStatuses } from 'enums/booking';
 
 const UserBookings: FC = () => {
   const { userId } = authStore();
@@ -31,6 +32,7 @@ const UserBookings: FC = () => {
             startEditable: false,
             durationEditable: false,
             className: 'event-item',
+            color: booking.status == BookingStatuses.CANCELLED ? 'red' : '',
             // start: booking.start,
             // end: booking.end,
           };
@@ -56,6 +58,11 @@ const UserBookings: FC = () => {
     refetch();
   };
 
+  const handleCancel = () => {
+    refetch();
+    setSelectedBooking(null);
+  };
+
   return (
     <>
       <Spinner loading={isLoading} />
@@ -65,7 +72,7 @@ const UserBookings: FC = () => {
         onClose={() => setSelectedBooking(null)}
         closeTitle="Close"
       >
-        <BookingInfo onDateChange={handleDateChange} booking={selectedBooking as Booking} />
+        <BookingInfo onCancel={handleCancel} onDateChange={handleDateChange} booking={selectedBooking as Booking} />
       </Modal>
       <Calendar onDateClick={handleDateClick} onEventClick={handleEventClick} view="user" events={events} />
     </>

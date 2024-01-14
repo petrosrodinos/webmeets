@@ -1,5 +1,6 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { BookingStatuses } from 'src/enums/booking';
+import { Roles } from 'src/enums/roles';
 
 export class CreateBookingDto {
   @IsString()
@@ -43,4 +44,14 @@ export class FindAvailabilityDto {
   @IsString()
   @IsNotEmpty()
   to: string;
+}
+
+export class CancelBookingDto {
+  @IsString()
+  @IsOptional()
+  reason: string;
+
+  @IsEnum(Roles)
+  @IsNotEmpty()
+  role: string;
 }

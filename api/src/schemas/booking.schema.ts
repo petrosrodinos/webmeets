@@ -1,7 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
-import { BookingStatuses } from 'src/enums/booking';
+import { BookingActivityType, BookingStatuses } from 'src/enums/booking';
 
+@Schema({
+  timestamps: true,
+})
+export class Activity {
+  @Prop({
+    enum: Object.values(BookingActivityType),
+  })
+  type: string;
+  @Prop()
+  description: string;
+  @Prop()
+  role: string;
+}
+
+const ActivitySchema = SchemaFactory.createForClass(Activity);
 @Schema({
   timestamps: true,
 })
@@ -41,6 +56,11 @@ export class Booking {
 
   @Prop()
   paymentId: string;
+
+  @Prop({
+    type: [ActivitySchema],
+  })
+  activities: Activity[];
 }
 
 export const BookingSchema = SchemaFactory.createForClass(Booking);

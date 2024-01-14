@@ -35,6 +35,7 @@ export interface BookingCalendarEvent {
   durationEditable?: boolean;
   date: Date;
   start?: Date;
+  color?: string;
   end?: Date;
   allDay?: boolean;
   extendedProps?: {

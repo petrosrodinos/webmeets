@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { CreateBookingDto, FindAvailabilityDto } from './dto/create-booking.dto';
+import { CancelBookingDto, CreateBookingDto, FindAvailabilityDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Booking } from 'src/schemas/booking.schema';
 import { Model, Error } from 'mongoose';
 import { Meet } from 'src/schemas/meet.schema';
+import { BookingActivityType, BookingStatuses } from 'src/enums/booking';
 
 @Injectable()
 export class BookingsService {
@@ -82,6 +83,27 @@ export class BookingsService {
     } catch (error) {
       throw new NotFoundException(error.message);
     }
+  }
+
+  async cancel(bookingId: string, cancelBookingDto: CancelBookingDto) {
+    const { reason, role } = cancelBookingDto;
+    const booking = await this.bookingModel.findById(bookingId);
+    if (!booking) {
+      throw new NotFoundException('Could not find booking.');
+    }
+
+    const newActivity = {
+      type: BookingActivityType.CANCELLED,
+      description: reason,
+      role,
+    };
+
+    booking.activities.push(newActivity);
+
+    booking.status = BookingStatuses.CANCELLED;
+
+    await booking.save();
+    return booking.populate('userId meetId profileId', '-password');
   }
 
   async findAvailability(query: FindAvailabilityDto) {

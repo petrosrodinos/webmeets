@@ -6,3 +6,8 @@ export enum BookingStatuses {
   CANCELLED = 'cancelled',
   COMPLETED = 'completed',
 }
+
+export enum BookingActivityType {
+  CANCELLED = 'cancelled',
+  RESCHEDULED = 'rescheduled',
+}

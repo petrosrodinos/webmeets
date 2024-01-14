@@ -18,9 +18,20 @@ type ModalProps = {
   onAction?: () => void;
   actionTitle?: string;
   closeTitle?: string;
+  actionTitleLoading?: boolean;
 } & React.ComponentProps<typeof ChakraModal>;
 
-const Modal: FC<ModalProps> = ({ isOpen, title, children, actionTitle, closeTitle = 'Cancel', onClose, onAction, ...rest }) => {
+const Modal: FC<ModalProps> = ({
+  isOpen,
+  title,
+  children,
+  actionTitle,
+  closeTitle = 'Cancel',
+  actionTitleLoading,
+  onClose,
+  onAction,
+  ...rest
+}) => {
   return (
     <ChakraModal size={'xl'} isOpen={isOpen} onClose={onClose} {...rest}>
       <ModalOverlay />
@@ -31,7 +42,7 @@ const Modal: FC<ModalProps> = ({ isOpen, title, children, actionTitle, closeTitl
 
         <ModalFooter>
           {onAction && (
-            <Button bg="primary.500" textColor="white" mr={3} onClick={onAction}>
+            <Button isLoading={actionTitleLoading} bg="primary.500" textColor="white" mr={3} onClick={onAction}>
               {actionTitle}
             </Button>
           )}

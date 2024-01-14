@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req, ForbiddenException } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-import { CreateBookingDto, FindAvailabilityDto } from './dto/create-booking.dto';
+import { CancelBookingDto, CreateBookingDto, FindAvailabilityDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Booking } from 'src/schemas/booking.schema';
@@ -83,5 +83,13 @@ export class BookingsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.bookingsService.remove(id);
+  }
+
+  @ApiOkResponse({ type: Booking })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
+  @Post(':id/cancel')
+  cancel(@Body() cancelBookingDto: CancelBookingDto, @Param('id') id: string) {
+    return this.bookingsService.cancel(id, cancelBookingDto);
   }
 }
