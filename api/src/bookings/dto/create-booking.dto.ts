@@ -35,10 +35,6 @@ export class CreateBookingDto {
 export class FindAvailabilityDto {
   @IsString()
   @IsNotEmpty()
-  meetId: string;
-
-  @IsString()
-  @IsNotEmpty()
   from: string;
 
   @IsString()

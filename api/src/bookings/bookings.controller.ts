@@ -18,9 +18,9 @@ export class BookingsController {
   ) {}
 
   @ApiOkResponse({ type: Booking })
-  @Get('availability')
-  findAvailability(@Query() query: FindAvailabilityDto) {
-    return this.bookingsService.findAvailability(query);
+  @Get(':id/availability')
+  findAvailability(@Query() query: FindAvailabilityDto, @Param('id') id: string) {
+    return this.bookingsService.findAvailability(id, query);
   }
 
   @UseGuards(JwtGuard)

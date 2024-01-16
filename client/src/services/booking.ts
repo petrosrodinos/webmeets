@@ -48,7 +48,7 @@ export const cancelBooking = async (payload: CancelBooking): Promise<Booking> =>
 
 export const bookingAvailability = async (query: BookingAvailability): Promise<BookingPeriod[]> => {
   try {
-    const result = await axios.get(`${API_URL}bookings/availability?${createParams(query)}`, getAuthHeaders());
+    const result = await axios.get(`${API_URL}bookings/${query.meetId}/availability?${createParams(query)}`, getAuthHeaders());
     const formattedData = formatAvailablePeriods(result.data.availability);
     return formattedData;
   } catch (err: any) {

@@ -106,8 +106,8 @@ export class BookingsService {
     return booking.populate('userId meetId profileId', '-password');
   }
 
-  async findAvailability(query: FindAvailabilityDto) {
-    const { meetId, from, to } = query;
+  async findAvailability(meetId: string, query: FindAvailabilityDto) {
+    const { from, to } = query;
 
     const meet = await this.meetModel.findById(meetId);
 
