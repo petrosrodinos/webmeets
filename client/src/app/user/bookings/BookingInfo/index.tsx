@@ -8,12 +8,13 @@ import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import TextArea from '@/components/ui/TextArea';
-import { formatDate } from '@/lib/date';
+import { formatDate, formatDateFromUTC } from '@/lib/date';
 import { MeetTypes } from 'enums/meet';
 import { FaCheck } from 'react-icons/fa6';
 import Modal from '@/components/ui/Modal';
 import { Roles } from 'enums/roles';
 import { BookingStatuses } from 'enums/booking';
+import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -24,7 +25,8 @@ interface BookingInfoProps {
 const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
   const toast = useToast();
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isEditDateModalOpen, setIsEditDateModalOpen] = useState(false);
   const [reason, setReason] = useState('');
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
   const { mutate: cancelBookingMutation, isLoading: isCanceling } = useMutation(cancelBooking);
@@ -96,6 +98,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
     handleSubmit,
     register,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(EditBookingUserSchema),
@@ -192,15 +195,23 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
     });
   };
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const handlePeriodSelected = (date: string) => {
+    setValue('date', formatDateFromUTC(date));
+  };
+
+  const toggleCancelModal = () => {
+    setIsCancelModalOpen(!isCancelModalOpen);
+  };
+
+  const toggleEditDateModal = () => {
+    setIsEditDateModalOpen(!isEditDateModalOpen);
   };
 
   return (
     <>
       <Modal
-        isOpen={isModalOpen}
-        onClose={toggleModal}
+        isOpen={isCancelModalOpen}
+        onClose={toggleCancelModal}
         title="Are you sure you want to cancel this booking?"
         actionTitle="Cancel"
         onAction={handleCancelBooking}
@@ -212,6 +223,15 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
           label="Reason (optional)"
           placeholder="Why are you canceling this booking?"
         />
+      </Modal>
+      <Modal
+        isOpen={isEditDateModalOpen}
+        onClose={toggleEditDateModal}
+        title="Find availability for this booking"
+        actionTitle="Save"
+        onAction={toggleEditDateModal}
+      >
+        <AvailabilityPeriods onPeriodSelected={handlePeriodSelected} meetId={booking?.meet?.id as string} />
       </Modal>
       <form onSubmit={handleSubmit(handleEditBooking)}>
         <Stack spacing="20px">
@@ -279,7 +299,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               >
                 Save
               </Button>
-              <Button colorScheme="red" variant="outline" onClick={toggleModal}>
+              <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
                 Cancel Booking
               </Button>
             </>
