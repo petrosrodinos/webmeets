@@ -1,81 +1,34 @@
 'use client';
-import { FC, useState } from 'react';
-import Calendar from '../../../components/ui/Calendar';
+import { FC } from 'react';
 import { getBookings } from '@/services/booking';
 import { useQuery } from 'react-query';
 import { authStore } from '@/store/authStore';
-import Spinner from '@/components/ui/Spinner';
-import Modal from '@/components/ui/Modal';
-import { BookingCalendarEvent } from '@/interfaces/components';
 import { Booking } from '@/interfaces/booking';
-import BookingInfo from './BookingInfo';
-import { BookingStatuses } from 'enums/booking';
+import ProfileCalendar from './Calendar';
+import ProfileList from './List';
+import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-ui/react';
 
 const ProfileBookings: FC = () => {
   const { profileId } = authStore();
-  const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
-  const {
-    data: bookings,
-    isLoading,
-    refetch,
-  } = useQuery('profile-bookings', () => getBookings({ profileId }), {
-    onSuccess: (data) => {
-      if (data) {
-        const events: BookingCalendarEvent[] = data.map((booking) => {
-          return {
-            title: booking?.user?.firstname + ' ' + booking?.user?.lastname,
-            resourceId: booking.id,
-            id: booking.id,
-            date: booking.date,
-            startEditable: true,
-            durationEditable: true,
-            color: booking.status == BookingStatuses.CANCELLED ? 'red' : '',
-
-            // start: booking.start,
-            // end: booking.end,
-          };
-        });
-        setEvents(events);
-      }
-    },
-  });
-
-  const handleDateClick = (arg: any) => {
-    console.log(arg);
-  };
-
-  const handleEventClick = (arg: any) => {
-    const bookingId = arg.event._def.publicId;
-    const booking = bookings?.find((booking) => booking.id === bookingId);
-    if (booking) {
-      setSelectedBooking(booking);
-    }
-  };
-
-  const handleDateChange = () => {
-    refetch();
-  };
-
-  const handleCancel = () => {
-    refetch();
-    setSelectedBooking(null);
-  };
+  const { data: bookings, isLoading, refetch } = useQuery('profile-bookings', () => getBookings({ profileId }));
 
   return (
-    <>
-      <Spinner loading={isLoading} />
-      <Modal
-        title={`${selectedBooking?.user?.firstname} ${selectedBooking?.user?.lastname}`}
-        isOpen={!!selectedBooking}
-        onClose={() => setSelectedBooking(null)}
-        closeTitle="Close"
-      >
-        <BookingInfo onCancel={handleCancel} onDateChange={handleDateChange} booking={selectedBooking as Booking} />
-      </Modal>
-      <Calendar onDateClick={handleDateClick} onEventClick={handleEventClick} view="profile" events={events} />
-    </>
+    <Tabs width="100%">
+      <TabList>
+        <Tab>Calendar</Tab>
+        <Tab>List</Tab>
+      </TabList>
+      <TabIndicator mt="-1.5px" height="2px" bg="primary.500" borderRadius="1px" />
+      <TabPanels>
+        <TabPanel width="100%">
+          <ProfileCalendar refetch={refetch} bookings={bookings as Booking[]} />
+        </TabPanel>
+        <TabPanel>
+          <ProfileList />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   );
 };
 

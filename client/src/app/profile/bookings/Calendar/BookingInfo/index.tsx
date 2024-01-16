@@ -203,15 +203,16 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             </List>
           </Box>
           <Input
-            disabled={booking.status == BookingStatuses.CANCELLED}
+            disabled={true}
             label="Date"
             error={errors.date?.message}
             type="datetime-local"
             register={register('date')}
+            onClick={toggleEditDateModal}
           />
-          <Button onClick={toggleEditDateModal}>
+          {/* <Button onClick={toggleEditDateModal}>
             <Text>Find availability for this date</Text>
-          </Button>
+          </Button> */}
           {booking.status != BookingStatuses.CANCELLED && (
             <>
               <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
