@@ -11,28 +11,31 @@ import {
   useToast,
   Text,
   Switch,
-  VStack,
   HStack,
 } from '@chakra-ui/react';
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { deleteMeet, editMeet } from '@/services/meets';
 import { useRouter } from 'next/navigation';
-import { EditMeet } from '@/interfaces/meet';
+import { EditMeet, Meet } from '@/interfaces/meet';
 import { VisibilityTypes } from 'enums/meet';
 
 interface SettingsProps {
-  meetId?: string;
+  meet?: Meet;
 }
 
-const Settings: FC<SettingsProps> = ({ meetId }) => {
+const Settings: FC<SettingsProps> = ({ meet }) => {
   const toast = useToast();
   const router = useRouter();
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState(meet?.visibility === VisibilityTypes.PUBLIC);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const { mutate: deleteMeetMutation, isLoading: isDeleting } = useMutation(deleteMeet);
-  const { mutate: editMeetMutation } = useMutation((data: EditMeet) => editMeet(meetId as string, data));
+  const { mutate: editMeetMutation } = useMutation((data: EditMeet) => editMeet(meet?.id as string, data));
+
+  useEffect(() => {
+    setIsPublic(meet?.visibility === VisibilityTypes.PUBLIC);
+  }, [meet]);
 
   const handleVisibilityChange = async () => {
     setIsPublic(!isPublic);
@@ -63,8 +66,8 @@ const Settings: FC<SettingsProps> = ({ meetId }) => {
   };
 
   const handleDeleteMeet = async () => {
-    if (!meetId) return;
-    deleteMeetMutation(meetId, {
+    if (!meet) return;
+    deleteMeetMutation(meet.id, {
       onSuccess: () => {
         toast({
           title: 'Meet deleted',

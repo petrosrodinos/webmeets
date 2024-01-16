@@ -14,7 +14,7 @@ interface MeetsProps {}
 
 const Meets: FC<MeetsProps> = () => {
   const { isLoggedIn } = authStore((state) => state);
-  const { data: meets, isLoading } = useQuery(['meets'], () => getMeets());
+  const { data: meets, isLoading } = useQuery(['meets'], () => getMeets({ visibility: 'public' }));
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [selectedMeet, setSelectedMeet] = useState<Meet>();
   const toast = useToast();

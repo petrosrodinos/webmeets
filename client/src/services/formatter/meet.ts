@@ -13,6 +13,7 @@ export const formatMeet = (meet: any): Meet => ({
   maxParticipants: meet.maxParticipants,
   price: meet.price,
   type: meet.type,
+  visibility: meet.visibility,
   createdAt: formatDate(meet.createdAt),
   city: meet.city,
   address: meet.address,
