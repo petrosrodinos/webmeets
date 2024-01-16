@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
+import { MeetVisibilityTypes } from 'src/enums/meet';
 import { MeetType } from 'src/types/meet';
 
 @Schema()
@@ -77,6 +78,13 @@ export class Meet {
 
   @Prop()
   type: MeetType;
+
+  @Prop({
+    type: String,
+    enum: MeetVisibilityTypes,
+    default: MeetVisibilityTypes.PUBLIC,
+  })
+  visibility: MeetVisibilityTypes;
 
   @Prop()
   maxParticipants: number;
