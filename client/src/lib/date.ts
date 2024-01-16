@@ -28,7 +28,7 @@ export const formatDateFromUTC = (date: string) => {
 
   const year = inputDateTime.getFullYear();
   const month = String(inputDateTime.getMonth() + 1).padStart(2, '0');
-  const day = String(inputDateTime.getDate()).padStart(2, '0');
+  const day = String(inputDateTime.getDate() + 1).padStart(2, '0');
   const hours = String(inputDateTime.getHours()).padStart(2, '0');
   const minutes = String(inputDateTime.getMinutes()).padStart(2, '0');
 
@@ -36,6 +36,8 @@ export const formatDateFromUTC = (date: string) => {
   return formattedDate;
 };
 
+//takes dateString:2024-01-19T22:00:00.000Z, timeString: 17:40
+//returns: 2024-01-19T17:40:00.000Z
 export const formatDateAndTime = (dateString: string, timeString: string): string => {
   const inputDate = new Date(dateString);
   const [hours, minutes] = timeString.split(':').map(Number);

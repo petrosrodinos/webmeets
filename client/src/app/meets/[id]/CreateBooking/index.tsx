@@ -21,7 +21,6 @@ import { useForm } from 'react-hook-form';
 import { BookingSchema } from '@/validation-schemas/booking';
 import AvailabilityPeriods from './AvailabilityPeriods';
 import Input from '@/components/ui/Input';
-import './style.css';
 interface CreateBookingProps {
   isOpen: boolean;
   onClose: () => void;

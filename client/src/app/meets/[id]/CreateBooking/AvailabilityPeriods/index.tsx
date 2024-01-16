@@ -7,16 +7,18 @@ import { FC, useState } from 'react';
 import Calendar from 'react-calendar';
 import { useMutation } from 'react-query';
 import Spinner from '@/components/ui/Spinner';
+import './style.css';
 
 interface AvailabilityPeriodsProps {
   meetId: string;
+  style?: any;
   onPeriodSelected: (date: string) => void;
 }
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({ meetId, onPeriodSelected }) => {
+const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({ meetId, style, onPeriodSelected }) => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>('');
   const [date, setDate] = useState<Value>(new Date());
   const [availablePeriods, setAvailablePeriods] = useState<BookingPeriod[]>();
@@ -55,26 +57,32 @@ const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({ meetId, onPeriodSel
   };
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <Calendar minDate={new Date()} className="date-picker" selectRange view="month" onChange={handleDateChange} value={date} />
       <Spinner mt={5} loading={isFindingAvailability} />
-      {availablePeriods?.map((period: BookingPeriod, index: number) => (
-        <div key={index}>
-          <Text>{formatDate(period.date)}</Text>
-          <SimpleGrid columns={[1, 2, 3]} gridTemplateColumns={['1fr', '1fr', 'repeat(3, 1fr)']} spacing="10px">
-            {period.periods.map((item, index) => (
-              <Tag
-                style={{ height: '40px' }}
-                key={index}
-                value={item.value}
-                id={item.id}
-                active={item.id == selectedPeriod}
-                onTagClick={handlePeriodClick}
-              />
-            ))}
-          </SimpleGrid>
-        </div>
-      ))}
+      {availablePeriods?.map((period: BookingPeriod, index: number) => {
+        return (
+          <>
+            {period.periods.length > 0 && (
+              <div key={index}>
+                <Text>{formatDate(period.date)}</Text>
+                <SimpleGrid columns={[1, 2, 3]} gridTemplateColumns={['1fr', '1fr', 'repeat(3, 1fr)']} spacing="10px">
+                  {period.periods.map((item, index) => (
+                    <Tag
+                      style={{ height: '40px' }}
+                      key={index}
+                      value={item.value}
+                      id={item.id}
+                      active={item.id == selectedPeriod}
+                      onTagClick={handlePeriodClick}
+                    />
+                  ))}
+                </SimpleGrid>
+              </div>
+            )}
+          </>
+        );
+      })}
       {availablePeriods?.length == 0 && (
         <Alert mt={5} status="warning">
           <AlertIcon />

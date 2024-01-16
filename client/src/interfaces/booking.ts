@@ -20,7 +20,7 @@ export interface Booking {
   meet: Meet;
   notes: string;
   location?: string;
-  date: Date;
+  date: string;
   status: 'pending' | 'accepted' | 'rejected' | 'cancelled' | 'completed';
   participants: number;
   createdAt: string;

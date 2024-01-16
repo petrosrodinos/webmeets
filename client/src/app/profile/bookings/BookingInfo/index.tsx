@@ -13,6 +13,7 @@ import { Roles } from 'enums/roles';
 import Modal from '@/components/ui/Modal';
 import TextArea from '@/components/ui/TextArea';
 import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
+import { formatDateFromUTC, formatDateToUTC } from '@/lib/date';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -31,9 +32,9 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
 
   useEffect(() => {
     reset({
-      date: new Date(booking.date).toISOString().slice(0, 16),
+      date: formatDateFromUTC(booking.date),
     });
-  }, []);
+  }, [booking]);
 
   useEffect(() => {
     setBookingInfo([
@@ -70,6 +71,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
     handleSubmit,
     register,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(EditBookingProfileSchema),
@@ -108,7 +110,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
     const payload = {
       bookingId: booking.id,
       reason,
-      role: Roles.USER,
+      role: Roles.ADMIN,
     };
     cancelBookingMutation(payload, {
       onSuccess: () => {
@@ -134,10 +136,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
   };
 
   const handlePeriodSelected = (date: string) => {
-    console.log(date);
-    reset({
-      date,
-    });
+    setValue('date', formatDateFromUTC(date));
   };
 
   const toggleCancelModal = () => {
@@ -168,7 +167,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
       <Modal
         isOpen={isEditDateModalOpen}
         onClose={toggleEditDateModal}
-        title="Find availability for this date"
+        title="Find availability for this booking"
         actionTitle="Save"
         onAction={toggleEditDateModal}
       >
@@ -218,7 +217,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
                 Save
               </Button>
-              <Button colorScheme="red" variant="outline" onClick={handleCancelBooking}>
+              <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
                 Cancel Booking
               </Button>
             </>

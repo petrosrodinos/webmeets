@@ -2,7 +2,6 @@ import { Booking, BookingPeriod } from '@/interfaces/booking';
 import { formatMeet } from './../formatter/meet';
 import { formatProfile } from './profile';
 import { formatUser } from './user';
-import { formatDate } from '@/lib/date';
 import { v4 as uuidv4 } from 'uuid';
 
 export const formatBooking = (booking: any): Booking => {
