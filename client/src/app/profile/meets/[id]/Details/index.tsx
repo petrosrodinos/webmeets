@@ -225,7 +225,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
           <Settings meetId={meet?.id} />
         </TabPanel>
       </TabPanels>
-      {activeTab !== 3 && activeTab !== 2 && (
+      {activeTab !== 3 && activeTab !== 2 && activeTab != 4 && (
         <Button
           isLoading={isLoading}
           loadingText="Saving"
