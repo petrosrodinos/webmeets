@@ -13,7 +13,7 @@ import { Roles } from 'enums/roles';
 import Modal from '@/components/ui/Modal';
 import TextArea from '@/components/ui/TextArea';
 import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
-import { formatDateFromUTC, formatDateToUTC } from '@/lib/date';
+import { formatDateFromUTC } from '@/lib/date';
 
 interface BookingInfoProps {
   booking: Booking;

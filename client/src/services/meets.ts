@@ -69,6 +69,15 @@ export const editMeet = async (id: string, payload: NewMeet) => {
   }
 };
 
+export const deleteMeet = async (id: string) => {
+  try {
+    const result = await axios.delete(`${API_URL}meets/${id}`, getAuthHeaders());
+    return result.data;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
 export const addPeriod = async (payload: AddPeriod) => {
   try {
     const { meetId, hourId } = payload;

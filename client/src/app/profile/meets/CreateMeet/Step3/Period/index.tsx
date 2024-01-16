@@ -61,14 +61,14 @@ const Period: FC<PeriodProps> = ({ onAdd, onRemove, onEdit, values, dayId, isAdd
   return (
     <>
       <Modal
-        title="Do you want to delete this period?"
+        title="Delete period"
         isOpen={deleteModal}
         onClose={() => setDeleteModal(false)}
         onAction={handleRemove}
         actionTitle="Delete"
         closeTitle="Cancel"
       >
-        <Text h={10}>This action cannot be undone!</Text>
+        <Text h={10}>Do you want to delete this period?</Text>
       </Modal>
       <HStack mb={5}>
         <Input name="from" onChange={handleChange} value={period.from} label="From" type="time" />

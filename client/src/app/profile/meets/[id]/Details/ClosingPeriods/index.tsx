@@ -125,14 +125,14 @@ const ClosingPeriods: FC<Step3Props> = ({ values, meetId }) => {
   return (
     <>
       <Modal
-        title="Do you want to delete this closing period?"
+        title="Delete period"
         isOpen={!!periodToDelete}
         onClose={() => setPeriodToDelete(null)}
         onAction={handleRemovePeriod}
         actionTitle="Delete"
         closeTitle="Cancel"
       >
-        <Text h={10}>This action cannot be undone!</Text>
+        <Text h={10}>Do you want to delete this closing period?</Text>
       </Modal>
       <PeriodInput meetId={meetId as string} onAdd={handleAddPeriod} isAdding={isAddingPeriod} />
       {periods.length > 0 && (

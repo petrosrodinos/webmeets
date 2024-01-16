@@ -222,7 +222,7 @@ const Details: FC<DetailsProps> = ({ meet }) => {
           <ClosingPeriods meetId={meet?.id} values={getValues('closingPeriods') as ClosingPeriod[]} />
         </TabPanel>
         <TabPanel>
-          <Settings />
+          <Settings meetId={meet?.id} />
         </TabPanel>
       </TabPanels>
       {activeTab !== 3 && activeTab !== 2 && (

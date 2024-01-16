@@ -104,7 +104,6 @@ const Step3: FC<Step3Props> = ({
     });
     setHours(updatedHours);
     setValue('hours', updatedHours);
-    console.log('updated', updatedHours);
     if (values) {
       setDeletingId(id);
       onDeletePeriod?.({ meetId: meetId as string, hourId: dayId, periodId: id });
