@@ -3,10 +3,10 @@ import { Stack, VStack, RadioGroup, Radio, FormLabel, useColorModeValue, Alert, 
 import Input from '@/components/ui/Input';
 import ImagePicker from '@/components/ui/ImagePicker';
 import { ImagePickerItemData } from '@/interfaces/components';
-import { MeetType } from '@/interfaces/meet';
 import TextArea from '@/components/ui/TextArea';
 import { SERVICE_CATEGORIES } from '@/constants/optionsData';
 import Select from '@/components/ui/Select';
+import { MeetTypes } from 'enums/meet';
 
 interface Step1Props {
   register: any;
@@ -17,7 +17,7 @@ interface Step1Props {
 }
 
 const Step1: FC<Step1Props> = ({ register, errors, setValue, values, onImageDelete }) => {
-  const [type, setType] = useState<MeetType>('remote');
+  const [type, setType] = useState<MeetTypes>(MeetTypes.REMOTE);
 
   useEffect(() => {
     setType(values?.type || 'remote');

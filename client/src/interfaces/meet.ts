@@ -1,4 +1,4 @@
-import { MeetTypes } from 'enums/meet';
+import { MeetTypes, VisibilityTypes } from 'enums/meet';
 import { Address, Profile } from './profile';
 import { User } from './user';
 
@@ -29,10 +29,26 @@ export interface NewMeet extends Address {
   category: string;
   phone?: string;
   duration: number;
+  visibility: VisibilityTypes;
   maxParticipants: number;
   price: number;
   type: MeetTypes;
   hours: Hours[];
+  [key: string]: any;
+}
+
+export interface EditMeet extends Address {
+  name?: string;
+  description?: string;
+  images?: File[];
+  category?: string;
+  phone?: string;
+  duration?: number;
+  visibility?: VisibilityTypes;
+  maxParticipants?: number;
+  price?: number;
+  type?: MeetTypes;
+  hours?: Hours[];
   [key: string]: any;
 }
 

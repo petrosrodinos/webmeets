@@ -16,8 +16,10 @@ import {
 } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 import { useMutation } from 'react-query';
-import { deleteMeet } from '@/services/meets';
+import { deleteMeet, editMeet } from '@/services/meets';
 import { useRouter } from 'next/navigation';
+import { EditMeet } from '@/interfaces/meet';
+import { VisibilityTypes } from 'enums/meet';
 
 interface SettingsProps {
   meetId?: string;
@@ -30,6 +32,35 @@ const Settings: FC<SettingsProps> = ({ meetId }) => {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const { mutate: deleteMeetMutation, isLoading: isDeleting } = useMutation(deleteMeet);
+  const { mutate: editMeetMutation } = useMutation((data: EditMeet) => editMeet(meetId as string, data));
+
+  const handleVisibilityChange = async () => {
+    setIsPublic(!isPublic);
+
+    editMeetMutation(
+      {
+        visibility: !isPublic ? VisibilityTypes.PUBLIC : VisibilityTypes.PRIVATE,
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: 'Meet updated',
+            status: 'success',
+            isClosable: true,
+            position: 'top',
+          });
+        },
+        onError: () => {
+          toast({
+            title: 'Could not update your meet',
+            status: 'error',
+            isClosable: true,
+            position: 'top',
+          });
+        },
+      },
+    );
+  };
 
   const handleDeleteMeet = async () => {
     if (!meetId) return;
@@ -81,7 +112,7 @@ const Settings: FC<SettingsProps> = ({ meetId }) => {
                 <Heading size="xs" textTransform="uppercase">
                   Visibility
                 </Heading>
-                <Switch isChecked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} colorScheme="pink" size="lg" />
+                <Switch isChecked={isPublic} onChange={handleVisibilityChange} colorScheme="pink" size="lg" />
               </HStack>
 
               <Text pt="2" fontSize="sm">
