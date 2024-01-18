@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { BookingStatuses } from 'src/enums/booking';
 import { Roles } from 'src/enums/roles';
 
@@ -12,8 +12,8 @@ export class CreateBookingDto {
   profileId: string;
 
   @IsString()
-  @IsOptional()
-  notes: string;
+  @IsNotEmpty()
+  date: string;
 
   @IsOptional()
   @IsString()
@@ -23,13 +23,18 @@ export class CreateBookingDto {
   @IsOptional()
   status: string;
 
+  @IsNotEmpty()
+  participants: ParticipantDto[];
+}
+
+export class ParticipantDto {
   @IsString()
   @IsNotEmpty()
-  date: string;
+  userId: string;
 
+  @IsString()
   @IsOptional()
-  @IsArray()
-  participants: string;
+  notes: string;
 }
 
 export class FindAvailabilityDto {

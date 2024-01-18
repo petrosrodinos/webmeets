@@ -17,12 +17,6 @@ export class BookingsController {
     private stripeService: StripeService,
   ) {}
 
-  @ApiOkResponse({ type: Booking })
-  @Get(':id/availability')
-  findAvailability(@Query() query: FindAvailabilityDto, @Param('id') id: string) {
-    return this.bookingsService.findAvailability(id, query);
-  }
-
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: Booking })
@@ -35,16 +29,16 @@ export class BookingsController {
       throw new ForbiddenException('You cannot book your own meet.');
     }
     const { name, price } = meet;
-    const payment = await this.stripeService.createCheckoutSession({
-      name,
-      price,
-    });
+    // const payment = await this.stripeService.createCheckoutSession({
+    //   name,
+    //   price,
+    // });
 
-    const booking = await this.bookingsService.create(createBookingDto, payment.id, userId);
+    const booking = await this.bookingsService.create(createBookingDto, 'payment.id', userId);
 
     return {
       booking,
-      payment,
+      // payment,
     };
   }
 
@@ -83,6 +77,12 @@ export class BookingsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.bookingsService.remove(id);
+  }
+
+  @ApiOkResponse({ type: Booking })
+  @Get(':id/availability')
+  findAvailability(@Query() query: FindAvailabilityDto, @Param('id') id: string) {
+    return this.bookingsService.findAvailability(id, query);
   }
 
   @ApiOkResponse({ type: Booking })

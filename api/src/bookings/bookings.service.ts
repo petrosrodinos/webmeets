@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/commo
 import { CancelBookingDto, CreateBookingDto, FindAvailabilityDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Booking } from 'src/schemas/booking.schema';
+import { Booking, Participant } from 'src/schemas/booking.schema';
 import { Model, Error } from 'mongoose';
 import { Meet } from 'src/schemas/meet.schema';
 import { BookingActivityType, BookingStatuses } from 'src/enums/booking';
@@ -18,13 +18,32 @@ export class BookingsService {
 
   async create(createBookingDto: CreateBookingDto, paymentId: string, userId: string) {
     try {
-      const booking = new this.bookingModel({
-        ...createBookingDto,
-        userId,
-        paymentId,
+      const existingBooking = await this.bookingModel.findOne({
+        meetId: createBookingDto.meetId,
+        date: createBookingDto.date,
       });
-      await booking.save();
-      return booking;
+      if (existingBooking) {
+        const isExistingParticipant = existingBooking.participants.find((participant: Participant) => {
+          return participant.userId == userId;
+        });
+        if (isExistingParticipant) {
+          throw new ForbiddenException('You are already a participant in this booking.');
+        }
+        const { participants, ..._ } = createBookingDto;
+
+        existingBooking.participants.push(...participants);
+        await existingBooking.save();
+        return existingBooking;
+      } else {
+        const { participants, ...restDto } = createBookingDto;
+        const booking = new this.bookingModel({
+          ...restDto,
+          paymentId,
+        });
+        booking.participants.push(...participants);
+        await booking.save();
+        return booking;
+      }
     } catch (error) {
       if (error instanceof Error.ValidationError) {
         throw new ForbiddenException(error.message);

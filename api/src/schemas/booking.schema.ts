@@ -21,12 +21,15 @@ const ActivitySchema = SchemaFactory.createForClass(Activity);
 @Schema({
   timestamps: true,
 })
-export class Participants {
+export class Participant {
   @Prop({ type: Types.ObjectId, ref: 'User' })
-  userId: Types.ObjectId;
+  userId: string;
+
+  @Prop()
+  notes: string;
 }
 
-const ParticipantsSchema = SchemaFactory.createForClass(Participants);
+const ParticipantSchema = SchemaFactory.createForClass(Participant);
 
 @Schema({
   timestamps: true,
@@ -60,10 +63,10 @@ export class Booking {
   date: Date;
 
   @Prop({
-    type: [ParticipantsSchema],
+    type: [ParticipantSchema],
     default: [],
   })
-  participants: Participants[];
+  participants: Participant[];
 
   @Prop()
   paymentId: string;
