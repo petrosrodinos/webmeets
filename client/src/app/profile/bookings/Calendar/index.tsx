@@ -1,7 +1,6 @@
 'use client';
 import { FC, useState, useEffect } from 'react';
 import Calendar from '../../../../components/ui/Calendar';
-import { authStore } from '@/store/authStore';
 import Modal from '@/components/ui/Modal';
 import { BookingCalendarEvent } from '@/interfaces/components';
 import { Booking } from '@/interfaces/booking';

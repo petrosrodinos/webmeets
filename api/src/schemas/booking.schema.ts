@@ -17,6 +17,17 @@ export class Activity {
 }
 
 const ActivitySchema = SchemaFactory.createForClass(Activity);
+
+@Schema({
+  timestamps: true,
+})
+export class Participants {
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  userId: Types.ObjectId;
+}
+
+const ParticipantsSchema = SchemaFactory.createForClass(Participants);
+
 @Schema({
   timestamps: true,
 })
@@ -49,10 +60,10 @@ export class Booking {
   date: Date;
 
   @Prop({
-    type: Number,
-    default: 1,
+    type: [ParticipantsSchema],
+    default: [],
   })
-  participants: number;
+  participants: Participants[];
 
   @Prop()
   paymentId: string;

@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { BookingStatuses } from 'src/enums/booking';
 import { Roles } from 'src/enums/roles';
 
@@ -27,8 +27,8 @@ export class CreateBookingDto {
   @IsNotEmpty()
   date: string;
 
-  @IsString()
   @IsOptional()
+  @IsArray()
   participants: string;
 }
 
