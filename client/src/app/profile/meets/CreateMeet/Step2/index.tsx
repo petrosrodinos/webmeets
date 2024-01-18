@@ -9,7 +9,7 @@ interface Step2Props {
   setValue: any;
 }
 
-const Step2: FC<Step2Props> = ({ register, errors, setValue }) => {
+const Step2: FC<Step2Props> = ({ register, errors }) => {
   return (
     <Stack>
       <Input placeholder="Enter meet name" label="Name" error={errors.name?.message} register={register('name')} />

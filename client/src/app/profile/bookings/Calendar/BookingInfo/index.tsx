@@ -1,7 +1,19 @@
 import { Booking, BookingInfoItem } from '@/interfaces/booking';
 import { cancelBooking, editBooking } from '@/services/booking';
 import { EditBookingProfileSchema } from '@/validation-schemas/booking';
-import { useToast, Stack, Text, Button, List, ListItem, Box, useColorModeValue, HStack, Avatar } from '@chakra-ui/react';
+import {
+  useToast,
+  Stack,
+  Text,
+  Button,
+  List,
+  ListItem,
+  Box,
+  useColorModeValue,
+  HStack,
+  Avatar,
+  IconButton,
+} from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
@@ -14,6 +26,7 @@ import Modal from '@/components/ui/Modal';
 import TextArea from '@/components/ui/TextArea';
 import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
 import { formatDateFromUTC } from '@/lib/date';
+import { MdEdit } from 'react-icons/md';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -202,17 +215,23 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               })}
             </List>
           </Box>
-          <Input
-            disabled={true}
-            label="Date"
-            error={errors.date?.message}
-            type="datetime-local"
-            register={register('date')}
-            onClick={toggleEditDateModal}
-          />
-          {/* <Button onClick={toggleEditDateModal}>
-            <Text>Find availability for this date</Text>
-          </Button> */}
+          <HStack>
+            <Input
+              disabled={true}
+              label="Date"
+              error={errors.date?.message}
+              type="datetime-local"
+              register={register('date')}
+              onClick={toggleEditDateModal}
+            />
+            <IconButton
+              mt={8}
+              colorScheme="green"
+              aria-label="Find availability for this date"
+              icon={<MdEdit />}
+              onClick={toggleEditDateModal}
+            />
+          </HStack>
           {booking.status != BookingStatuses.CANCELLED && (
             <>
               <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
