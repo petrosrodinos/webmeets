@@ -278,57 +278,68 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             </List>
           </Box>
 
-          <HStack>
-            <Input
-              disabled={true}
-              label="Date"
-              error={errors.date?.message}
-              type="datetime-local"
-              register={register('date')}
-              onClick={toggleEditDateModal}
-            />
-            <IconButton
-              mt={8}
-              colorScheme="green"
-              aria-label="Find availability for this date"
-              icon={<MdEdit />}
-              onClick={toggleEditDateModal}
-            />
-          </HStack>
-
-          {booking.meet.type == MeetTypes.CLIENTS_LOCATION && (
-            <Input
-              label="Location"
-              placeholder="Enter location"
-              error={errors.location?.message}
-              register={register('location')}
-              disabled={booking.status == BookingStatuses.CANCELLED}
-            />
-          )}
-
-          <TextArea
-            disabled={booking.status == BookingStatuses.CANCELLED}
-            label="Notes"
-            placeholder="Add some notes"
-            register={register('notes')}
-          />
-          {booking.status != BookingStatuses.CANCELLED && (
-            <>
-              <Button
-                rightIcon={<FaCheck />}
-                isLoading={isLoading}
+          <Box
+            display="flex"
+            flexDirection="column"
+            rounded={'lg'}
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'lg'}
+            p={3}
+          >
+            <HStack>
+              <Input
+                disabled={true}
+                label="Date"
+                error={errors.date?.message}
+                type="datetime-local"
+                register={register('date')}
+                onClick={toggleEditDateModal}
+              />
+              <IconButton
+                mt={8}
                 colorScheme="green"
-                variant="solid"
-                type="submit"
-                maxWidth="100px"
-              >
-                Save
-              </Button>
-              <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
-                Cancel Booking
-              </Button>
-            </>
-          )}
+                aria-label="Find availability for this date"
+                icon={<MdEdit />}
+                onClick={toggleEditDateModal}
+              />
+            </HStack>
+
+            {booking.meet.type == MeetTypes.CLIENTS_LOCATION && (
+              <Input
+                label="Location"
+                placeholder="Enter location"
+                error={errors.location?.message}
+                register={register('location')}
+                disabled={booking.status == BookingStatuses.CANCELLED}
+              />
+            )}
+
+            <TextArea
+              disabled={booking.status == BookingStatuses.CANCELLED}
+              label="Notes"
+              placeholder="Add some notes"
+              register={register('notes')}
+            />
+
+            {booking.status != BookingStatuses.CANCELLED && (
+              <>
+                <Button
+                  rightIcon={<FaCheck />}
+                  isLoading={isLoading}
+                  colorScheme="green"
+                  variant="solid"
+                  type="submit"
+                  maxWidth="100px"
+                  mt={5}
+                >
+                  Save
+                </Button>
+              </>
+            )}
+          </Box>
+          <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
+            Cancel Booking
+          </Button>
         </Stack>
       </form>
     </>
