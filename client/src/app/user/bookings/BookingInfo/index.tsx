@@ -28,6 +28,7 @@ import { Roles } from 'enums/roles';
 import { BookingStatuses } from 'enums/booking';
 import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
 import { MdEdit } from 'react-icons/md';
+import { authStore } from '@/store/authStore';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -36,6 +37,7 @@ interface BookingInfoProps {
 }
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
+  const { userId } = authStore((state) => state);
   const toast = useToast();
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -45,10 +47,11 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
   const { mutate: cancelBookingMutation, isLoading: isCanceling } = useMutation(cancelBooking);
 
   useEffect(() => {
+    const usersNotes = booking.participants.find((participant) => participant.user.id == userId)?.notes;
     reset({
       date: new Date(booking.date).toISOString().slice(0, 16),
       location: booking.location,
-      notes: booking.notes,
+      notes: usersNotes,
     });
   }, []);
 
@@ -60,7 +63,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
       },
       {
         label: 'Notes',
-        value: booking?.notes || '',
+        value: booking.participants[0].notes || '',
       },
       {
         label: 'Duration',
