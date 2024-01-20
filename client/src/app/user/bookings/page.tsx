@@ -22,13 +22,14 @@ const UserBookings: FC = () => {
     refetch,
   } = useQuery('user-bookings', () => getBookings({ userId }), {
     onSuccess: (data) => {
+      console.log('data', data);
       if (data) {
         const events = data.map((booking) => {
           return {
-            title: booking.meet.name,
-            resourceId: booking.id,
             id: booking.id,
-            date: booking.date,
+            title: booking.meet.name,
+            date: new Date(booking.date),
+            resourceId: booking.id,
             startEditable: false,
             durationEditable: false,
             className: 'event-item',
@@ -37,6 +38,7 @@ const UserBookings: FC = () => {
             // end: booking.end,
           };
         });
+        console.log('asd', events);
         setEvents(events);
       }
     },

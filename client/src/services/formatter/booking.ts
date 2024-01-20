@@ -7,14 +7,19 @@ import { v4 as uuidv4 } from 'uuid';
 export const formatBooking = (booking: any): Booking => {
   return {
     id: booking._id,
-    user: formatUser(booking.userId),
     profile: formatProfile(booking.profileId),
     meet: formatMeet(booking.meetId),
     date: booking.date,
     location: booking.location,
-    notes: booking.notes,
     status: booking.status,
-    participants: booking.participants,
+    participants: booking.participants.map((participant: any) => {
+      return {
+        id: participant._id,
+        user: formatUser(participant.userId),
+        notes: participant?.notes || '',
+        createdAt: participant.createdAt,
+      };
+    }),
     createdAt: booking.createdAt,
   };
 };

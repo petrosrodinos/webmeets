@@ -17,14 +17,17 @@ export interface NewBooking {
 
 export interface Booking {
   id: string;
-  user: User | null;
   profile: Profile | null;
   meet: Meet;
-  notes: string;
   location?: string;
   date: string;
   status: 'pending' | 'accepted' | 'rejected' | 'cancelled' | 'completed';
-  participants: number;
+  participants: {
+    id: string;
+    user: User;
+    notes?: string;
+    createdAt: string;
+  }[];
   createdAt: string;
 }
 
