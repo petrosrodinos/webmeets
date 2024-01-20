@@ -54,11 +54,21 @@ export class BookingsService {
 
   async findAll(query: any) {
     try {
-      const bookings = await this.bookingModel
-        .find({
-          ...query,
-        })
-        .populate('userId meetId profileId', '-password');
+      let bookings = null;
+      if (query.userId) {
+        bookings = await this.bookingModel
+          .find({
+            'participants.userId': query.userId,
+          })
+          .populate('meetId profileId participants.userId', '-password');
+      } else {
+        bookings = await this.bookingModel
+          .find({
+            ...query,
+          })
+          .populate('meetId profileId participants.userId', '-password');
+      }
+
       if (!bookings || bookings.length === 0) {
         throw new NotFoundException('Could not find bookings.');
       }
