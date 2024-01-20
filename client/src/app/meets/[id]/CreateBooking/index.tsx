@@ -21,6 +21,7 @@ import { useForm } from 'react-hook-form';
 import { BookingSchema } from '@/validation-schemas/booking';
 import AvailabilityPeriods from './AvailabilityPeriods';
 import Input from '@/components/ui/Input';
+import { authStore } from '@/store/authStore';
 interface CreateBookingProps {
   isOpen: boolean;
   onClose: () => void;
@@ -28,6 +29,7 @@ interface CreateBookingProps {
 }
 
 const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
+  const { userId } = authStore((state) => state);
   const firstField = useRef();
   const toast = useToast();
   const { mutate: createBookingMutation, isLoading } = useMutation(createBooking);
@@ -54,14 +56,21 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
     }
     createBookingMutation(
       {
-        ...data,
         meetId: meet.id,
-        profileId: meet?.profile?.id,
+        profileId: meet?.profile?.id as string,
+        location: data.location,
+        date: data.date,
+        participants: [
+          {
+            userId,
+            notes: data.notes,
+          },
+        ],
       },
       {
         onSuccess: (data: any) => {
-          const paymentUrl = data.payment.url;
-          window.open(paymentUrl, '_blank');
+          // const paymentUrl = data.payment.url;
+          // window.open(paymentUrl, '_blank');
         },
         onError: (error: any) => {
           toast({

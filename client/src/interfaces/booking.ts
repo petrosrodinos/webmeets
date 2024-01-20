@@ -1,4 +1,3 @@
-import { create } from 'zustand';
 import { Meet } from './meet';
 import { Profile } from './profile';
 import { User } from './user';
@@ -8,9 +7,12 @@ import { Roles } from 'enums/roles';
 export interface NewBooking {
   profileId: string;
   meetId: string;
-  notes: string;
   date: Date;
-  participants: number;
+  location?: string;
+  participants: {
+    userId: string;
+    notes: string;
+  }[];
 }
 
 export interface Booking {
