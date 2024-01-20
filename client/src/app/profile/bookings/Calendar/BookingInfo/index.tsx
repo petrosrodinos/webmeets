@@ -13,6 +13,8 @@ import {
   HStack,
   Avatar,
   IconButton,
+  SimpleGrid,
+  VStack,
 } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -56,16 +58,8 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         value: booking.meet.name,
       },
       {
-        label: 'Notes',
-        value: booking.notes,
-      },
-      {
         label: 'Duration',
         value: String(booking?.meet?.duration) || 'NOT-SET',
-      },
-      {
-        label: 'Participants',
-        value: String(booking?.participants) || '1',
       },
       {
         label: 'Meet URL',
@@ -74,7 +68,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
       },
       {
         label: 'Location',
-        value: 'some location',
+        value: booking?.location || '',
         type: MeetTypes.CLIENTS_LOCATION,
       },
     ]);
@@ -196,7 +190,15 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             boxShadow={'lg'}
             p={3}
           >
-            <Avatar alignSelf="center" size="xl" src={booking?.user?.avatar} mb={4} />
+            {/* <SimpleGrid alignSelf="center" columns={2} spacing={4} mb={4}>
+              {booking.participants?.map((participant, index) => {
+                return (
+                  <HStack key={index}>
+                    <Avatar size="md" src={participant.user.avatar} />
+                  </HStack>
+                );
+              })}
+            </SimpleGrid> */}
 
             <List spacing={2}>
               {bookingInfo?.map((info, index) => {
@@ -215,23 +217,44 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               })}
             </List>
           </Box>
-          <HStack>
-            <Input
-              disabled={true}
-              label="Date"
-              error={errors.date?.message}
-              type="datetime-local"
-              register={register('date')}
-              onClick={toggleEditDateModal}
-            />
-            <IconButton
-              mt={8}
-              colorScheme="green"
-              aria-label="Find availability for this date"
-              icon={<MdEdit />}
-              onClick={toggleEditDateModal}
-            />
-          </HStack>
+          <Box
+            display="flex"
+            flexDirection="column"
+            rounded={'lg'}
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'lg'}
+            p={3}
+          >
+            <Text fontWeight="bold">Participants:</Text>
+            {booking.participants?.map((participant, index) => {
+              return (
+                <HStack key={index}>
+                  <Avatar size="sm" src={participant.user.avatar} />
+                  <VStack>
+                    <Text>{`${participant.user.firstname} ${participant.user.lastname}`}</Text>
+                    <Text>Notes:{participant.notes}</Text>
+                  </VStack>
+                </HStack>
+              );
+            })}
+            <HStack mt={10}>
+              <Input
+                disabled={true}
+                label="Date"
+                error={errors.date?.message}
+                type="datetime-local"
+                register={register('date')}
+                onClick={toggleEditDateModal}
+              />
+              <IconButton
+                mt={8}
+                colorScheme="green"
+                aria-label="Find availability for this date"
+                icon={<MdEdit />}
+                onClick={toggleEditDateModal}
+              />
+            </HStack>
+          </Box>
           {booking.status != BookingStatuses.CANCELLED && (
             <>
               <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">

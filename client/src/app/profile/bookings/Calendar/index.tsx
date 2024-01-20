@@ -1,5 +1,5 @@
 'use client';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useMemo } from 'react';
 import Calendar from '../../../../components/ui/Calendar';
 import Modal from '@/components/ui/Modal';
 import { BookingCalendarEvent } from '@/interfaces/components';
@@ -19,7 +19,7 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
   useEffect(() => {
     const events: BookingCalendarEvent[] = bookings?.map((booking) => {
       return {
-        title: booking?.user?.firstname + ' ' + booking?.user?.lastname,
+        title: bookingName || booking.meet.name,
         resourceId: booking.id,
         id: booking.id,
         date: new Date(booking.date),
@@ -55,10 +55,21 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
     setSelectedBooking(null);
   };
 
+  const bookingName = useMemo(() => {
+    if (!selectedBooking) return;
+    const user = selectedBooking.participants[0].user;
+    const userName = `${user.firstname} ${user.lastname}`;
+    if (selectedBooking.participants.length > 0) {
+      return `${userName} + ${selectedBooking.participants.length - 1} more`;
+    } else {
+      return userName;
+    }
+  }, [bookings]);
+
   return (
     <div style={{ width: '100%' }}>
       <Modal
-        title={`${selectedBooking?.user?.firstname} ${selectedBooking?.user?.lastname}`}
+        title={selectedBooking?.meet?.name || 'Booking'}
         isOpen={!!selectedBooking}
         onClose={() => setSelectedBooking(null)}
         closeTitle="Close"
