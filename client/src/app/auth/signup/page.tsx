@@ -29,11 +29,13 @@ import { RiLockPasswordLine } from 'react-icons/ri';
 import { IoPersonOutline } from 'react-icons/io5';
 import { TfiEmail } from 'react-icons/tfi';
 import { Roles } from 'enums/roles';
+import { preferencesStore } from '@/store/preferencesStore';
 
 export default function SignUp() {
   const toast = useToast();
   const { logIn } = authStore((state) => state);
   const router = useRouter();
+  const { setPreferences } = preferencesStore((state) => state);
 
   const {
     handleSubmit,
@@ -65,7 +67,11 @@ export default function SignUp() {
             exp: data.exp,
             userId: data.user._id,
           });
+
           if (values.isBusiness) {
+            setPreferences({
+              roleView: Roles.ADMIN,
+            });
             router.push('/profile');
           } else {
             router.push('/home');

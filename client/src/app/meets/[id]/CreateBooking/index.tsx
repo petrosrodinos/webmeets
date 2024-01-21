@@ -69,6 +69,13 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
       },
       {
         onSuccess: (data: any) => {
+          toast({
+            title: 'Booking created',
+            description: 'Your booking was created successfully',
+            position: 'top',
+            isClosable: true,
+            status: 'success',
+          });
           // const paymentUrl = data.payment.url;
           // window.open(paymentUrl, '_blank');
         },
@@ -117,6 +124,7 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
 
                 <DrawerFooter borderTopWidth="1px">
                   <Button
+                    disabled={isLoading}
                     _hover={{
                       bg: 'primary.600',
                     }}
@@ -127,7 +135,7 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
                   >
                     Create
                   </Button>
-                  <Button disabled={isLoading} variant="outline" onClick={onClose}>
+                  <Button variant="outline" onClick={onClose}>
                     Cancel
                   </Button>
                 </DrawerFooter>
