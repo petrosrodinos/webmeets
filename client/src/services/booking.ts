@@ -1,6 +1,14 @@
 import { API_URL } from '@/constants/api';
 import axios from 'axios';
-import { Booking, BookingAvailability, BookingPeriod, CancelBooking, EditBooking, NewBooking } from '@/interfaces/booking';
+import {
+  Booking,
+  BookingAvailability,
+  BookingPeriod,
+  CancelBooking,
+  EditBooking,
+  EditBookingParticipant,
+  NewBooking,
+} from '@/interfaces/booking';
 import { formatAvailablePeriods, formatBooking } from './formatter/booking';
 import { createParams, getAuthHeaders, getHeaders } from './utils/utils';
 
@@ -29,6 +37,21 @@ export const editBooking = async (payload: EditBooking): Promise<Booking> => {
   try {
     const { bookingId, ...restPayload } = payload;
     const result = await axios.patch(`${API_URL}bookings/${payload.bookingId}`, restPayload, getAuthHeaders());
+    const formattedData = formatBooking(result.data);
+    return formattedData;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
+export const editParticipant = async (payload: EditBookingParticipant): Promise<Booking> => {
+  try {
+    const { bookingId, participantId, ...restPayload } = payload;
+    const result = await axios.patch(
+      `${API_URL}bookings/${bookingId}/participants/${participantId}`,
+      restPayload,
+      getAuthHeaders(),
+    );
     const formattedData = formatBooking(result.data);
     return formattedData;
   } catch (err: any) {

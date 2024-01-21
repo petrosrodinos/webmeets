@@ -6,7 +6,7 @@ export const formatDate = (date: string, time: boolean = false) => {
   const day = newDate.toLocaleString('default', { day: 'numeric' });
   const year = newDate.toLocaleString('default', { year: 'numeric' });
   const hours = newDate.getHours();
-  const minutes = newDate.getMinutes();
+  const minutes = newDate.getMinutes().toString().padStart(2, '0');
   const formattedTime = `${hours}:${minutes}`;
   if (time) {
     return `${month} ${day}, ${year} at ${formattedTime}`;
