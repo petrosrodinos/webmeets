@@ -6,6 +6,7 @@ import { Booking, Participant } from 'src/schemas/booking.schema';
 import { Model, Error } from 'mongoose';
 import { Meet } from 'src/schemas/meet.schema';
 import { BookingActivityType, BookingStatuses } from 'src/enums/booking';
+import { Roles } from 'src/enums/roles';
 
 @Injectable()
 export class BookingsService {
@@ -114,12 +115,15 @@ export class BookingsService {
     }
   }
 
-  async cancel(bookingId: string, cancelBookingDto: CancelBookingDto) {
+  async cancel(bookingId: string, cancelBookingDto: CancelBookingDto, req: Express.Request) {
     const { reason, role } = cancelBookingDto;
+    const { userId, role: userRole } = req.user;
     const booking = await this.bookingModel.findById(bookingId);
     if (!booking) {
       throw new NotFoundException('Could not find booking.');
     }
+
+    const meet = await this.meetModel.findById(booking.meetId);
 
     const newActivity = {
       type: BookingActivityType.CANCELLED,
@@ -129,7 +133,15 @@ export class BookingsService {
 
     booking.activities.push(newActivity);
 
-    booking.status = BookingStatuses.CANCELLED;
+    if (meet.maxParticipants == 1 || userRole == Roles.ADMIN) {
+      booking.status = BookingStatuses.CANCELLED;
+    }
+
+    if (userRole == Roles.USER) {
+      booking.participants = booking.participants.filter((participant: Participant) => {
+        return participant.userId != userId;
+      });
+    }
 
     await booking.save();
     return booking.populate('userId meetId profileId', '-password');

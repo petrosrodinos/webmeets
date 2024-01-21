@@ -89,8 +89,8 @@ export class BookingsController {
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @Post(':id/cancel')
-  cancel(@Body() cancelBookingDto: CancelBookingDto, @Param('id') id: string) {
-    return this.bookingsService.cancel(id, cancelBookingDto);
+  cancel(@Body() cancelBookingDto: CancelBookingDto, @Param('id') id: string, @Req() req: Express.Request) {
+    return this.bookingsService.cancel(id, cancelBookingDto, req);
   }
 
   @ApiOkResponse({ type: Booking })
