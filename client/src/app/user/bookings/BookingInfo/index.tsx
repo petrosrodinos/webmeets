@@ -70,10 +70,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         label: 'Date',
         value: formatDate(booking?.date, true) || 'NOT-SET',
       },
-      {
-        label: 'Notes',
-        value: booking.participants[0].notes || '',
-      },
+
       {
         label: 'Duration',
         value: booking?.meet?.duration.toString() || 'NOT-SET',
@@ -90,7 +87,10 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         label: 'Created at',
         value: formatDate(booking.createdAt, true),
       },
-
+      {
+        label: 'Notes',
+        value: booking.participants[0].notes || '',
+      },
       {
         label: 'Phone Number',
         value: booking?.meet?.phone || 'NOT-SET',

@@ -66,6 +66,7 @@ export class BookingsService {
         bookings = await this.bookingModel
           .find({
             ...query,
+            'participants.0': { $exists: true },
           })
           .populate('meetId profileId participants.userId', '-password');
       }
@@ -135,6 +136,7 @@ export class BookingsService {
 
     if (meet.maxParticipants == 1 || userRole == Roles.ADMIN) {
       booking.status = BookingStatuses.CANCELLED;
+      //send notification to all participants if cancelled by admin
     }
 
     if (userRole == Roles.USER) {
