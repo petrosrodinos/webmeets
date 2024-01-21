@@ -29,14 +29,17 @@ import { RiLockPasswordLine } from 'react-icons/ri';
 import { IoPersonOutline } from 'react-icons/io5';
 import { TfiEmail } from 'react-icons/tfi';
 import { Roles } from 'enums/roles';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { SignUp as SignUpInt } from '@/interfaces/user';
+import { get } from 'http';
+import { formatDateToUTC } from '@/lib/date';
 
 interface SignUpProps {
   data?: SignUpInt;
+  onSave?: () => void;
 }
 
-const SignUp: FC<SignUpProps> = ({ data }) => {
+const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
   const toast = useToast();
   const { logIn } = authStore((state) => state);
   const router = useRouter();
@@ -45,6 +48,7 @@ const SignUp: FC<SignUpProps> = ({ data }) => {
     handleSubmit,
     register,
     reset,
+    getValues,
     formState: { errors },
     setValue,
   } = useForm({
@@ -72,11 +76,6 @@ const SignUp: FC<SignUpProps> = ({ data }) => {
             exp: data.exp,
             userId: data.user._id,
           });
-          if (values.isBusiness) {
-            router.push('/profile');
-          } else {
-            router.push('/home');
-          }
         },
         onError: (error: any) => {
           if (error.statusCode == 409) {
@@ -100,6 +99,19 @@ const SignUp: FC<SignUpProps> = ({ data }) => {
       },
     );
   }
+
+  useEffect(() => {
+    if (data) {
+      reset({
+        firstname: data.firstname,
+        lastname: data.lastname,
+        email: data.email,
+        phone: data.phone,
+        birthDate: formatDateToUTC(data.birthDate),
+        avatar: data.avatar,
+      });
+    }
+  }, [data]);
 
   const handleImageChange = (data: any) => {
     setValue('avatar', data.file);
@@ -176,7 +188,7 @@ const SignUp: FC<SignUpProps> = ({ data }) => {
                 register={register('password')}
               />
 
-              <FileUpload onChange={handleImageChange} label="Avatar" name="profilePicture" />
+              <FileUpload onChange={handleImageChange} label="Avatar" name="profilePicture" value={getValues('avatar')} />
 
               {!data && (
                 <>
@@ -196,7 +208,7 @@ const SignUp: FC<SignUpProps> = ({ data }) => {
                   bg: 'primary.600',
                 }}
               >
-                Sign up
+                {!data ? 'Sign Up' : 'Update Profile'}
               </Button>
               <Stack pt={6}>
                 <Text align={'center'}>
