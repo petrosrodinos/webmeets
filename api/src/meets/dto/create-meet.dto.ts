@@ -31,6 +31,7 @@ export class CreateMeetDto {
   type: MeetType;
 
   @IsEnum(MeetVisibilityTypes)
+  @IsOptional()
   visibility: MeetVisibilityTypes;
 
   @IsString()

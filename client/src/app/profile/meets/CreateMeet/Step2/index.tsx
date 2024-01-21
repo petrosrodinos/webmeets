@@ -12,8 +12,6 @@ interface Step2Props {
 const Step2: FC<Step2Props> = ({ register, errors }) => {
   return (
     <Stack>
-      <Input placeholder="Enter meet name" label="Name" error={errors.name?.message} register={register('name')} />
-
       <NumberInput min={1} label="Duration (minutes)" error={errors.duration?.message} register={register('duration')} />
       <NumberInput
         min={1}
