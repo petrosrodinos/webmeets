@@ -335,6 +335,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 aria-label="Find availability for this date"
                 icon={<MdEdit />}
                 onClick={toggleEditDateModal}
+                isDisabled={booking.status == BookingStatuses.CANCELLED}
               />
             </HStack>
 
@@ -371,9 +372,11 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               </>
             )}
           </Box>
-          <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
-            Cancel Booking
-          </Button>
+          {booking.status != BookingStatuses.CANCELLED && (
+            <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
+              Cancel Booking
+            </Button>
+          )}
         </Stack>
       </form>
     </>

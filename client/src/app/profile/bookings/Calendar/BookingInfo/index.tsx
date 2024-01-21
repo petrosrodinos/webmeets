@@ -252,6 +252,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 aria-label="Find availability for this date"
                 icon={<MdEdit />}
                 onClick={toggleEditDateModal}
+                isDisabled={booking.status == BookingStatuses.CANCELLED}
               />
             </HStack>
           </Box>
