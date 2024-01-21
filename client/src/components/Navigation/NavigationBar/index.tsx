@@ -68,7 +68,7 @@ const AvatarMenuItems = [
   {
     name: 'Profile',
     onClick: () => {},
-    path: '/profile',
+    path: '/user/profile',
   },
   {
     name: 'Settings',
