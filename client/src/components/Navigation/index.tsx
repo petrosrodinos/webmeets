@@ -53,7 +53,6 @@ export const DrawerLinks: Array<LinkItemProps> = [
   { id: '2', name: 'Bookings', path: '/profile/bookings', role: Roles.ADMIN, icon: LuBookMarked },
   { id: '3', name: 'Messages', path: '/profile/messages', role: Roles.ADMIN, icon: CiChat2 },
   { id: '4', name: 'Meets', path: '/profile/meets', role: Roles.ADMIN, icon: HiOutlineVideoCamera },
-  { id: '7', name: 'Profile', path: '/user/profile', role: Roles.USER, icon: BsShop },
   { id: '5', name: 'Bookings', path: '/user/bookings', role: Roles.USER, icon: IoBookOutline },
   { id: '6', name: 'Messages', path: '/user/messages', role: Roles.USER, icon: CiChat2 },
 ];

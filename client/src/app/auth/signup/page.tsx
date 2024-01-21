@@ -29,8 +29,14 @@ import { RiLockPasswordLine } from 'react-icons/ri';
 import { IoPersonOutline } from 'react-icons/io5';
 import { TfiEmail } from 'react-icons/tfi';
 import { Roles } from 'enums/roles';
+import { FC } from 'react';
+import { SignUp as SignUpInt } from '@/interfaces/user';
 
-export default function SignUp() {
+interface SignUpProps {
+  data?: SignUpInt;
+}
+
+const SignUp: FC<SignUpProps> = ({ data }) => {
   const toast = useToast();
   const { logIn } = authStore((state) => state);
   const router = useRouter();
@@ -38,6 +44,7 @@ export default function SignUp() {
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors },
     setValue,
   } = useForm({
@@ -103,10 +110,10 @@ export default function SignUp() {
       <Stack spacing={8} mx={'auto'} maxW={'xl'} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
-            Sign up
+            {!data ? 'Sign Up' : 'Update Profile'}
           </Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool features ✌️
+            {!data ? 'to enjoy all of our cool features ✌️' : 'You can change your profile information here'}
           </Text>
         </Stack>
         <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={8}>
@@ -171,8 +178,12 @@ export default function SignUp() {
 
               <FileUpload onChange={handleImageChange} label="Avatar" name="profilePicture" />
 
-              <FormLabel>I have a business</FormLabel>
-              <Switch {...register('isBusiness')} colorScheme="pink" size="lg" />
+              {!data && (
+                <>
+                  <FormLabel>I have a business</FormLabel>
+                  <Switch {...register('isBusiness')} colorScheme="pink" size="lg" />
+                </>
+              )}
 
               <Button
                 isLoading={isLoading}
@@ -201,4 +212,6 @@ export default function SignUp() {
       </Stack>
     </Flex>
   );
-}
+};
+
+export default SignUp;

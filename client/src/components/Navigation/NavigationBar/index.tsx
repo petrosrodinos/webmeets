@@ -27,6 +27,7 @@ import { LinkItemProps, NavItemProps } from '..';
 import { navigationStore } from '@/store/navigationStore';
 import { preferencesStore } from '@/store/preferencesStore';
 import { Roles } from 'enums/roles';
+import Link from 'next/link';
 interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
@@ -34,7 +35,7 @@ interface MobileProps extends FlexProps {
 interface AvatarMenuItemProps {
   name: string;
   onClick: () => void;
-  path?: string;
+  path: string;
 }
 
 export const HeaderLinks: LinkItemProps[] = [
@@ -222,13 +223,15 @@ const NavLink = ({ icon, path, selected, children, ...rest }: NavItemProps) => {
   );
 };
 
-const AvatarMenuItem = ({ name, onClick }: AvatarMenuItemProps) => {
+const AvatarMenuItem = ({ name, onClick, path }: AvatarMenuItemProps) => {
   return (
-    <MenuItem onClick={onClick}>
-      <HStack>
-        <Text fontSize="sm">{name}</Text>
-      </HStack>
-    </MenuItem>
+    <Link href={path}>
+      <MenuItem onClick={onClick}>
+        <HStack>
+          <Text fontSize="sm">{name}</Text>
+        </HStack>
+      </MenuItem>
+    </Link>
   );
 };
 
