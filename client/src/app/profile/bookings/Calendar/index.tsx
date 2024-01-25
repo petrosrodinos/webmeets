@@ -25,7 +25,7 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
         date: new Date(booking.date),
         startEditable: true,
         durationEditable: true,
-        color: booking.status == BookingStatuses.CANCELLED ? 'red' : '',
+        color: eventColor(booking),
 
         // start: booking.start,
         // end: booking.end,
@@ -33,6 +33,12 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
     });
     setEvents(events);
   }, [bookings]);
+
+  const eventColor = (booking: Booking) => {
+    if (booking.date > new Date().toUTCString()) return 'green';
+    if (booking.date < new Date().toUTCString()) return 'grey';
+    if (booking.status == BookingStatuses.CANCELLED) return 'red';
+  };
 
   const handleDateClick = (arg: any) => {
     console.log(arg);
