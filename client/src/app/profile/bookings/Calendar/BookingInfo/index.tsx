@@ -27,7 +27,7 @@ import { Roles } from 'enums/roles';
 import Modal from '@/components/ui/Modal';
 import TextArea from '@/components/ui/TextArea';
 import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
-import { formatDateFromUTC } from '@/lib/date';
+import { formatDate, formatDateFromUTC } from '@/lib/date';
 import { MdEdit } from 'react-icons/md';
 
 interface BookingInfoProps {
@@ -46,6 +46,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
   const { mutate: cancelBookingMutation, isLoading: isCanceling } = useMutation(cancelBooking);
 
   useEffect(() => {
+    console.log(booking);
     reset({
       date: formatDateFromUTC(booking.date),
     });
@@ -217,6 +218,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               })}
             </List>
           </Box>
+          <Text fontWeight="bold">Participants:</Text>
           <Box
             display="flex"
             flexDirection="column"
@@ -225,7 +227,6 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             boxShadow={'lg'}
             p={3}
           >
-            <Text fontWeight="bold">Participants:</Text>
             {booking.participants?.map((participant, index) => {
               return (
                 <HStack key={index}>
@@ -255,6 +256,24 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 isDisabled={booking.status == BookingStatuses.CANCELLED}
               />
             </HStack>
+          </Box>
+          <Text fontWeight="bold">Activity</Text>
+          <Box
+            display="flex"
+            flexDirection="column"
+            rounded={'lg'}
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'lg'}
+            p={3}
+          >
+            {booking?.activity?.map((activity, index) => (
+              <HStack key={index}>
+                <Text>
+                  Booking cancelled by {activity.role == Roles.ADMIN ? 'Creator ' : 'User '}
+                  because {activity.description} at {formatDate(activity.createdAt)}
+                </Text>
+              </HStack>
+            ))}
           </Box>
           {booking.status != BookingStatuses.CANCELLED && (
             <>

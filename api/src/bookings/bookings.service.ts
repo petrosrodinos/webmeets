@@ -66,7 +66,7 @@ export class BookingsService {
         bookings = await this.bookingModel
           .find({
             ...query,
-            'participants.0': { $exists: true },
+            // 'participants.0': { $exists: true },
           })
           .populate('meetId profileId participants.userId', '-password');
       }

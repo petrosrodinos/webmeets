@@ -23,6 +23,16 @@ export interface Booking {
   date: string;
   status: 'pending' | 'accepted' | 'rejected' | 'cancelled' | 'completed';
   participants: BookingParticipant[];
+  activity: BookingActivity[];
+  createdAt: string;
+}
+
+export interface BookingActivity {
+  id: string;
+  type: 'cancelled' | 'accepted' | 'rejected';
+  description: string;
+  role: Roles;
+  user: User;
   createdAt: string;
 }
 

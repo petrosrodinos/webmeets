@@ -56,11 +56,12 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
   };
 
   const bookingName = useMemo(() => {
-    if (!selectedBooking) return;
-    const user = selectedBooking.participants[0].user;
+    if (!bookings || bookings?.length === 0) return;
+    const booking = bookings[0];
+    const user = booking.participants[0].user;
     const userName = `${user.firstname} ${user.lastname}`;
-    if (selectedBooking.participants.length > 0) {
-      return `${userName} + ${selectedBooking.participants.length - 1} more`;
+    if (booking.participants.length > 1) {
+      return `${userName} + ${booking.participants.length - 1} more`;
     } else {
       return userName;
     }
