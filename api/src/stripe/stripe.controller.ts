@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
-import { BookingsService } from 'src/bookings/bookings.service';
 import { BookingStatuses } from 'src/enums/booking';
 import { ApiTags } from '@nestjs/swagger';
+import { BookingsService } from 'src/api/bookings/bookings.service';
 
 @Controller('stripe')
 @ApiTags('Stripe')

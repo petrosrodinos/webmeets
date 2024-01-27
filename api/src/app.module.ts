@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ProfileModule } from './profiles/profiles.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import { MeetModule } from './meets/meets.module';
-import { BookingsModule } from './bookings/bookings.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { StripeModule } from './stripe/stripe.module';
+import { AuthModule } from './api/auth/auth.module';
+import { UserModule } from './api/users/users.module';
+import { ProfileModule } from './api/profiles/profiles.module';
+import { MeetModule } from './api/meets/meets.module';
+import { BookingsModule } from './api/bookings/bookings.module';
 
 @Module({
   imports: [

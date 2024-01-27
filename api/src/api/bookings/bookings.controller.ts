@@ -4,9 +4,9 @@ import { CancelBookingDto, CreateBookingDto, FindAvailabilityDto, ParticipantDto
 import { UpdateBookingDto, UpdateParticipantDto } from './dto/update-booking.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Booking } from 'src/schemas/booking.schema';
-import { JwtGuard } from 'src/auth/guard';
-import { MeetService } from 'src/meets/meets.service';
 import { StripeService } from 'src/stripe/stripe.service';
+import { MeetService } from '../meets/meets.service';
+import { JwtGuard } from '../auth/guard';
 
 @Controller('bookings')
 @ApiTags('Booking')
