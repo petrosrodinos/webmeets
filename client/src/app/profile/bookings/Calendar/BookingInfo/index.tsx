@@ -275,7 +275,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               </HStack>
             ))}
           </Box>
-          {booking.status != BookingStatuses.CANCELLED && (
+          {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
             <>
               <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
                 Save

@@ -7,6 +7,7 @@ import { StripeService } from 'src/stripe/stripe.service';
 import { MeetSchema } from 'src/schemas/meet.schema';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
 import { MeetService } from '../meets/meets.service';
+import { DailyService } from 'src/daily/daily.service';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { MeetService } from '../meets/meets.service';
     MongooseModule.forFeature([{ name: 'Booking', schema: BookingSchema }]),
   ],
   controllers: [BookingsController],
-  providers: [BookingsService, StripeService, MeetService, S3Service],
+  providers: [BookingsService, StripeService, MeetService, S3Service, DailyService],
 })
 export class BookingsModule {}

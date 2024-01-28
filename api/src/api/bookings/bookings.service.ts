@@ -7,6 +7,7 @@ import { Model, Error } from 'mongoose';
 import { Meet } from 'src/schemas/meet.schema';
 import { BookingActivityType, BookingStatuses } from 'src/enums/booking';
 import { Roles } from 'src/enums/roles';
+import { DailyService } from 'src/daily/daily.service';
 
 @Injectable()
 export class BookingsService {
@@ -15,6 +16,7 @@ export class BookingsService {
     private meetModel: Model<Meet>,
     @InjectModel(Booking.name)
     private bookingModel: Model<Booking>,
+    private dailyService: DailyService,
   ) {}
 
   async create(createBookingDto: CreateBookingDto, paymentId: string, userId: string) {
@@ -147,6 +149,33 @@ export class BookingsService {
 
     await booking.save();
     return booking.populate('userId meetId profileId', '-password');
+  }
+
+  async joinRoom(bookingId: string, req: Express.Request) {
+    const { userId, profileId } = req.user;
+    const booking = await this.bookingModel.findById(bookingId);
+    if (!booking) {
+      throw new NotFoundException('Could not find booking.');
+    }
+
+    const isExistingParticipant = booking.participants.find((participant: Participant) => {
+      return participant.userId == userId;
+    });
+
+    console.log(isExistingParticipant, profileId, booking.profileId);
+
+    if (!isExistingParticipant || (profileId && profileId != booking.profileId)) {
+      throw new ForbiddenException('You are not allowed to enter this booking.');
+    }
+
+    const room = await this.dailyService.createRoom({});
+
+    booking.populate('userId meetId profileId', '-password');
+
+    return {
+      room,
+      booking,
+    };
   }
 
   async addParticipant(bookingId: string, participantDto: ParticipantDto) {

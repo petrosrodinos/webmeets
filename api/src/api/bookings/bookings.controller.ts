@@ -96,6 +96,14 @@ export class BookingsController {
   @ApiOkResponse({ type: Booking })
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
+  @Post(':id/join-room')
+  joinRoom(@Param('id') id: string, @Req() req: Express.Request) {
+    return this.bookingsService.joinRoom(id, req);
+  }
+
+  @ApiOkResponse({ type: Booking })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   @Post(':id/participants')
   addParticipant(@Body() participantsDto: ParticipantDto, @Param('id') id: string) {
     return this.bookingsService.addParticipant(id, participantsDto);

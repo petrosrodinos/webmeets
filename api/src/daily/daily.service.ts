@@ -21,8 +21,8 @@ export class DailyService {
         `${this.DAILY_DOMAIN}rooms`,
         {
           properties: {
-            // enable_chat: false,
-            // enable_screenshare: false,
+            enable_chat: false,
+            enable_screenshare: false,
             // enable_knocking: false,
             start_video_off: true,
             start_audio_off: true,
