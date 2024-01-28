@@ -13,7 +13,6 @@ import {
   HStack,
   Avatar,
   IconButton,
-  SimpleGrid,
   VStack,
 } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
@@ -29,6 +28,7 @@ import TextArea from '@/components/ui/TextArea';
 import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
 import { formatDate, formatDateFromUTC } from '@/lib/date';
 import { MdEdit } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -37,11 +37,13 @@ interface BookingInfoProps {
 }
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
+  const router = useRouter();
   const toast = useToast();
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isEditDateModalOpen, setIsEditDateModalOpen] = useState(false);
   const [reason, setReason] = useState('');
+
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
   const { mutate: cancelBookingMutation, isLoading: isCanceling } = useMutation(cancelBooking);
 
@@ -141,6 +143,11 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         });
       },
     });
+  };
+
+  const handleJoinBooking = () => {
+    console.log('handleJoinBooking');
+    router.push(`/meet/${booking.id}`);
   };
 
   const handlePeriodSelected = (date: string) => {
@@ -275,13 +282,17 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               </HStack>
             ))}
           </Box>
+
           {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
             <>
               <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
                 Save
               </Button>
+              <Button onClick={handleJoinBooking} isLoading={isLoading} colorScheme="green" variant="outline" mt={5}>
+                Join
+              </Button>
               <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
-                Cancel Booking
+                Cancel
               </Button>
             </>
           )}

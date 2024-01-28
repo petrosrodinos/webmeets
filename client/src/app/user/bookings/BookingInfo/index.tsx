@@ -356,7 +356,11 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               register={register('notes')}
             />
 
-            {booking.status != BookingStatuses.CANCELLED && (
+            <Button rightIcon={<FaCheck />} isLoading={isLoading} colorScheme="green" variant="solid" mt={5}>
+              Join
+            </Button>
+
+            {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
               <>
                 <Button
                   rightIcon={<FaCheck />}
@@ -369,14 +373,12 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 >
                   Save
                 </Button>
+                <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
+                  Cancel
+                </Button>
               </>
             )}
           </Box>
-          {booking.status != BookingStatuses.CANCELLED && (
-            <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
-              Cancel Booking
-            </Button>
-          )}
         </Stack>
       </form>
     </>

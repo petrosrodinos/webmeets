@@ -78,3 +78,17 @@ export const bookingAvailability = async (query: BookingAvailability): Promise<B
     throw err?.response?.data;
   }
 };
+
+export const joinBooking = async (payload: { bookingId: string }): Promise<any> => {
+  try {
+    const { bookingId } = payload;
+    const result = await axios.post(`${API_URL}bookings/${bookingId}/join-room`, {}, getAuthHeaders());
+    const formattedBooking = formatBooking(result.data.booking);
+    return {
+      booking: formattedBooking,
+      room: result.data.room,
+    };
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
