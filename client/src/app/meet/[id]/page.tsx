@@ -3,6 +3,7 @@ import { useEffect, FC, useRef, useState, useCallback } from 'react';
 import DailyIframe from '@daily-co/daily-js';
 import { joinBooking } from '@/services/booking';
 import { useQuery } from 'react-query';
+import Spinner from '@/components/ui/Spinner';
 
 const CALL_OPTIONS: any = {
   showLeaveButton: true,
@@ -25,12 +26,21 @@ const Meet: FC<MeetProps> = ({ params }) => {
   const { id } = params;
   const [room, setRoom] = useState<any>(id);
   const [callFrame, setCallFrame] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
   const callRef = useRef<any>(null);
   const createdRef = useRef<any>(false);
 
-  useQuery(['joinBooking', id], () => joinBooking({ bookingId: id }), {
+  const { isLoading } = useQuery(['joinBooking', id], () => joinBooking({ bookingId: id }), {
     onSuccess: (data) => {
-      createAndJoinCall(data.room.url);
+      console.log('DATA', data);
+      if (data?.room?.url) {
+        createAndJoinCall(data.room.url);
+      } else {
+        setError('Waiting for the host to start the meeting. Please try again later.');
+      }
+    },
+    onError: (error) => {
+      setError(error);
     },
   });
 
@@ -61,6 +71,8 @@ const Meet: FC<MeetProps> = ({ params }) => {
 
   return (
     <div>
+      <Spinner loading={isLoading} />
+      {error && <div>{error}</div>}
       <div ref={callRef} className="call" />
     </div>
   );

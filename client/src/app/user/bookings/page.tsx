@@ -32,7 +32,7 @@ const UserBookings: FC = () => {
             startEditable: false,
             durationEditable: false,
             className: 'event-item',
-            color: booking.status == BookingStatuses.CANCELLED ? 'red' : '',
+            color: eventColor(booking),
             // start: booking.start,
             // end: booking.end,
           };
@@ -41,6 +41,12 @@ const UserBookings: FC = () => {
       }
     },
   });
+
+  const eventColor = (booking: Booking) => {
+    if (booking.date > new Date().toUTCString()) return 'green';
+    if (booking.date < new Date().toUTCString()) return 'grey';
+    if (booking.status == BookingStatuses.CANCELLED) return 'red';
+  };
 
   const handleDateClick = (arg: any) => {
     console.log(arg);

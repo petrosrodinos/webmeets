@@ -153,6 +153,7 @@ export class BookingsService {
 
   async joinRoom(bookingId: string, req: Express.Request) {
     const { userId, profileId } = req.user;
+    let room: any;
     const booking = await this.bookingModel.findById(bookingId).populate('userId meetId profileId', '-password');
     if (!booking) {
       throw new NotFoundException('Could not find booking.');
@@ -162,8 +163,6 @@ export class BookingsService {
       return participant.userId == userId;
     });
 
-    console.log('isExistingParticipant', isExistingParticipant, profileId, booking.profileId._id);
-
     if (profileId && profileId != booking.profileId._id) {
       throw new ForbiddenException('You are not allowed to enter this booking.');
     }
@@ -172,7 +171,15 @@ export class BookingsService {
       throw new ForbiddenException('You are not allowed to enter this booking.');
     }
 
-    const room = await this.dailyService.createRoom({});
+    if (booking.roomName) {
+      room = await this.dailyService.getRoom(booking.roomName);
+    } else {
+      if (profileId) {
+        room = await this.dailyService.createRoom({});
+        booking.roomName = room.name;
+        await booking.save();
+      }
+    }
 
     return {
       room,

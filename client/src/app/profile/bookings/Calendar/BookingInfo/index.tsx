@@ -146,7 +146,6 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
   };
 
   const handleJoinBooking = () => {
-    console.log('handleJoinBooking');
     router.push(`/meet/${booking.id}`);
   };
 
@@ -264,37 +263,51 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               />
             </HStack>
           </Box>
-          <Text fontWeight="bold">Activity</Text>
-          <Box
-            display="flex"
-            flexDirection="column"
-            rounded={'lg'}
-            bg={useColorModeValue('white', 'gray.700')}
-            boxShadow={'lg'}
-            p={3}
-          >
-            {booking?.activity?.map((activity, index) => (
-              <HStack key={index}>
-                <Text>
-                  Booking cancelled by {activity.role == Roles.ADMIN ? 'Creator ' : 'User '}
-                  because {activity.description} at {formatDate(activity.createdAt)}
-                </Text>
-              </HStack>
-            ))}
-          </Box>
+          {booking.activity.length > 0 && (
+            <>
+              <Text fontWeight="bold">Activity</Text>
+              <Box
+                display="flex"
+                flexDirection="column"
+                rounded={'lg'}
+                bg={useColorModeValue('white', 'gray.700')}
+                boxShadow={'lg'}
+                p={3}
+              >
+                {booking?.activity?.map((activity, index) => (
+                  <HStack key={index}>
+                    <Text>
+                      Booking cancelled by {activity.role == Roles.ADMIN ? 'Creator ' : 'User '}
+                      because {activity.description} at {formatDate(activity.createdAt)}
+                    </Text>
+                  </HStack>
+                ))}
+              </Box>
+            </>
+          )}
 
           {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
-            <>
-              <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
-                Save
-              </Button>
-              <Button onClick={handleJoinBooking} isLoading={isLoading} colorScheme="green" variant="outline" mt={5}>
+            <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
+              Save
+            </Button>
+          )}
+
+          {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
+            <Box
+              display="flex"
+              flexDirection="column"
+              rounded={'lg'}
+              bg={useColorModeValue('white', 'gray.700')}
+              boxShadow={'lg'}
+              p={3}
+            >
+              <Button mb={5} onClick={handleJoinBooking} isLoading={isLoading} colorScheme="green" variant="outline" mt={5}>
                 Join
               </Button>
               <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
                 Cancel
               </Button>
-            </>
+            </Box>
           )}
         </Stack>
       </form>

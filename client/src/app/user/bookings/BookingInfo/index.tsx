@@ -30,6 +30,8 @@ import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriod
 import { MdEdit } from 'react-icons/md';
 import { authStore } from '@/store/authStore';
 import { editParticipant } from '@/services/booking';
+import { useRouter } from 'next/navigation';
+
 interface BookingInfoProps {
   booking: Booking;
   onDateChange?: (bookingId: string, date: string) => void;
@@ -37,6 +39,7 @@ interface BookingInfoProps {
 }
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
+  const router = useRouter();
   const { userId } = authStore((state) => state);
   const toast = useToast();
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
@@ -245,6 +248,10 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
     };
   };
 
+  const handleJoinBooking = () => {
+    router.push(`/meet/${booking.id}`);
+  };
+
   const handlePeriodSelected = (date: string) => {
     setValue('date', formatDateFromUTC(date));
   };
@@ -356,24 +363,35 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               register={register('notes')}
             />
 
-            <Button rightIcon={<FaCheck />} isLoading={isLoading} colorScheme="green" variant="solid" mt={5}>
-              Join
-            </Button>
-
             {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
+              <Button
+                rightIcon={<FaCheck />}
+                isLoading={isLoading}
+                colorScheme="green"
+                variant="solid"
+                type="submit"
+                maxWidth="100px"
+                mt={5}
+              >
+                Save
+              </Button>
+            )}
+          </Box>
+
+          <Box
+            display="flex"
+            flexDirection="column"
+            rounded={'lg'}
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'lg'}
+            p={3}
+          >
+            {booking.status != BookingStatuses.CANCELLED && (
               <>
-                <Button
-                  rightIcon={<FaCheck />}
-                  isLoading={isLoading}
-                  colorScheme="green"
-                  variant="solid"
-                  type="submit"
-                  maxWidth="100px"
-                  mt={5}
-                >
-                  Save
+                <Button onClick={handleJoinBooking} isLoading={isLoading} colorScheme="green" variant="outline" mt={5}>
+                  Join
                 </Button>
-                <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
+                <Button mt={5} colorScheme="red" variant="outline" onClick={toggleCancelModal}>
                   Cancel
                 </Button>
               </>

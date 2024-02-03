@@ -11,7 +11,7 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-u
 const ProfileBookings: FC = () => {
   const { profileId } = authStore();
 
-  const { data: bookings, isLoading, refetch } = useQuery('profile-bookings', () => getBookings({ profileId }));
+  const { data: bookings, refetch } = useQuery('profile-bookings', () => getBookings({ profileId }));
 
   return (
     <Tabs width="100%">
