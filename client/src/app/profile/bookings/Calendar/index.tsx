@@ -25,7 +25,7 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
         date: new Date(booking.date),
         startEditable: true,
         durationEditable: true,
-        color: booking.status == BookingStatuses.CANCELLED ? 'red' : '',
+        color: eventColor(booking),
 
         // start: booking.start,
         // end: booking.end,
@@ -33,6 +33,12 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
     });
     setEvents(events);
   }, [bookings]);
+
+  const eventColor = (booking: Booking) => {
+    if (booking.date > new Date().toUTCString()) return 'green';
+    if (booking.date < new Date().toUTCString()) return 'grey';
+    if (booking.status == BookingStatuses.CANCELLED) return 'red';
+  };
 
   const handleDateClick = (arg: any) => {
     console.log(arg);
@@ -56,11 +62,12 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
   };
 
   const bookingName = useMemo(() => {
-    if (!selectedBooking) return;
-    const user = selectedBooking.participants[0].user;
+    if (!bookings || bookings?.length === 0) return;
+    const booking = bookings[0];
+    const user = booking.participants[0].user;
     const userName = `${user.firstname} ${user.lastname}`;
-    if (selectedBooking.participants.length > 0) {
-      return `${userName} + ${selectedBooking.participants.length - 1} more`;
+    if (booking.participants.length > 1) {
+      return `${userName} + ${booking.participants.length - 1} more`;
     } else {
       return userName;
     }

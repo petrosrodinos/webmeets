@@ -4,11 +4,11 @@ import { ProfileController } from './profiles.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProfileSchema } from 'src/schemas/profile.schema';
 import { UserSchema } from 'src/schemas/user.schema';
-import { UserService } from 'src/users/users.service';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
-import { CreateJwtServiceModule } from 'src/auth/jwt/jwt.module';
-import { MeetService } from 'src/meets/meets.service';
 import { MeetSchema } from 'src/schemas/meet.schema';
+import { UserService } from '../users/users.service';
+import { MeetService } from '../meets/meets.service';
+import { CreateJwtServiceModule } from '../auth/jwt/jwt.module';
 
 @Module({
   imports: [

@@ -22,13 +22,31 @@ export interface Booking {
   location?: string;
   date: string;
   status: 'pending' | 'accepted' | 'rejected' | 'cancelled' | 'completed';
-  participants: {
-    id: string;
-    user: User;
-    notes?: string;
-    createdAt: string;
-  }[];
+  participants: BookingParticipant[];
+  activity: BookingActivity[];
   createdAt: string;
+}
+
+export interface BookingActivity {
+  id: string;
+  type: 'cancelled' | 'accepted' | 'rejected';
+  description: string;
+  role: Roles;
+  user: User;
+  createdAt: string;
+}
+
+export interface BookingParticipant {
+  id: string;
+  user: User;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface EditBookingParticipant {
+  notes?: string;
+  bookingId: string;
+  participantId: string;
 }
 
 export interface EditBooking {

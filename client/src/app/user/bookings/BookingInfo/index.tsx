@@ -1,4 +1,4 @@
-import { Booking, BookingInfoItem } from '@/interfaces/booking';
+import { Booking, BookingInfoItem, BookingParticipant } from '@/interfaces/booking';
 import { cancelBooking, editBooking } from '@/services/booking';
 import { EditBookingUserSchema } from '@/validation-schemas/booking';
 import {
@@ -29,6 +29,8 @@ import { BookingStatuses } from 'enums/booking';
 import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
 import { MdEdit } from 'react-icons/md';
 import { authStore } from '@/store/authStore';
+import { editParticipant } from '@/services/booking';
+import { useRouter } from 'next/navigation';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -37,45 +39,60 @@ interface BookingInfoProps {
 }
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
+  const router = useRouter();
   const { userId } = authStore((state) => state);
   const toast = useToast();
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
+  const [participant, setParticipant] = useState<BookingParticipant>();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isEditDateModalOpen, setIsEditDateModalOpen] = useState(false);
   const [reason, setReason] = useState('');
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
   const { mutate: cancelBookingMutation, isLoading: isCanceling } = useMutation(cancelBooking);
+  const { mutate: editParticipantMutation } = useMutation(editParticipant);
 
   useEffect(() => {
-    const usersNotes = booking.participants.find((participant) => participant.user.id == userId)?.notes;
+    if (!booking) return;
+    const participant = booking.participants.find((participant) => participant.user.id == userId);
     reset({
       date: new Date(booking.date).toISOString().slice(0, 16),
       location: booking.location,
-      notes: usersNotes,
+      notes: participant?.notes || '',
     });
-  }, []);
+    setParticipant(participant);
+  }, [booking]);
 
   useEffect(() => {
+    if (!booking) return;
     setBookingInfo([
       {
         label: 'Meet',
         value: booking?.meet?.name || 'NOT-SET',
       },
       {
-        label: 'Notes',
-        value: booking.participants[0].notes || '',
+        label: 'Date',
+        value: formatDate(booking?.date, true) || 'NOT-SET',
       },
+
       {
         label: 'Duration',
         value: booking?.meet?.duration.toString() || 'NOT-SET',
+      },
+      {
+        label: 'Price',
+        value: `${booking?.meet?.price}€`,
+      },
+      {
+        label: 'Participants',
+        value: `${booking?.participants.length}`,
       },
       {
         label: 'Created at',
         value: formatDate(booking.createdAt, true),
       },
       {
-        label: 'Price',
-        value: `${booking?.meet?.price}€`,
+        label: 'Notes',
+        value: booking.participants[0].notes || '',
       },
       {
         label: 'Phone Number',
@@ -108,7 +125,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         type: MeetTypes.CLIENTS_LOCATION,
       },
     ]);
-  }, []);
+  }, [booking]);
 
   const {
     handleSubmit,
@@ -121,21 +138,70 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
   });
 
   const handleEditBooking = (data: any) => {
-    if (booking.meet.type == MeetTypes.CLIENTS_LOCATION && !data.location) {
-      toast({
-        title: 'Location is required',
-        description: 'Please enter a location',
-        position: 'top',
-        isClosable: true,
-        status: 'error',
-      });
-      return;
+    if (data.notes != participant?.notes) {
+      editBookingParticipant(data);
     }
+    if (data.location != booking.location) {
+      if (booking.meet.type == MeetTypes.CLIENTS_LOCATION && !data.location) {
+        toast({
+          title: 'Location is required',
+          description: 'Please enter a location',
+          position: 'top',
+          isClosable: true,
+          status: 'error',
+        });
+        return;
+      }
+
+      const payload = {
+        bookingId: booking.id,
+        location: data.location,
+      };
+      editBookingMutation(payload, bookingMutationResult(data));
+    }
+  };
+
+  const editBookingParticipant = (data: any) => {
     const payload = {
       bookingId: booking.id,
-      ...data,
+      participantId: participant?.id as string,
+      notes: data.notes,
     };
-    editBookingMutation(payload, {
+
+    editParticipantMutation(payload, bookingMutationResult(data));
+  };
+
+  const handleCancelBooking = () => {
+    const payload = {
+      bookingId: booking.id,
+      reason,
+      role: Roles.USER,
+    };
+    cancelBookingMutation(payload, {
+      onSuccess: () => {
+        onCancel?.(booking.id);
+        toast({
+          title: 'Booking cancelled successfully',
+          description: "We've cancelled your booking for you.",
+          position: 'top',
+          isClosable: true,
+          status: 'success',
+        });
+      },
+      onError: (error: any) => {
+        toast({
+          title: 'Could not cancel booking',
+          description: error.message,
+          position: 'top',
+          isClosable: true,
+          status: 'error',
+        });
+      },
+    });
+  };
+
+  const bookingMutationResult = (data: any) => {
+    return {
       onSuccess: () => {
         const updatedBookingInfo = bookingInfo?.map((info) => {
           if (info.label == 'Date') {
@@ -179,36 +245,11 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
           status: 'error',
         });
       },
-    });
+    };
   };
 
-  const handleCancelBooking = () => {
-    const payload = {
-      bookingId: booking.id,
-      reason,
-      role: Roles.USER,
-    };
-    cancelBookingMutation(payload, {
-      onSuccess: () => {
-        onCancel?.(booking.id);
-        toast({
-          title: 'Booking cancelled successfully',
-          description: "We've cancelled your booking for you.",
-          position: 'top',
-          isClosable: true,
-          status: 'success',
-        });
-      },
-      onError: (error: any) => {
-        toast({
-          title: 'Could not cancel booking',
-          description: error.message,
-          position: 'top',
-          isClosable: true,
-          status: 'error',
-        });
-      },
-    });
+  const handleJoinBooking = () => {
+    router.push(`/meet/${booking.id}`);
   };
 
   const handlePeriodSelected = (date: string) => {
@@ -301,6 +342,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 aria-label="Find availability for this date"
                 icon={<MdEdit />}
                 onClick={toggleEditDateModal}
+                isDisabled={booking.status == BookingStatuses.CANCELLED}
               />
             </HStack>
 
@@ -321,25 +363,40 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               register={register('notes')}
             />
 
+            {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
+              <Button
+                rightIcon={<FaCheck />}
+                isLoading={isLoading}
+                colorScheme="green"
+                variant="solid"
+                type="submit"
+                maxWidth="100px"
+                mt={5}
+              >
+                Save
+              </Button>
+            )}
+          </Box>
+
+          <Box
+            display="flex"
+            flexDirection="column"
+            rounded={'lg'}
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'lg'}
+            p={3}
+          >
             {booking.status != BookingStatuses.CANCELLED && (
               <>
-                <Button
-                  rightIcon={<FaCheck />}
-                  isLoading={isLoading}
-                  colorScheme="green"
-                  variant="solid"
-                  type="submit"
-                  maxWidth="100px"
-                  mt={5}
-                >
-                  Save
+                <Button onClick={handleJoinBooking} isLoading={isLoading} colorScheme="green" variant="outline" mt={5}>
+                  Join
+                </Button>
+                <Button mt={5} colorScheme="red" variant="outline" onClick={toggleCancelModal}>
+                  Cancel
                 </Button>
               </>
             )}
           </Box>
-          <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
-            Cancel Booking
-          </Button>
         </Stack>
       </form>
     </>

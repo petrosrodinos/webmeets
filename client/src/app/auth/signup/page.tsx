@@ -29,6 +29,7 @@ import { RiLockPasswordLine } from 'react-icons/ri';
 import { IoPersonOutline } from 'react-icons/io5';
 import { TfiEmail } from 'react-icons/tfi';
 import { Roles } from 'enums/roles';
+import { preferencesStore } from '@/store/preferencesStore';
 import { FC, useEffect } from 'react';
 import { SignUp as SignUpInt } from '@/interfaces/user';
 import { get } from 'http';
@@ -43,6 +44,7 @@ const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
   const toast = useToast();
   const { logIn } = authStore((state) => state);
   const router = useRouter();
+  const { setPreferences } = preferencesStore((state) => state);
 
   const {
     handleSubmit,
@@ -76,6 +78,15 @@ const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
             exp: data.exp,
             userId: data.user._id,
           });
+
+          if (values.isBusiness) {
+            setPreferences({
+              roleView: Roles.ADMIN,
+            });
+            router.push('/profile');
+          } else {
+            router.push('/home');
+          }
         },
         onError: (error: any) => {
           if (error.statusCode == 409) {

@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { CancelBookingDto, CreateBookingDto, FindAvailabilityDto } from './dto/create-booking.dto';
-import { UpdateBookingDto } from './dto/update-booking.dto';
+import { CancelBookingDto, CreateBookingDto, FindAvailabilityDto, ParticipantDto } from './dto/create-booking.dto';
+import { UpdateBookingDto, UpdateParticipantDto } from './dto/update-booking.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Booking, Participant } from 'src/schemas/booking.schema';
 import { Model, Error } from 'mongoose';
 import { Meet } from 'src/schemas/meet.schema';
 import { BookingActivityType, BookingStatuses } from 'src/enums/booking';
+import { Roles } from 'src/enums/roles';
+import { DailyService } from 'src/daily/daily.service';
 
 @Injectable()
 export class BookingsService {
@@ -14,6 +16,7 @@ export class BookingsService {
     private meetModel: Model<Meet>,
     @InjectModel(Booking.name)
     private bookingModel: Model<Booking>,
+    private dailyService: DailyService,
   ) {}
 
   async create(createBookingDto: CreateBookingDto, paymentId: string, userId: string) {
@@ -65,6 +68,7 @@ export class BookingsService {
         bookings = await this.bookingModel
           .find({
             ...query,
+            // 'participants.0': { $exists: true },
           })
           .populate('meetId profileId participants.userId', '-password');
       }
@@ -114,12 +118,15 @@ export class BookingsService {
     }
   }
 
-  async cancel(bookingId: string, cancelBookingDto: CancelBookingDto) {
+  async cancel(bookingId: string, cancelBookingDto: CancelBookingDto, req: Express.Request) {
     const { reason, role } = cancelBookingDto;
+    const { userId, role: userRole } = req.user;
     const booking = await this.bookingModel.findById(bookingId);
     if (!booking) {
       throw new NotFoundException('Could not find booking.');
     }
+
+    const meet = await this.meetModel.findById(booking.meetId);
 
     const newActivity = {
       type: BookingActivityType.CANCELLED,
@@ -129,11 +136,122 @@ export class BookingsService {
 
     booking.activities.push(newActivity);
 
-    booking.status = BookingStatuses.CANCELLED;
+    if (meet.maxParticipants == 1 || userRole == Roles.ADMIN) {
+      booking.status = BookingStatuses.CANCELLED;
+      //send notification to all participants if cancelled by admin
+    }
+
+    if (userRole == Roles.USER) {
+      booking.participants = booking.participants.filter((participant: Participant) => {
+        return participant.userId != userId;
+      });
+    }
 
     await booking.save();
     return booking.populate('userId meetId profileId', '-password');
   }
+
+  async joinRoom(bookingId: string, req: Express.Request) {
+    const { userId, profileId } = req.user;
+    let room: any;
+    const booking = await this.bookingModel.findById(bookingId).populate('userId meetId profileId', '-password');
+    if (!booking) {
+      throw new NotFoundException('Could not find booking.');
+    }
+
+    const isExistingParticipant = booking.participants.find((participant: Participant) => {
+      return participant.userId == userId;
+    });
+
+    if (profileId && profileId != booking.profileId._id) {
+      throw new ForbiddenException('You are not allowed to enter this booking.');
+    }
+
+    if (!isExistingParticipant && !profileId) {
+      throw new ForbiddenException('You are not allowed to enter this booking.');
+    }
+
+    if (booking.roomName) {
+      room = await this.dailyService.getRoom(booking.roomName);
+    } else {
+      if (profileId) {
+        room = await this.dailyService.createRoom({});
+        booking.roomName = room.name;
+        await booking.save();
+      }
+    }
+
+    return {
+      room,
+      booking,
+    };
+  }
+
+  async addParticipant(bookingId: string, participantDto: ParticipantDto) {
+    const { userId, notes } = participantDto;
+    const booking = await this.bookingModel.findById(bookingId);
+    if (!booking) {
+      throw new NotFoundException('Could not find booking.');
+    }
+
+    const isExistingParticipant = booking.participants.find((participant: Participant) => {
+      return participant.userId == userId;
+    });
+    if (isExistingParticipant) {
+      throw new ForbiddenException('You are already a participant in this booking.');
+    }
+
+    const newParticipant = {
+      userId,
+      notes,
+    };
+
+    booking.participants.push(newParticipant);
+
+    await booking.save();
+    return booking.populate('userId meetId profileId', '-password');
+  }
+
+  updateParticipant = async (bookingId: string, participantId: string, participantDto: UpdateParticipantDto) => {
+    const { notes } = participantDto;
+    const booking = await this.bookingModel.findById(bookingId);
+    if (!booking) {
+      throw new NotFoundException('Could not find booking.');
+    }
+
+    const participantIndex = booking.participants.findIndex((participant: any) => {
+      return participant._id == participantId;
+    });
+
+    if (participantIndex < 0) {
+      throw new NotFoundException('Could not find participant.');
+    }
+
+    booking.participants[participantIndex].notes = notes;
+
+    await booking.save();
+    return booking.populate('userId meetId profileId', '-password');
+  };
+
+  removeParticipant = async (bookingId: string, participantId: string) => {
+    const booking = await this.bookingModel.findById(bookingId);
+    if (!booking) {
+      throw new NotFoundException('Could not find booking.');
+    }
+
+    const participantIndex = booking.participants.findIndex((participant: any) => {
+      return participant._id == participantId;
+    });
+
+    if (participantIndex < 0) {
+      throw new NotFoundException('Could not find participant.');
+    }
+
+    booking.participants.splice(participantIndex, 1);
+
+    await booking.save();
+    return booking.populate('userId meetId profileId', '-password');
+  };
 
   async findAvailability(meetId: string, query: FindAvailabilityDto) {
     const { from, to } = query;

@@ -5,9 +5,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Profile } from 'src/schemas/profile.schema';
 import { Model, Error } from 'mongoose';
 import { S3Service } from 'src/aws-s3/aws-s3.service';
-import { CreateJwtService } from 'src/auth/jwt/jwt.service';
 import { Roles } from 'src/enums/roles';
 import { Meet } from 'src/schemas/meet.schema';
+import { CreateJwtService } from '../auth/jwt/jwt.service';
 
 @Injectable()
 export class ProfileService {

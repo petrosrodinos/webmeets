@@ -9,5 +9,6 @@ export enum BookingStatuses {
 
 export enum BookingActivityType {
   CANCELLED = 'cancelled',
-  RESCHEDULED = 'rescheduled',
+  RESCHEDULED = 'postponed',
+  CHANGED_LOCATION = 'changed-location',
 }

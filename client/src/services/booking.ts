@@ -1,6 +1,14 @@
 import { API_URL } from '@/constants/api';
 import axios from 'axios';
-import { Booking, BookingAvailability, BookingPeriod, CancelBooking, EditBooking, NewBooking } from '@/interfaces/booking';
+import {
+  Booking,
+  BookingAvailability,
+  BookingPeriod,
+  CancelBooking,
+  EditBooking,
+  EditBookingParticipant,
+  NewBooking,
+} from '@/interfaces/booking';
 import { formatAvailablePeriods, formatBooking } from './formatter/booking';
 import { createParams, getAuthHeaders, getHeaders } from './utils/utils';
 
@@ -36,6 +44,21 @@ export const editBooking = async (payload: EditBooking): Promise<Booking> => {
   }
 };
 
+export const editParticipant = async (payload: EditBookingParticipant): Promise<Booking> => {
+  try {
+    const { bookingId, participantId, ...restPayload } = payload;
+    const result = await axios.patch(
+      `${API_URL}bookings/${bookingId}/participants/${participantId}`,
+      restPayload,
+      getAuthHeaders(),
+    );
+    const formattedData = formatBooking(result.data);
+    return formattedData;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
 export const cancelBooking = async (payload: CancelBooking): Promise<Booking> => {
   try {
     const result = await axios.post(`${API_URL}bookings/${payload.bookingId}/cancel`, payload, getAuthHeaders());
@@ -51,6 +74,20 @@ export const bookingAvailability = async (query: BookingAvailability): Promise<B
     const result = await axios.get(`${API_URL}bookings/${query.meetId}/availability?${createParams(query)}`, getAuthHeaders());
     const formattedData = formatAvailablePeriods(result.data.availability);
     return formattedData;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
+export const joinBooking = async (payload: { bookingId: string }): Promise<any> => {
+  try {
+    const { bookingId } = payload;
+    const result = await axios.post(`${API_URL}bookings/${bookingId}/join-room`, {}, getAuthHeaders());
+    const formattedBooking = formatBooking(result.data.booking);
+    return {
+      booking: formattedBooking,
+      room: result.data.room,
+    };
   } catch (err: any) {
     throw err?.response?.data;
   }

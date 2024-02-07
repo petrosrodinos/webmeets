@@ -63,6 +63,11 @@ export class Booking {
   date: Date;
 
   @Prop({
+    type: String,
+  })
+  roomName: string;
+
+  @Prop({
     type: [ParticipantSchema],
     default: [],
   })

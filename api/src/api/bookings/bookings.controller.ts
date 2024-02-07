@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req, ForbiddenException } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-import { CancelBookingDto, CreateBookingDto, FindAvailabilityDto } from './dto/create-booking.dto';
-import { UpdateBookingDto } from './dto/update-booking.dto';
+import { CancelBookingDto, CreateBookingDto, FindAvailabilityDto, ParticipantDto } from './dto/create-booking.dto';
+import { UpdateBookingDto, UpdateParticipantDto } from './dto/update-booking.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Booking } from 'src/schemas/booking.schema';
-import { JwtGuard } from 'src/auth/guard';
-import { MeetService } from 'src/meets/meets.service';
 import { StripeService } from 'src/stripe/stripe.service';
+import { MeetService } from '../meets/meets.service';
+import { JwtGuard } from '../auth/guard';
 
 @Controller('bookings')
 @ApiTags('Booking')
@@ -89,7 +89,43 @@ export class BookingsController {
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @Post(':id/cancel')
-  cancel(@Body() cancelBookingDto: CancelBookingDto, @Param('id') id: string) {
-    return this.bookingsService.cancel(id, cancelBookingDto);
+  cancel(@Body() cancelBookingDto: CancelBookingDto, @Param('id') id: string, @Req() req: Express.Request) {
+    return this.bookingsService.cancel(id, cancelBookingDto, req);
+  }
+
+  @ApiOkResponse({ type: Booking })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
+  @Post(':id/join-room')
+  joinRoom(@Param('id') id: string, @Req() req: Express.Request) {
+    return this.bookingsService.joinRoom(id, req);
+  }
+
+  @ApiOkResponse({ type: Booking })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
+  @Post(':id/participants')
+  addParticipant(@Body() participantsDto: ParticipantDto, @Param('id') id: string) {
+    return this.bookingsService.addParticipant(id, participantsDto);
+  }
+
+  @ApiOkResponse({ type: Booking })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
+  @Patch(':id/participants/:participantId')
+  updateParticipant(
+    @Param('id') id: string,
+    @Param('participantId') participantId: string,
+    @Body() updateParticipantDto: UpdateParticipantDto,
+  ) {
+    return this.bookingsService.updateParticipant(id, participantId, updateParticipantDto);
+  }
+
+  @ApiOkResponse({ type: Booking })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
+  @Delete(':id/participants/:participantId')
+  removeParticipant(@Param('participantId') participantId: string, @Param('id') id: string) {
+    return this.bookingsService.removeParticipant(id, participantId);
   }
 }

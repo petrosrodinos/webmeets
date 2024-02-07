@@ -13,7 +13,6 @@ import {
   HStack,
   Avatar,
   IconButton,
-  SimpleGrid,
   VStack,
 } from '@chakra-ui/react';
 import Input from '@/components/ui/Input';
@@ -27,8 +26,9 @@ import { Roles } from 'enums/roles';
 import Modal from '@/components/ui/Modal';
 import TextArea from '@/components/ui/TextArea';
 import AvailabilityPeriods from 'app/meets/[id]/CreateBooking/AvailabilityPeriods';
-import { formatDateFromUTC } from '@/lib/date';
+import { formatDate, formatDateFromUTC } from '@/lib/date';
 import { MdEdit } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 
 interface BookingInfoProps {
   booking: Booking;
@@ -37,15 +37,18 @@ interface BookingInfoProps {
 }
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
+  const router = useRouter();
   const toast = useToast();
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isEditDateModalOpen, setIsEditDateModalOpen] = useState(false);
   const [reason, setReason] = useState('');
+
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
   const { mutate: cancelBookingMutation, isLoading: isCanceling } = useMutation(cancelBooking);
 
   useEffect(() => {
+    console.log(booking);
     reset({
       date: formatDateFromUTC(booking.date),
     });
@@ -142,6 +145,10 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
     });
   };
 
+  const handleJoinBooking = () => {
+    router.push(`/meet/${booking.id}`);
+  };
+
   const handlePeriodSelected = (date: string) => {
     setValue('date', formatDateFromUTC(date));
   };
@@ -217,6 +224,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               })}
             </List>
           </Box>
+          <Text fontWeight="bold">Participants:</Text>
           <Box
             display="flex"
             flexDirection="column"
@@ -225,7 +233,6 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             boxShadow={'lg'}
             p={3}
           >
-            <Text fontWeight="bold">Participants:</Text>
             {booking.participants?.map((participant, index) => {
               return (
                 <HStack key={index}>
@@ -252,18 +259,55 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 aria-label="Find availability for this date"
                 icon={<MdEdit />}
                 onClick={toggleEditDateModal}
+                isDisabled={booking.status == BookingStatuses.CANCELLED}
               />
             </HStack>
           </Box>
-          {booking.status != BookingStatuses.CANCELLED && (
+          {booking.activity.length > 0 && (
             <>
-              <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
-                Save
+              <Text fontWeight="bold">Activity</Text>
+              <Box
+                display="flex"
+                flexDirection="column"
+                rounded={'lg'}
+                bg={useColorModeValue('white', 'gray.700')}
+                boxShadow={'lg'}
+                p={3}
+              >
+                {booking?.activity?.map((activity, index) => (
+                  <HStack key={index}>
+                    <Text>
+                      Booking cancelled by {activity.role == Roles.ADMIN ? 'Creator ' : 'User '}
+                      because {activity.description} at {formatDate(activity.createdAt)}
+                    </Text>
+                  </HStack>
+                ))}
+              </Box>
+            </>
+          )}
+
+          {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
+            <Button isLoading={isLoading} colorScheme="green" variant="solid" type="submit" maxWidth="100px">
+              Save
+            </Button>
+          )}
+
+          {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
+            <Box
+              display="flex"
+              flexDirection="column"
+              rounded={'lg'}
+              bg={useColorModeValue('white', 'gray.700')}
+              boxShadow={'lg'}
+              p={3}
+            >
+              <Button mb={5} onClick={handleJoinBooking} isLoading={isLoading} colorScheme="green" variant="outline" mt={5}>
+                Join
               </Button>
               <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
-                Cancel Booking
+                Cancel
               </Button>
-            </>
+            </Box>
           )}
         </Stack>
       </form>

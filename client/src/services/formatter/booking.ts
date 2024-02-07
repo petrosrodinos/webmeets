@@ -1,4 +1,4 @@
-import { Booking, BookingPeriod } from '@/interfaces/booking';
+import { Booking, BookingParticipant, BookingPeriod } from '@/interfaces/booking';
 import { formatMeet } from './../formatter/meet';
 import { formatProfile } from './profile';
 import { formatUser } from './user';
@@ -12,16 +12,34 @@ export const formatBooking = (booking: any): Booking => {
     date: booking.date,
     location: booking.location,
     status: booking.status,
-    participants: booking.participants.map((participant: any) => {
-      return {
-        id: participant._id,
-        user: formatUser(participant.userId),
-        notes: participant?.notes || '',
-        createdAt: participant.createdAt,
-      };
-    }),
+    participants: formatParticipants(booking.participants),
+    activity: formatActivities(booking.activities),
     createdAt: booking.createdAt,
   };
+};
+
+const formatParticipants = (participants: any[]): any[] => {
+  return participants.map((participant) => {
+    return {
+      id: participant._id,
+      user: formatUser(participant.userId),
+      notes: participant?.notes || '',
+      createdAt: participant.createdAt,
+    };
+  });
+};
+
+const formatActivities = (activities: any[]): any[] => {
+  return activities.map((activity) => {
+    return {
+      id: activity._id,
+      type: activity.type,
+      role: activity.role,
+      // user: formatUser(activity?.userId),
+      description: activity.description,
+      createdAt: activity.createdAt,
+    };
+  });
 };
 
 export const formatAvailablePeriods = (periods: any[]): BookingPeriod[] => {

@@ -3,8 +3,9 @@ import { StripeService } from './stripe.service';
 import { StripeController } from './stripe.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BookingSchema } from 'src/schemas/booking.schema';
-import { BookingsService } from 'src/bookings/bookings.service';
 import { MeetSchema } from 'src/schemas/meet.schema';
+import { BookingsService } from 'src/api/bookings/bookings.service';
+import { DailyService } from 'src/daily/daily.service';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { MeetSchema } from 'src/schemas/meet.schema';
   ],
   exports: [StripeService],
   controllers: [StripeController],
-  providers: [StripeService, BookingsService],
+  providers: [StripeService, BookingsService, DailyService],
 })
 export class StripeModule {}
