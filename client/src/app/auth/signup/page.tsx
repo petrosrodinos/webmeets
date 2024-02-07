@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Input from '@/components/ui/Input';
-import { SignupSchema } from '@/validation-schemas/auth';
+import { SignupSchema, EditUserSchema } from '@/validation-schemas/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import { signUpUser } from '@/services/auth';
@@ -34,6 +34,7 @@ import { FC, useEffect } from 'react';
 import { SignUp as SignUpInt } from '@/interfaces/user';
 import { get } from 'http';
 import { formatDateToUTC } from '@/lib/date';
+import { editUser } from '@/services/user';
 
 interface SignUpProps {
   data?: SignUpInt;
@@ -54,16 +55,41 @@ const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
     formState: { errors },
     setValue,
   } = useForm({
-    resolver: yupResolver(SignupSchema),
+    resolver: yupResolver(!data ? SignupSchema : EditUserSchema),
   });
 
   const { mutate: signupMutation, isLoading } = useMutation((user: any) => {
     return signUpUser(user);
   });
 
+  useEffect(() => {
+    console.log('data', data);
+    if (data) {
+      reset({
+        firstname: data.firstname,
+        lastname: data.lastname,
+        email: data.email,
+        phone: data.phone,
+        birthDate: formatDateToUTC(data.birthDate),
+        avatar: data.avatar,
+      });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    console.log('errors', errors);
+  }, [errors]);
+
   function onSubmit(values: any) {
     console.log(values);
     // return;
+
+    if (data) {
+      console.log('updating');
+      onSave?.();
+      return;
+    }
+
     signupMutation(
       {
         ...values,
@@ -111,23 +137,9 @@ const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
     );
   }
 
-  useEffect(() => {
-    if (data) {
-      reset({
-        firstname: data.firstname,
-        lastname: data.lastname,
-        email: data.email,
-        phone: data.phone,
-        birthDate: formatDateToUTC(data.birthDate),
-        avatar: data.avatar,
-      });
-    }
-  }, [data]);
-
   const handleImageChange = (data: any) => {
     setValue('avatar', data.file);
   };
-
   return (
     <Flex>
       <Stack spacing={8} mx={'auto'} maxW={'xl'} px={6}>
@@ -190,14 +202,16 @@ const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
                 type="date"
                 register={register('birthDate')}
               />
-              <Input
-                error={errors.password?.message}
-                label="Password"
-                placeholder="Enter Password"
-                password
-                icon={RiLockPasswordLine}
-                register={register('password')}
-              />
+              {!data ? (
+                <Input
+                  error={errors?.password?.message as string}
+                  label="Password"
+                  placeholder="Enter Password"
+                  password
+                  icon={RiLockPasswordLine}
+                  register={register('password')}
+                />
+              ) : null}
 
               <FileUpload onChange={handleImageChange} label="Avatar" name="profilePicture" value={getValues('avatar')} />
 
@@ -221,14 +235,16 @@ const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
               >
                 {!data ? 'Sign Up' : 'Update Profile'}
               </Button>
-              <Stack pt={6}>
-                <Text align={'center'}>
-                  Already a user?{' '}
-                  <Link href="/auth/signin" color={'blue.400'}>
-                    Login
-                  </Link>
-                </Text>
-              </Stack>
+              {!data ? (
+                <Stack pt={6}>
+                  <Text align={'center'}>
+                    Already a user?{' '}
+                    <Link href="/auth/signin" color={'blue.400'}>
+                      Login
+                    </Link>
+                  </Text>
+                </Stack>
+              ) : null}
             </Stack>
           </form>
         </Box>

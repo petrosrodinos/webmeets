@@ -9,8 +9,14 @@ const UserProfile: FC = () => {
   const { data, isLoading } = useQuery('user', getUser);
   //   console.log(data);]
 
-  const { mutate } = useMutation(() => {
-    return editUser(data);
+  const { mutate } = useMutation({
+    mutationFn: () => editUser(data),
+    onSuccess: () => {
+      console.log('User updated successfully');
+      const editData = editUser(data);
+      console.log('editData', editData);
+    },
+    onError: (error) => {},
   });
 
   return (

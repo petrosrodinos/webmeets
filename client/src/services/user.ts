@@ -14,7 +14,7 @@ export const getUser = async () => {
 
 export const editUser = async (payload: SignUp) => {
   try {
-    const res = await axios.patch(`${API_URL}user/me`, payload, getHeaders());
+    const res = await axios.patch(`${API_URL}user`, payload, getHeaders());
     return res.data;
   } catch (err: any) {
     throw err?.response?.data;
