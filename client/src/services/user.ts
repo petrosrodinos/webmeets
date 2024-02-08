@@ -12,8 +12,9 @@ export const getUser = async () => {
   }
 };
 
-export const editUser = async (payload: SignUp) => {
+export const editUser = async (payload: any) => {
   try {
+    console.log('payload', payload);
     const res = await axios.patch(`${API_URL}user`, payload, getHeaders());
     return res.data;
   } catch (err: any) {

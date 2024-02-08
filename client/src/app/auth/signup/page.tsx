@@ -38,10 +38,10 @@ import { editUser } from '@/services/user';
 
 interface SignUpProps {
   data?: SignUpInt;
-  onSave?: () => void;
+  onSave?: (values: any) => void;
 }
 
-const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
+const SignUp: FC<SignUpProps> = ({ data }) => {
   const toast = useToast();
   const { logIn } = authStore((state) => state);
   const router = useRouter();
@@ -62,6 +62,8 @@ const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
     return signUpUser(user);
   });
 
+  const { mutate: editUserMutation } = useMutation(editUser);
+
   useEffect(() => {
     console.log('data', data);
     if (data) {
@@ -76,17 +78,28 @@ const SignUp: FC<SignUpProps> = ({ data, onSave }) => {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log('errors', errors);
-  }, [errors]);
+  // useEffect(() => {
+  //   console.log('errors', errors);
+  // }, [errors]);
 
   function onSubmit(values: any) {
     console.log(values);
     // return;
 
     if (data) {
-      console.log('updating');
-      onSave?.();
+      // onSave?.(values);
+      editUserMutation(values, {
+        onSuccess: (data: any) => {
+          toast({
+            title: 'Profile updated',
+            description: 'Your profile has been updated',
+            position: 'top',
+            isClosable: true,
+            status: 'success',
+          });
+        },
+      });
+      console.log('new data', values);
       return;
     }
 

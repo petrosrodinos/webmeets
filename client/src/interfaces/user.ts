@@ -20,3 +20,13 @@ export interface User {
   lastname: string;
   avatar: string;
 }
+
+export interface EditUser {
+  userId: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  avatar: string;
+  birthDate: string;
+}
