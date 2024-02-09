@@ -66,7 +66,7 @@ const Profile: FC = () => {
   });
 
   const { mutate: editProfileMutation, isLoading: isEditing } = useMutation((data: CreateProfile) => {
-    return editUserProfile(data);
+    return editUserProfile(data, profileId);
   });
 
   useEffect(() => {

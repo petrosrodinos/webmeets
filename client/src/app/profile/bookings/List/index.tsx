@@ -1,45 +1,85 @@
-import { FC } from 'react';
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from '@chakra-ui/react';
-const ProfileList: FC = () => {
+import { FC, useMemo, useState } from 'react';
+import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, Tab } from '@chakra-ui/react';
+import Modal from '@/components/ui/Modal';
+import BookingInfo from '../Calendar/BookingInfo';
+import { Booking } from '@/interfaces/booking';
+
+interface ProfileListProps {
+  bookings: Booking[];
+  refetch: any;
+}
+const ProfileList: FC<ProfileListProps> = ({ bookings, refetch }) => {
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+
+  const handleEventClick = (booking: any) => {
+    console.log('booking', booking);
+  };
+  const bookingName = useMemo(() => {
+    if (!bookings || bookings?.length === 0) return;
+    const booking = bookings[0];
+    const user = booking.participants[0].user;
+    const userName = `${user.firstname} ${user.lastname}`;
+    if (booking.participants.length > 1) {
+      return `${userName} + ${booking.participants.length - 1} more`;
+    } else {
+      return userName;
+    }
+  }, [bookings]);
+
+  const handleDateChange = () => {
+    refetch();
+  };
+
+  const handleCancel = () => {
+    refetch();
+    setSelectedBooking(null);
+  };
+
   return (
-    <div>
+    <>
       <TableContainer>
-        <Table variant="simple">
-          <TableCaption>Imperial to metric conversion factors</TableCaption>
-          <Thead>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Thead>
+        <Table variant="striped" colorScheme="gray">
+          {/* <Thead>
+          <Tr>
+            <Th>Name</Th>
+            <Th>Meet</Th>
+            <Th>Participants</Th>
+            <Th>Date</Th>
+            <Th>Status</Th>
+          </Tr>
+        </Thead> */}
           <Tbody>
-            <Tr>
-              <Td>inches</Td>
-              <Td>millimetres (mm)</Td>
-              <Td isNumeric>25.4</Td>
-            </Tr>
-            <Tr>
-              <Td>feet</Td>
-              <Td>centimetres (cm)</Td>
-              <Td isNumeric>30.48</Td>
-            </Tr>
-            <Tr>
-              <Td>yards</Td>
-              <Td>metres (m)</Td>
-              <Td isNumeric>0.91444</Td>
-            </Tr>
+            {bookings &&
+              bookings.map((booking) => {
+                return (
+                  <>
+                    <Tr
+                      _hover={{ cursor: 'pointer', color: 'blue.500' }}
+                      onClick={() => {
+                        setSelectedBooking(booking);
+                      }}
+                    >
+                      <Td>{bookingName || booking.meet.name}</Td>
+                      <Td>{booking.meet.name}</Td>
+                      <Td>{booking.participants.length}</Td>
+                      <Td>{booking.date}</Td>
+                      <Td>{booking.status}</Td>
+                    </Tr>
+                    <Modal
+                      title={selectedBooking?.meet?.name || 'Booking'}
+                      isOpen={!!selectedBooking}
+                      onClose={() => setSelectedBooking(null)}
+                      closeTitle="Close"
+                    >
+                      <BookingInfo onCancel={handleCancel} onDateChange={handleDateChange} booking={selectedBooking as Booking} />
+                    </Modal>
+                  </>
+                );
+              })}
           </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Tfoot>
         </Table>
       </TableContainer>
-    </div>
+    </>
   );
 };
 

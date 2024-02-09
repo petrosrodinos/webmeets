@@ -25,7 +25,7 @@ const ProfileBookings: FC = () => {
           <ProfileCalendar refetch={refetch} bookings={bookings as Booking[]} />
         </TabPanel>
         <TabPanel>
-          <ProfileList />
+          <ProfileList refetch={refetch} bookings={bookings as Booking[]} />
         </TabPanel>
       </TabPanels>
     </Tabs>

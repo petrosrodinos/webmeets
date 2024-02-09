@@ -20,9 +20,9 @@ export const createProfile = async (payload: CreateProfile) => {
   }
 };
 
-export const editProfile = async (payload: CreateProfile) => {
+export const editProfile = async (payload: CreateProfile, id: string) => {
   try {
-    const result = await axios.patch(`${API_URL}profiles`, payload, {
+    const result = await axios.patch(`${API_URL}profiles/${id}`, payload, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${getAuthState().token}`,
