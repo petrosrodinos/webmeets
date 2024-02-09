@@ -20,7 +20,7 @@ import { useMutation, useQuery } from 'react-query';
 import FileUpload from '@/components/ui/FilePicker';
 import { ProfileSchema } from '@/validation-schemas/profile';
 import { createProfile as createUserProfile, editProfile as editUserProfile, getProfileById } from '@/services/profile';
-import { useState, FC } from 'react';
+import { useState, FC, useEffect, use } from 'react';
 import TextArea from '@/components/ui/TextArea';
 import Modal from '@/components/ui/Modal';
 import { useRouter } from 'next/navigation';
@@ -33,6 +33,7 @@ import { MultiFilePickerItemData } from '@/interfaces/components';
 import MultiFilePicker from '@/components/ui/MultiFilePicker';
 import { Roles } from 'enums/roles';
 import { authStore } from '@/store/authStore';
+import { get } from 'http';
 
 const Profile: FC = () => {
   const { profileId, updateProfile } = authStore((state) => state);
@@ -47,6 +48,7 @@ const Profile: FC = () => {
     formState: { errors },
     setValue,
     reset,
+    getValues,
   } = useForm({
     resolver: yupResolver(ProfileSchema),
   });
@@ -66,6 +68,29 @@ const Profile: FC = () => {
   const { mutate: editProfileMutation, isLoading: isEditing } = useMutation((data: CreateProfile) => {
     return editUserProfile(data);
   });
+
+  useEffect(() => {
+    console.log('errors', errors);
+  }, [errors]);
+
+  useEffect(() => {
+    reset({
+      country: profileData?.country,
+      categories: profileData?.categories,
+      bio: profileData?.bio,
+      isOnline: profileData?.isOnline,
+      avatar: profileData?.avatar,
+      banner: profileData?.banner,
+      certificates: profileData?.certificates,
+      phone: profileData?.phone,
+      email: profileData?.email,
+      address: profileData?.address,
+      city: profileData?.city,
+      area: profileData?.area,
+      postalCode: profileData?.postalCode,
+    });
+    console.log('profileData', profileData);
+  }, [profileData]);
 
   const onSubmit: SubmitHandler<any> = (values: CreateProfile) => {
     console.log(values);
@@ -228,7 +253,7 @@ const Profile: FC = () => {
                 />
 
                 <FormLabel>I have a physical business</FormLabel>
-                <Switch {...register('isOnline')} onChange={handleCheckBoxChange} colorScheme="teal" size="lg" />
+                <Switch {...register('isOnline')} onChange={handleCheckBoxChange} colorScheme="teal" size="lg" checked={true} />
 
                 {isPhysical && (
                   <VStack>
