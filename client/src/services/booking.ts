@@ -1,16 +1,17 @@
-import { API_URL } from '@/constants/api';
-import axios from 'axios';
+import axios from "axios";
+
+import { formatAvailablePeriods, formatBooking } from "./formatter/booking";
+import { createParams, getAuthHeaders } from "./utils/utils";
+import { API_URL } from "constants/api";
 import {
+  NewBooking,
   Booking,
-  BookingAvailability,
-  BookingPeriod,
-  CancelBooking,
   EditBooking,
   EditBookingParticipant,
-  NewBooking,
-} from '@/interfaces/booking';
-import { formatAvailablePeriods, formatBooking } from './formatter/booking';
-import { createParams, getAuthHeaders, getHeaders } from './utils/utils';
+  CancelBooking,
+  BookingAvailability,
+  BookingPeriod,
+} from "interfaces/booking";
 
 export const createBooking = async (payload: NewBooking) => {
   try {
@@ -36,7 +37,11 @@ export const getBookings = async (query: { [key: string]: string }): Promise<Boo
 export const editBooking = async (payload: EditBooking): Promise<Booking> => {
   try {
     const { bookingId, ...restPayload } = payload;
-    const result = await axios.patch(`${API_URL}bookings/${payload.bookingId}`, restPayload, getAuthHeaders());
+    const result = await axios.patch(
+      `${API_URL}bookings/${payload.bookingId}`,
+      restPayload,
+      getAuthHeaders()
+    );
     const formattedData = formatBooking(result.data);
     return formattedData;
   } catch (err: any) {
@@ -50,7 +55,7 @@ export const editParticipant = async (payload: EditBookingParticipant): Promise<
     const result = await axios.patch(
       `${API_URL}bookings/${bookingId}/participants/${participantId}`,
       restPayload,
-      getAuthHeaders(),
+      getAuthHeaders()
     );
     const formattedData = formatBooking(result.data);
     return formattedData;
@@ -61,7 +66,11 @@ export const editParticipant = async (payload: EditBookingParticipant): Promise<
 
 export const cancelBooking = async (payload: CancelBooking): Promise<Booking> => {
   try {
-    const result = await axios.post(`${API_URL}bookings/${payload.bookingId}/cancel`, payload, getAuthHeaders());
+    const result = await axios.post(
+      `${API_URL}bookings/${payload.bookingId}/cancel`,
+      payload,
+      getAuthHeaders()
+    );
     const formattedData = formatBooking(result.data);
     return formattedData;
   } catch (err: any) {
@@ -71,7 +80,10 @@ export const cancelBooking = async (payload: CancelBooking): Promise<Booking> =>
 
 export const bookingAvailability = async (query: BookingAvailability): Promise<BookingPeriod[]> => {
   try {
-    const result = await axios.get(`${API_URL}bookings/${query.meetId}/availability?${createParams(query)}`, getAuthHeaders());
+    const result = await axios.get(
+      `${API_URL}bookings/${query.meetId}/availability?${createParams(query)}`,
+      getAuthHeaders()
+    );
     const formattedData = formatAvailablePeriods(result.data.availability);
     return formattedData;
   } catch (err: any) {
@@ -82,7 +94,11 @@ export const bookingAvailability = async (query: BookingAvailability): Promise<B
 export const joinBooking = async (payload: { bookingId: string }): Promise<any> => {
   try {
     const { bookingId } = payload;
-    const result = await axios.post(`${API_URL}bookings/${bookingId}/join-room`, {}, getAuthHeaders());
+    const result = await axios.post(
+      `${API_URL}bookings/${bookingId}/join-room`,
+      {},
+      getAuthHeaders()
+    );
     const formattedBooking = formatBooking(result.data.booking);
     return {
       booking: formattedBooking,

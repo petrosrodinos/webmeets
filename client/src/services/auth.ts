@@ -1,7 +1,7 @@
-import { API_URL } from '@/constants/api';
-import axios from 'axios';
-import { SignIn, SignUp } from '@/interfaces/user';
-import { decodeToken } from '@/lib/token';
+import axios from "axios";
+import { API_URL } from "constants/api";
+import { SignIn, SignUp } from "interfaces/user";
+import { decodeToken } from "lib/token";
 
 export const signInUser = async (payload: SignIn): Promise<any> => {
   try {
@@ -21,7 +21,7 @@ export const signUpUser = async (paylaod: SignUp): Promise<any> => {
   try {
     const result = await axios.post(`${API_URL}auth/signup`, paylaod, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
     const { exp } = decodeToken(result.data.token);

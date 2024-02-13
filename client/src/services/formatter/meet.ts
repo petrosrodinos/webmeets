@@ -1,7 +1,8 @@
-import { Meet } from '@/interfaces/meet';
-import { formatDate, formatDateFromUTC } from '@/lib/date';
-import { formatProfile } from './profile';
-import { formatUser } from './user';
+import { formatDate } from "@fullcalendar/core/index.js";
+import { Meet } from "interfaces/meet";
+import { formatDateFromUTC } from "lib/date";
+import { formatProfile } from "./profile";
+import { formatUser } from "./user";
 
 export const formatMeet = (meet: any): Meet => ({
   id: meet._id,

@@ -1,8 +1,8 @@
-import { Booking, BookingParticipant, BookingPeriod } from '@/interfaces/booking';
-import { formatMeet } from './../formatter/meet';
-import { formatProfile } from './profile';
-import { formatUser } from './user';
-import { v4 as uuidv4 } from 'uuid';
+import { Booking, BookingPeriod } from "interfaces/booking";
+import { formatMeet } from "./../formatter/meet";
+import { formatProfile } from "./profile";
+import { formatUser } from "./user";
+import { v4 as uuidv4 } from "uuid";
 
 export const formatBooking = (booking: any): Booking => {
   return {
@@ -23,7 +23,7 @@ const formatParticipants = (participants: any[]): any[] => {
     return {
       id: participant._id,
       user: formatUser(participant.userId),
-      notes: participant?.notes || '',
+      notes: participant?.notes || "",
       createdAt: participant.createdAt,
     };
   });

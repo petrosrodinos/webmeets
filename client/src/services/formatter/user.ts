@@ -1,7 +1,7 @@
-import { User } from '@/interfaces/user';
+import { User } from "interfaces/user";
 
 export const formatUser = (data: any): User | null => {
-  if (typeof data === 'string') {
+  if (typeof data === "string") {
     return null;
   } else {
     return {

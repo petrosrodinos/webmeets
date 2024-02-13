@@ -1,16 +1,16 @@
-import { API_URL } from '@/constants/api';
-import axios from 'axios';
-import { getAuthState } from '../store/authStore';
-import { CreateProfile, Profile } from '@/interfaces/profile';
-import { formatProfile } from './formatter/profile';
-import { formatMeet } from './formatter/meet';
-import { Meet } from '@/interfaces/meet';
+import axios from "axios";
+import { getAuthState } from "../store/authStore";
+import { formatProfile } from "./formatter/profile";
+import { formatMeet } from "./formatter/meet";
+import { API_URL } from "constants/api";
+import { Meet } from "interfaces/meet";
+import { CreateProfile, Profile } from "interfaces/profile";
 
 export const createProfile = async (payload: CreateProfile) => {
   try {
     const result = await axios.post(`${API_URL}profiles`, payload, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${getAuthState().token}`,
       },
     });
@@ -24,7 +24,7 @@ export const editProfile = async (payload: CreateProfile) => {
   try {
     const result = await axios.patch(`${API_URL}profiles`, payload, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${getAuthState().token}`,
       },
     });

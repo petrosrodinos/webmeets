@@ -1,9 +1,9 @@
-import { Profile } from '@/interfaces/profile';
-import { formatDate } from '@/lib/date';
-import { formatUser } from './user';
+import { Profile } from "interfaces/profile";
+import { formatUser } from "./user";
+import { formatDate } from "lib/date";
 
 export const formatProfile = (data: any): Profile | null => {
-  if (typeof data === 'string') {
+  if (typeof data === "string") {
     return null;
   } else {
     return {
