@@ -1,6 +1,6 @@
-import { OptionItem } from '@/interfaces/components';
-import { FormControl, FormErrorMessage, FormLabel, Select as ChakraSelect } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FormControl, FormErrorMessage, FormLabel, Select as ChakraSelect } from "@chakra-ui/react";
+import { FC } from "react";
+import { OptionItem } from "../../../interfaces/components";
 
 type SelectProps = {
   placeholder?: string;
@@ -13,11 +13,27 @@ type SelectProps = {
   onChange?: any;
 } & React.ComponentProps<typeof ChakraSelect>;
 
-const Select: FC<SelectProps> = ({ placeholder, register, error, required, label, onChange, options = [], props, ...rest }) => {
+const Select: FC<SelectProps> = ({
+  placeholder,
+  register,
+  error,
+  required,
+  label,
+  onChange,
+  options = [],
+  props,
+  ...rest
+}) => {
   return (
     <FormControl isInvalid={!!error} isRequired={required}>
       {label && <FormLabel>{label}</FormLabel>}
-      <ChakraSelect onChange={onChange} placeholder={placeholder} {...register} {...props} {...rest}>
+      <ChakraSelect
+        onChange={onChange}
+        placeholder={placeholder}
+        {...register}
+        {...props}
+        {...rest}
+      >
         {options?.map((option: OptionItem, index: number) => (
           <option key={index} value={option.value}>
             {option.label}

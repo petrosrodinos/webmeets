@@ -1,6 +1,6 @@
-import { Roles } from 'enums/roles';
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
+import { Roles } from "../enums/roles";
 
 interface PreferencesStoreState {
   roleView: Roles;
@@ -10,7 +10,7 @@ interface PreferencesStoreState {
 
 const initialStateValues = {
   roleView: Roles.USER,
-  drawerView: 'full',
+  drawerView: "full",
 };
 
 export const preferencesStore = create<PreferencesStoreState>()(
@@ -25,10 +25,10 @@ export const preferencesStore = create<PreferencesStoreState>()(
           })),
       }),
       {
-        name: 'webmeets-preferences',
-      },
-    ),
-  ),
+        name: "webmeets-preferences",
+      }
+    )
+  )
 );
 
 // export const getAuthState = (): AuthState => {

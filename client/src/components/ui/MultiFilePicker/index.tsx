@@ -1,7 +1,11 @@
-import { Accordion, FormControl, FormLabel } from '@chakra-ui/react';
-import { FC, useState } from 'react';
-import Item from './Item';
-import { FilePickerAccept, MultiFilePickerItemData, PreviewType } from '@/interfaces/components';
+import { Accordion, FormControl, FormLabel } from "@chakra-ui/react";
+import { FC, useState } from "react";
+import Item from "./Item";
+import {
+  MultiFilePickerItemData,
+  FilePickerAccept,
+  PreviewType,
+} from "../../../interfaces/components";
 
 interface MultiFilePickerProps {
   onChange: (data: MultiFilePickerItemData[]) => void;
@@ -12,7 +16,14 @@ interface MultiFilePickerProps {
   itemName: string;
 }
 
-const MultiFilePicker: FC<MultiFilePickerProps> = ({ label, inputLabel, itemName, accept, previewType, onChange }) => {
+const MultiFilePicker: FC<MultiFilePickerProps> = ({
+  label,
+  inputLabel,
+  itemName,
+  accept,
+  previewType,
+  onChange,
+}) => {
   const [files, setFiles] = useState<MultiFilePickerItemData[]>([]);
 
   const handleAdd = (data: MultiFilePickerItemData) => {
@@ -26,7 +37,7 @@ const MultiFilePicker: FC<MultiFilePickerProps> = ({ label, inputLabel, itemName
     <>
       <FormControl>
         <FormLabel>{label}</FormLabel>
-        <Accordion width={'100%'} defaultIndex={[0]} allowMultiple>
+        <Accordion width={"100%"} defaultIndex={[0]} allowMultiple>
           {files.length == 0 && (
             <Item
               itemName={`${itemName} 1`}

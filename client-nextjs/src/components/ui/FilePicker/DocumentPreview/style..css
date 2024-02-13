@@ -1,0 +1,11 @@
+.document-preview-container {
+  max-width: 400px;
+  overflow: auto;
+}
+
+.document-navigation-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}

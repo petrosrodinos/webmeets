@@ -1,17 +1,17 @@
-import { useImperativeFilePicker } from 'use-file-picker';
+import { useImperativeFilePicker } from "use-file-picker";
 import {
   FileAmountLimitValidator,
   FileTypeValidator,
   FileSizeValidator,
   // ImageDimensionsValidator,
-} from 'use-file-picker/validators';
-import { FC, useEffect, useState } from 'react';
-import Spinner from '@/components/ui/Spinner';
-import { Button, SimpleGrid, useColorModeValue, Box } from '@chakra-ui/react';
-import { MdOutlineAddPhotoAlternate } from 'react-icons/md';
-import { IoIosCloseCircleOutline } from 'react-icons/io';
-import { ImagePickerFile, ImagePickerItemData } from '@/interfaces/components';
-import './style.css';
+} from "use-file-picker/validators";
+import { FC, useEffect, useState } from "react";
+import { Button, SimpleGrid, Box } from "@chakra-ui/react";
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import "./style.css";
+import { ImagePickerItemData, ImagePickerFile } from "../../../interfaces/components";
+import Spinner from "../Spinner";
 
 interface ImagePickerProps {
   label: string;
@@ -36,7 +36,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
   onChange,
   onImageDelete,
   multiple = true,
-  accept = 'image/*',
+  accept = "image/*",
   maxFiles = 5,
 }) => {
   const [filteredImages, setFilteredImages] = useState<Image[]>([]);
@@ -53,10 +53,10 @@ const ImagePicker: FC<ImagePickerProps> = ({
       <Button
         onClick={() => openFilePicker()}
         leftIcon={<MdOutlineAddPhotoAlternate />}
-        bg={'primary.500'}
-        color={'white'}
+        bg={"primary.500"}
+        color={"white"}
         _hover={{
-          bg: 'primary.600',
+          bg: "primary.600",
         }}
       >
         {label}
@@ -64,34 +64,35 @@ const ImagePicker: FC<ImagePickerProps> = ({
     );
   };
 
-  const { openFilePicker, filesContent, loading, plainFiles, errors, removeFileByIndex } = useImperativeFilePicker({
-    readAs: 'DataURL',
-    accept: accept,
-    multiple: multiple,
-    validators: [
-      new FileAmountLimitValidator({ max: maxFiles }),
-      new FileTypeValidator(['jpg', 'png', 'jpeg']),
-      new FileSizeValidator({ maxFileSize: 50 * 1024 * 1024 /* 50 MB */ }),
-      //   new ImageDimensionsValidator({
-      //     maxHeight: 900,
-      //     maxWidth: 1600,
-      //     minHeight: 600,
-      //     minWidth: 768,
-      //   }),
-    ],
-    onFilesSuccessfullySelected: ({ plainFiles }) => {
-      const filesWithIds = plainFiles.map((file, index) => ({
-        id: index.toString(),
-        file: file,
-      }));
-      setSelectedImages((prev) => [...prev, ...filesWithIds]);
+  const { openFilePicker, filesContent, loading, errors, removeFileByIndex } =
+    useImperativeFilePicker({
+      readAs: "DataURL",
+      accept: accept,
+      multiple: multiple,
+      validators: [
+        new FileAmountLimitValidator({ max: maxFiles }),
+        new FileTypeValidator(["jpg", "png", "jpeg"]),
+        new FileSizeValidator({ maxFileSize: 50 * 1024 * 1024 /* 50 MB */ }),
+        //   new ImageDimensionsValidator({
+        //     maxHeight: 900,
+        //     maxWidth: 1600,
+        //     minHeight: 600,
+        //     minWidth: 768,
+        //   }),
+      ],
+      onFilesSuccessfullySelected: ({ plainFiles }) => {
+        const filesWithIds = plainFiles.map((file, index) => ({
+          id: index.toString(),
+          file: file,
+        }));
+        setSelectedImages((prev) => [...prev, ...filesWithIds]);
 
-      onChange({
-        name,
-        files: filesWithIds,
-      });
-    },
-  });
+        onChange({
+          name,
+          files: filesWithIds,
+        });
+      },
+    });
 
   if (errors.length) {
     return (
@@ -100,7 +101,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
 
         {errors.map((err: any) => (
           <div>
-            {err.name}: {err.reason}{' '}
+            {err.name}: {err.reason}{" "}
             {err?.reasons?.map((reason: string) => (
               <p>{reason}</p>
             ))}
@@ -130,11 +131,22 @@ const ImagePicker: FC<ImagePickerProps> = ({
     }
   };
 
-  const ImageContainer = ({ image, index, imageId }: { image: string; index: number; imageId?: string }) => {
+  const ImageContainer = ({
+    image,
+    index,
+    imageId,
+  }: {
+    image: string;
+    index: number;
+    imageId?: string;
+  }) => {
     return (
       <div className="image-container">
-        <IoIosCloseCircleOutline className="image-remove-button" onClick={() => removeImage(index, imageId)} />
-        <img className="image-picker-image" alt={'image'} src={image}></img>
+        <IoIosCloseCircleOutline
+          className="image-remove-button"
+          onClick={() => removeImage(index, imageId)}
+        />
+        <img className="image-picker-image" alt={"image"} src={image}></img>
       </div>
     );
   };
@@ -142,7 +154,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
   return (
     <div>
       <FilePickerButton label={label} />
-      <Box rounded={'sm'} boxShadow={'sm'} p={1}>
+      <Box rounded={"sm"} boxShadow={"sm"} p={1}>
         {filesContent.length > 0 && (
           <SimpleGrid mt={2} columns={{ sm: 2, md: 3 }} spacing={2}>
             {filesContent.map((file, index) => (

@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Input,
   FormControl,
@@ -10,11 +8,11 @@ import {
   Icon,
   Avatar,
   Center,
-} from '@chakra-ui/react';
-import { FiFile } from 'react-icons/fi';
-import { useRef, FC, useState, useEffect } from 'react';
-import DocumentPreview from './DocumentPreview';
-import { FilePicker, FilePickerAccept, PreviewType } from '@/interfaces/components';
+} from "@chakra-ui/react";
+import { FiFile } from "react-icons/fi";
+import { useRef, FC, useState, useEffect } from "react";
+import DocumentPreview from "./DocumentPreview";
+import { FilePickerAccept, PreviewType, FilePicker } from "../../../interfaces/components";
 
 interface FileUploadProps {
   name: string;
@@ -30,18 +28,18 @@ interface FileUploadProps {
 
 const FileUpload: FC<FileUploadProps> = ({
   onChange,
-  placeholder = 'Select a file ...',
+  placeholder = "Select a file ...",
   name,
-  accept = 'image/*, .pdf, .doc, .docx',
+  accept = "image/*, .pdf, .doc, .docx",
   value,
   error,
   label,
   isRequired = false,
-  previewType = 'avatar',
+  previewType = "avatar",
 }) => {
   const inputRef: any = useRef();
   const [filePreview, setFilePreview] = useState<any>(null);
-  const [fileName, setFileName] = useState<string>('');
+  const [fileName, setFileName] = useState<string>("");
 
   useEffect(() => {
     if (value) {
@@ -72,8 +70,10 @@ const FileUpload: FC<FileUploadProps> = ({
   };
 
   const previewTypes = {
-    avatar: <Avatar style={{ cursor: 'pointer' }} size="lg" name="Selected image" src={filePreview} />,
-    banner: <img style={{ cursor: 'pointer' }} src={filePreview} alt="Selected image" />,
+    avatar: (
+      <Avatar style={{ cursor: "pointer" }} size="lg" name="Selected image" src={filePreview} />
+    ),
+    banner: <img style={{ cursor: "pointer" }} src={filePreview} alt="Selected image" />,
     pdf: <DocumentPreview imagePreview={filePreview} />,
   };
 
@@ -82,7 +82,13 @@ const FileUpload: FC<FileUploadProps> = ({
       {label && <FormLabel>{label}</FormLabel>}
       <InputGroup>
         <InputLeftElement pointerEvents="none" children={<Icon as={FiFile} />} />
-        <input onChange={handleChange} type="file" accept={accept} ref={inputRef} style={{ display: 'none' }}></input>
+        <input
+          onChange={handleChange}
+          type="file"
+          accept={accept}
+          ref={inputRef}
+          style={{ display: "none" }}
+        ></input>
         <Input defaultValue={fileName} placeholder={placeholder} onClick={openFilePicker} />
       </InputGroup>
       <FormErrorMessage>{error}</FormErrorMessage>

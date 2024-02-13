@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Box,
   CloseButton,
@@ -13,21 +11,21 @@ import {
   BoxProps,
   FlexProps,
   VStack,
-} from '@chakra-ui/react';
-import { IoBookOutline } from 'react-icons/io5';
-import { IconType } from 'react-icons';
-import NavigationBar, { HeaderLinks } from './NavigationBar';
-import { authStore } from '@/store/authStore';
-import { navigationStore } from '@/store/navigationStore';
-import { selectedLink } from '../../../hooks/selectedLink';
-import { LuBookMarked } from 'react-icons/lu';
-import { BsShop } from 'react-icons/bs';
-import { HiOutlineVideoCamera } from 'react-icons/hi2';
-import Link from 'next/link';
-import { preferencesStore } from '@/store/preferencesStore';
-import { useEffect, useState } from 'react';
-import { CiChat2 } from 'react-icons/ci';
-import { Roles } from 'enums/roles';
+} from "@chakra-ui/react";
+import { IoBookOutline } from "react-icons/io5";
+import { IconType } from "react-icons";
+import NavigationBar, { HeaderLinks } from "./NavigationBar";
+import { LuBookMarked } from "react-icons/lu";
+import { BsShop } from "react-icons/bs";
+import { HiOutlineVideoCamera } from "react-icons/hi2";
+import { useEffect, useState } from "react";
+import { CiChat2 } from "react-icons/ci";
+import { Link } from "react-router-dom";
+import { Roles } from "../../enums/roles";
+import { selectedLink } from "../../hooks/selectedLink";
+import { authStore } from "../../store/authStore";
+import { navigationStore } from "../../store/navigationStore";
+import { preferencesStore } from "../../store/preferencesStore";
 export interface LinkItemProps {
   name: string;
   path: string;
@@ -49,17 +47,17 @@ interface SidebarProps extends BoxProps {
 }
 
 export const DrawerLinks: Array<LinkItemProps> = [
-  { id: '1', name: 'Profile', path: '/profile', role: Roles.ADMIN, icon: BsShop },
-  { id: '2', name: 'Bookings', path: '/profile/bookings', role: Roles.ADMIN, icon: LuBookMarked },
-  { id: '3', name: 'Messages', path: '/profile/messages', role: Roles.ADMIN, icon: CiChat2 },
-  { id: '4', name: 'Meets', path: '/profile/meets', role: Roles.ADMIN, icon: HiOutlineVideoCamera },
-  { id: '5', name: 'Bookings', path: '/user/bookings', role: Roles.USER, icon: IoBookOutline },
-  { id: '6', name: 'Messages', path: '/user/messages', role: Roles.USER, icon: CiChat2 },
+  { id: "1", name: "Profile", path: "/profile", role: Roles.ADMIN, icon: BsShop },
+  { id: "2", name: "Bookings", path: "/profile/bookings", role: Roles.ADMIN, icon: LuBookMarked },
+  { id: "3", name: "Messages", path: "/profile/messages", role: Roles.ADMIN, icon: CiChat2 },
+  { id: "4", name: "Meets", path: "/profile/meets", role: Roles.ADMIN, icon: HiOutlineVideoCamera },
+  { id: "5", name: "Bookings", path: "/user/bookings", role: Roles.USER, icon: IoBookOutline },
+  { id: "6", name: "Messages", path: "/user/messages", role: Roles.USER, icon: CiChat2 },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const { selectedLink } = navigationStore((state) => state);
-  const { roleView } = preferencesStore((state) => state);
+  const { selectedLink } = navigationStore();
+  const { roleView } = preferencesStore();
   const [drawerLinks, setDrawerLinks] = useState<LinkItemProps[]>([]);
 
   useEffect(() => {
@@ -73,10 +71,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue('gray.100', 'gray.900')}
+      bg={useColorModeValue("gray.100", "gray.900")}
       borderRight="1px"
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', md: 60 }}
+      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
       {...rest}
@@ -85,9 +83,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <Text color="primary.700" fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           WebMeets
         </Text>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      <VStack flexDirection="column" alignItems="flex-start" display={{ base: 'flex', md: 'none' }}>
+      <VStack flexDirection="column" alignItems="flex-start" display={{ base: "flex", md: "none" }}>
         {HeaderLinks.map((link, index) => (
           <Box key={index} width="100%">
             <NavItem selected={selectedLink == link.id} path={link.path} icon={link?.icon}>
@@ -107,8 +105,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 const NavItem = ({ icon, children, path, selected, ...rest }: NavItemProps) => {
   return (
-    <Link href={path}>
-      <Box style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link to={path}>
+      <Box style={{ textDecoration: "none" }} _focus={{ boxShadow: "none" }}>
         <Flex
           align="center"
           p="4"
@@ -116,10 +114,10 @@ const NavItem = ({ icon, children, path, selected, ...rest }: NavItemProps) => {
           borderRadius="lg"
           role="group"
           cursor="pointer"
-          bg={selected ? 'primary.500' : 'transparent'}
+          bg={selected ? "primary.500" : "transparent"}
           _hover={{
-            bg: 'primary.400',
-            color: 'white',
+            bg: "primary.400",
+            color: "white",
             // height: '40px',
           }}
           {...rest}
@@ -129,7 +127,7 @@ const NavItem = ({ icon, children, path, selected, ...rest }: NavItemProps) => {
               mr="4"
               fontSize="16"
               _groupHover={{
-                color: 'white',
+                color: "white",
               }}
               as={icon}
             />
@@ -147,10 +145,10 @@ const NavigationDrawer = (props: any) => {
   selectedLink();
 
   return (
-    <Box minH="100vh" bg={useColorModeValue('white', 'gray.900')}>
+    <Box minH="100vh" bg={useColorModeValue("white", "gray.900")}>
       {isLoggedIn && (
         <>
-          <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
+          <SidebarContent onClose={() => onClose} display={{ base: "none", md: "block" }} />
           <Drawer
             isOpen={isOpen}
             placement="left"

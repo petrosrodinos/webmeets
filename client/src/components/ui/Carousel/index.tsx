@@ -1,11 +1,8 @@
-'use client';
-
-import { FC, useState } from 'react';
-import { Box, IconButton, useBreakpointValue, Img } from '@chakra-ui/react';
-import { MdArrowForwardIos, MdArrowBackIosNew } from 'react-icons/md';
-import Slider from 'react-slick';
-import MeetPlaceholder from '../../../../public/meet-placeholder.jpg';
-import Image from 'next/image';
+import { FC, useState } from "react";
+import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
+import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
+import Slider from "react-slick";
+import MeetPlaceholder from "../../../../public/meet-placeholder.jpg";
 
 interface CarouselProps {
   images: string[];
@@ -34,11 +31,11 @@ const Carousel: FC<CarouselProps> = ({
 }) => {
   const [slider, setSlider] = useState<Slider | null>(null);
 
-  const top = useBreakpointValue({ base: '90%', md: '50%' });
-  const side = useBreakpointValue({ base: '30%', md: '10px' });
+  const top = useBreakpointValue({ base: "90%", md: "50%" });
+  const side = useBreakpointValue({ base: "30%", md: "10px" });
 
   return (
-    <Box position={'relative'} height={'max-content'} width={'full'} overflow={'hidden'}>
+    <Box position={"relative"} height={"max-content"} width={"full"} overflow={"hidden"}>
       {images.length > 1 && (
         <IconButton
           aria-label="left-arrow"
@@ -46,7 +43,7 @@ const Carousel: FC<CarouselProps> = ({
           position="absolute"
           left={side}
           top={top}
-          transform={'translate(0%, -50%)'}
+          transform={"translate(0%, -50%)"}
           zIndex={2}
           onClick={(e) => {
             e.stopPropagation();
@@ -64,7 +61,7 @@ const Carousel: FC<CarouselProps> = ({
           position="absolute"
           right={side}
           top={top}
-          transform={'translate(0%, -50%)'}
+          transform={"translate(0%, -50%)"}
           zIndex={2}
           onClick={(e) => {
             e.stopPropagation();
@@ -88,8 +85,18 @@ const Carousel: FC<CarouselProps> = ({
         ref={(slider: any) => setSlider(slider)}
       >
         {images.length == 0 && (
-          <Box height="210px" position="relative" backgroundPosition="center" backgroundRepeat="no-repeat" backgroundSize="cover">
-            <Image style={{ height: '100%', objectFit: 'cover' }} alt="meet-placeholder-image" src={MeetPlaceholder} />
+          <Box
+            height="210px"
+            position="relative"
+            backgroundPosition="center"
+            backgroundRepeat="no-repeat"
+            backgroundSize="cover"
+          >
+            <img
+              style={{ height: "100%", objectFit: "cover" }}
+              alt="meet-placeholder-image"
+              src={MeetPlaceholder}
+            />
           </Box>
         )}
 

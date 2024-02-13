@@ -7,10 +7,10 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-} from '@chakra-ui/react';
-import { FC, useState } from 'react';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import { FaRegEyeSlash } from 'react-icons/fa';
+} from "@chakra-ui/react";
+import { FC, useState } from "react";
+import { AiFillEye } from "react-icons/ai";
+import { FaRegEyeSlash } from "react-icons/fa";
 type ChakraInputProps = React.ComponentProps<typeof ChakraInput>;
 
 interface AdditionalProps {
@@ -51,7 +51,7 @@ const Input: FC<InputProps> = ({
           </InputLeftElement>
         )}
         <ChakraInput
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           disabled={disabled}
           name={name}
           {...props}
@@ -59,8 +59,8 @@ const Input: FC<InputProps> = ({
           {...rest}
         />
         {password && (
-          <InputRightElement h={'full'}>
-            <Button variant={'ghost'} onClick={() => setShowPassword((prev) => !prev)}>
+          <InputRightElement h={"full"}>
+            <Button variant={"ghost"} onClick={() => setShowPassword((prev) => !prev)}>
               {showPassword ? <AiFillEye /> : <FaRegEyeSlash />}
             </Button>
           </InputRightElement>

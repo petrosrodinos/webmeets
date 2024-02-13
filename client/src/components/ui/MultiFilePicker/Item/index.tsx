@@ -1,9 +1,20 @@
-import { AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button } from '@chakra-ui/react';
-import { FC, useState } from 'react';
-import FileUpload from '../../FilePicker';
-import Input from '../../Input';
-import { FilePickerAccept, MultiFilePickerItemData, PreviewType } from '@/interfaces/components';
-import { IoAdd } from 'react-icons/io5';
+import {
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Button,
+} from "@chakra-ui/react";
+import { FC, useState } from "react";
+import FileUpload from "../../FilePicker";
+import Input from "../../Input";
+import { IoAdd } from "react-icons/io5";
+import {
+  FilePickerAccept,
+  PreviewType,
+  MultiFilePickerItemData,
+} from "../../../../interfaces/components";
 
 interface ItemProps {
   inputLabel: string;
@@ -15,7 +26,15 @@ interface ItemProps {
   onAdd: (data: MultiFilePickerItemData) => void;
 }
 
-const Item: FC<ItemProps> = ({ itemName, inputLabel, nameValue = '', fileValue, accept, previewType, onAdd }) => {
+const Item: FC<ItemProps> = ({
+  itemName,
+  inputLabel,
+  nameValue = "",
+  fileValue,
+  accept,
+  previewType,
+  onAdd,
+}) => {
   const [file, setFile] = useState<File | undefined>(fileValue);
   const [fileName, setFileName] = useState(nameValue);
 
@@ -25,7 +44,7 @@ const Item: FC<ItemProps> = ({ itemName, inputLabel, nameValue = '', fileValue, 
       file,
       name: fileName,
     });
-    setFileName('');
+    setFileName("");
     setFile(undefined);
   };
 
@@ -38,7 +57,7 @@ const Item: FC<ItemProps> = ({ itemName, inputLabel, nameValue = '', fileValue, 
   };
 
   return (
-    <AccordionItem width={'100%'}>
+    <AccordionItem width={"100%"}>
       <h2>
         <AccordionButton>
           <Box as="span" flex="1" textAlign="left">
@@ -48,7 +67,12 @@ const Item: FC<ItemProps> = ({ itemName, inputLabel, nameValue = '', fileValue, 
         </AccordionButton>
       </h2>
       <AccordionPanel pb={4}>
-        <Input value={fileName} onChange={handleNameChange} label={inputLabel} placeholder={inputLabel} />
+        <Input
+          value={fileName}
+          onChange={handleNameChange}
+          label={inputLabel}
+          placeholder={inputLabel}
+        />
         <FileUpload
           placeholder="Add file"
           previewType={previewType}
