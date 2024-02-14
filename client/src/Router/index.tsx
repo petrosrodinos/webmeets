@@ -1,4 +1,4 @@
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { FC } from "react";
 import Home from "../pages/home";
 import SignIn from "pages/auth/signin";
