@@ -1,45 +1,37 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect, useMemo } from "react";
 import Calendar from "components/ui/Calendar";
-import { getBookings } from "services/booking";
-import { useQuery } from "react-query";
-import { authStore } from "store/authStore";
-import Spinner from "components/ui/Spinner";
-import { Booking } from "interfaces/booking";
 import Modal from "components/ui/Modal";
 import { BookingCalendarEvent } from "interfaces/components";
+import { Booking } from "interfaces/booking";
 import BookingInfo from "./BookingInfo";
 import { BookingStatuses } from "enums/booking";
 
-const UserBookings: FC = () => {
-  const { userId } = authStore();
+interface ProfileCalendarProps {
+  bookings: Booking[];
+  refetch: any;
+}
+
+const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
   const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
-  const {
-    data: bookings,
-    isLoading,
-    refetch,
-  } = useQuery("user-bookings", () => getBookings({ userId }), {
-    onSuccess: (data) => {
-      if (data) {
-        const events = data.map((booking) => {
-          return {
-            id: booking.id,
-            title: booking.meet.name,
-            date: new Date(booking.date),
-            resourceId: booking.id,
-            startEditable: false,
-            durationEditable: false,
-            className: "event-item",
-            color: eventColor(booking),
-            // start: booking.start,
-            // end: booking.end,
-          };
-        });
-        setEvents(events);
-      }
-    },
-  });
+  useEffect(() => {
+    const events: BookingCalendarEvent[] = bookings?.map((booking) => {
+      return {
+        title: bookingName || booking.meet.name,
+        resourceId: booking.id,
+        id: booking.id,
+        date: new Date(booking.date),
+        startEditable: true,
+        durationEditable: true,
+        color: eventColor(booking),
+
+        // start: booking.start,
+        // end: booking.end,
+      };
+    });
+    setEvents(events);
+  }, [bookings]);
 
   const eventColor = (booking: Booking) => {
     if (booking.date > new Date().toUTCString()) return "green";
@@ -68,11 +60,22 @@ const UserBookings: FC = () => {
     setSelectedBooking(null);
   };
 
+  const bookingName = useMemo(() => {
+    if (!bookings || bookings?.length === 0) return;
+    const booking = bookings[0];
+    const user = booking.participants[0].user;
+    const userName = `${user.firstname} ${user.lastname}`;
+    if (booking.participants.length > 1) {
+      return `${userName} + ${booking.participants.length - 1} more`;
+    } else {
+      return userName;
+    }
+  }, [bookings]);
+
   return (
-    <>
-      <Spinner loading={isLoading} />
+    <div style={{ width: "100%" }}>
       <Modal
-        title={selectedBooking?.meet?.name as string}
+        title={selectedBooking?.meet?.name || "Booking"}
         isOpen={!!selectedBooking}
         onClose={() => setSelectedBooking(null)}
         closeTitle="Close"
@@ -86,11 +89,11 @@ const UserBookings: FC = () => {
       <Calendar
         onDateClick={handleDateClick}
         onEventClick={handleEventClick}
-        view="user"
+        view="profile"
         events={events}
       />
-    </>
+    </div>
   );
 };
 
-export default UserBookings;
+export default ProfileCalendar;

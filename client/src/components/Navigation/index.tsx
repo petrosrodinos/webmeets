@@ -142,7 +142,7 @@ const NavItem = ({ icon, children, path, selected, ...rest }: NavItemProps) => {
 const NavigationDrawer = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoggedIn } = authStore();
-  selectedLink();
+  // selectedLink();
 
   return (
     <Box minH="100vh" bg={useColorModeValue("white", "gray.900")}>

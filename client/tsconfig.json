@@ -33,6 +33,7 @@
     "store/*": ["./src/store/*"],
     "enums/*": ["./src/enums/*"],
     "types/*": ["./src/types/*"],
+    "constants/*": ["./src/constants/*"],
     "interfaces/*": ["./src/interfaces/*"],
     "validation-schemas/*": ["./src/validation-schemas/*"],
     "services/*": ["./src/services/*"]

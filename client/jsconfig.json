@@ -4,8 +4,8 @@
     "paths": {
       "src/*": ["./src/*"],
       "components/*": ["./src/components/*"],
-      "assets/@": ["./src/assets/*"],
-      "lib/@": ["./src/lib/*"],
+      "assets/": ["./src/assets/*"],
+      "lib/": ["./src/lib/*"],
       "pages/*": ["./src/pages/*"],
       "hooks/*": ["./src/hooks/*"],
       "store/*": ["./src/store/*"],
@@ -13,7 +13,8 @@
       "types/*": ["./src/types/*"],
       "interfaces/*": ["./src/interfaces/*"],
       "validation-schemas/*": ["./src/validation-schemas/*"],
-      "services/*": ["./src/services/*"]
+      "services/*": ["./src/services/*"],
+      "constants/*": ["./src/constants/*"]
     }
   }
 }

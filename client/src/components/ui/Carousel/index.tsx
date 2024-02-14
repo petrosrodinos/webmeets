@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
 import Slider from "react-slick";
-import MeetPlaceholder from "../../../../public/meet-placeholder.jpg";
+import MeetPlaceholder from "assets/meet-placeholder.jpg";
 
 interface CarouselProps {
   images: string[];

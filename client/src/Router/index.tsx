@@ -4,6 +4,19 @@ import Home from "../pages/home";
 import SignIn from "pages/auth/signin";
 import SignUp from "pages/auth/signup";
 import BookingStatus from "pages/bookings";
+import Meet from "pages/meet";
+import Contact from "pages/contact";
+import Meets from "pages/meets";
+import ProfileBookings from "pages/profile/bookings";
+import Profile from "pages/profile";
+import ProfilePage from "pages/profiles/Profile";
+import ProfileMeets from "pages/profile/meets";
+import ProfileMessages from "pages/profile/messages";
+import UserPage from "pages/user/messages";
+import UserBookings from "pages/user/bookings";
+import UserMessages from "pages/user/messages";
+import MeetPage from "pages/meets/Meet";
+import ProfileMeet from "pages/profile/meets/Meet/page";
 
 const Router: FC = () => {
   return (
@@ -14,20 +27,20 @@ const Router: FC = () => {
       <Route path="/auth/signin" element={<SignIn />} />
       <Route path="/auth/signup" element={<SignUp />} />
       <Route path="/bookings" element={<BookingStatus />} />
-      <Route path="/contact" element={<Home />} />
-      <Route path="/home" element={<Outlet />} />
-      <Route path="/meet" element={<Home />} />
-      <Route path="/meet/:id" element={<Home />} />
-      <Route path="/meets" element={<Home />} />
-      <Route path="/meets/:id" element={<Home />} />
-      <Route path="/profile" element={<Home />} />
-      <Route path="/profile/bookings" element={<Home />} />
-      <Route path="/profile/meets" element={<Home />} />
-      <Route path="/profile/messages" element={<Home />} />
-      <Route path="/profiles/:id" element={<Home />} />
-      <Route path="/user" element={<Home />} />
-      <Route path="/user/bookings" element={<Home />} />
-      <Route path="/user/messages" element={<Home />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/meet/:id" element={<Meet />} />
+      <Route path="/meets" element={<Meets />} />
+      <Route path="/meets/:id" element={<MeetPage />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/bookings" element={<ProfileBookings />} />
+      <Route path="/profile/meets" element={<ProfileMeets />} />
+      <Route path="/profile/meets/:id" element={<ProfileMeet />} />
+      <Route path="/profile/messages" element={<ProfileMessages />} />
+      <Route path="/profiles/:id" element={<ProfilePage />} />
+      <Route path="/user" element={<UserPage />} />
+      <Route path="/user/bookings" element={<UserBookings />} />
+      <Route path="/user/messages" element={<UserMessages />} />
     </Routes>
   );
 };
