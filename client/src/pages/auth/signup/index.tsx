@@ -121,6 +121,9 @@ const SignUp: FC<SignUpProps> = ({ data }) => {
             });
             navigate("/profile");
           } else {
+            setPreferences({
+              roleView: Roles.USER,
+            });
             navigate("/home");
           }
         },

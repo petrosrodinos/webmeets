@@ -20,7 +20,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { BookingStatuses } from "enums/booking";
 import { MeetTypes } from "enums/meet";
 import { Roles } from "enums/roles";
 import Modal from "components/ui/Modal";
@@ -29,6 +28,7 @@ import { formatDate, formatDateFromUTC } from "lib/date";
 import { MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import AvailabilityPeriods from "pages/meets/Meet/CreateBooking/AvailabilityPeriods";
+import { useBooking } from "hooks/booking";
 
 interface BookingInfoProps {
   booking: Booking;
@@ -38,6 +38,7 @@ interface BookingInfoProps {
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
   const toast = useToast();
+  const { isEditable } = useBooking(booking);
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isEditDateModalOpen, setIsEditDateModalOpen] = useState(false);
@@ -200,16 +201,6 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             boxShadow={"lg"}
             p={3}
           >
-            {/* <SimpleGrid alignSelf="center" columns={2} spacing={4} mb={4}>
-              {booking.participants?.map((participant, index) => {
-                return (
-                  <HStack key={index}>
-                    <Avatar size="md" src={participant.user.avatar} />
-                  </HStack>
-                );
-              })}
-            </SimpleGrid> */}
-
             <List spacing={2}>
               {bookingInfo?.map((info, index) => {
                 return (
@@ -262,9 +253,21 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 aria-label="Find availability for this date"
                 icon={<MdEdit />}
                 onClick={toggleEditDateModal}
-                isDisabled={booking.status == BookingStatuses.CANCELLED}
+                isDisabled={!isEditable}
               />
             </HStack>
+            {isEditable && (
+              <Button
+                mt={10}
+                isLoading={isLoading}
+                colorScheme="green"
+                variant="solid"
+                type="submit"
+                maxWidth="100px"
+              >
+                Save
+              </Button>
+            )}
           </Box>
           {booking.activity.length > 0 && (
             <>
@@ -289,19 +292,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             </>
           )}
 
-          {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
-            <Button
-              isLoading={isLoading}
-              colorScheme="green"
-              variant="solid"
-              type="submit"
-              maxWidth="100px"
-            >
-              Save
-            </Button>
-          )}
-
-          {(booking.status != BookingStatuses.CANCELLED || new Date(booking.date) < new Date()) && (
+          {isEditable && (
             <Box
               display="flex"
               flexDirection="column"

@@ -11,7 +11,6 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { Roles } from "enums/roles";
 import { signInUser } from "services/auth";
 import { authStore } from "store/authStore";
 import { preferencesStore } from "store/preferencesStore";
@@ -46,15 +45,9 @@ export default function SignIn() {
           userId: data.user._id,
           profileId: data.user?.profileId,
         });
-        if (data.user.role == Roles.USER) {
-          setPreferences({
-            roleView: data.user.role,
-          });
-        }
-        // if(data.user.role === 'admin'){
-        //   router.push('/admin');
-        //   return;
-        // }
+        setPreferences({
+          roleView: data.user.role,
+        });
         navigate("/home");
       },
       onError: (error: any) => {

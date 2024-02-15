@@ -272,8 +272,8 @@ export class BookingsService {
 
     const availability = [
       {
-        date: '2024-01-19T22:00:00.000Z',
-        periods: ['12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00'],
+        date: new Date().toUTCString(),
+        periods: ['12:00-13:00', '13:00-14:00', '14:00-15:00', '23:00-01:00'],
       },
       {
         date: '2024-01-20T22:00:00.000Z',

@@ -17,12 +17,13 @@ import UserBookings from "pages/user/bookings";
 import UserMessages from "pages/user/messages";
 import MeetPage from "pages/meets/Meet";
 import ProfileMeet from "pages/profile/meets/Meet/page";
+import About from "pages/about";
 
 const Router: FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/about" element={<Home />} />
+      <Route path="/about" element={<About />} />
       <Route path="/auth" element={<Home />} />
       <Route path="/auth/signin" element={<SignIn />} />
       <Route path="/auth/signup" element={<SignUp />} />

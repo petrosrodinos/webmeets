@@ -53,7 +53,10 @@ const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({ meetId, onPeriodSel
   const handlePeriodClick = (id: string, period: string) => {
     setSelectedPeriod(id);
     const date = availablePeriods?.find((period) => period.periods.find((item) => item.id == id));
-    const fullDate = formatDateAndTime(date?.date as string, period.split("-")[0]);
+    const fullDate = formatDateAndTime(
+      new Date(date?.date as string).toUTCString(),
+      period.split("-")[0]
+    );
     onPeriodSelected(fullDate);
   };
 

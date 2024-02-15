@@ -22,6 +22,7 @@ import { BookingSchema } from "validation-schemas/booking";
 import AvailabilityPeriods from "./AvailabilityPeriods";
 import Input from "components/ui/Input";
 import { authStore } from "store/authStore";
+import { MeetTypes } from "enums/meet";
 interface CreateBookingProps {
   isOpen: boolean;
   onClose: () => void;
@@ -44,7 +45,19 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
   });
 
   const handleCreateBooking = (data: any) => {
-    if (meet.type == "clients-location" && !data.location) {
+    console.log(data);
+    // return;
+    if (!data.date) {
+      toast({
+        title: "Date is required",
+        description: "Please select a date",
+        position: "top",
+        isClosable: true,
+        status: "error",
+      });
+      return;
+    }
+    if (meet.type == MeetTypes.CLIENTS_LOCATION && !data.location) {
       toast({
         title: "Location is required",
         description: "Please enter a location",
@@ -68,7 +81,7 @@ const CreateBooking: FC<CreateBookingProps> = ({ isOpen, onClose, meet }) => {
         ],
       },
       {
-        onSuccess: (data: any) => {
+        onSuccess: () => {
           toast({
             title: "Booking created",
             description: "Your booking was created successfully",

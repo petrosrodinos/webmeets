@@ -7,8 +7,8 @@ import {
   ModalHeader,
   ModalOverlay,
   Modal as ChakraModal,
-} from '@chakra-ui/react';
-import { FC } from 'react';
+} from "@chakra-ui/react";
+import { FC } from "react";
 
 type ModalProps = {
   children: React.ReactNode;
@@ -26,14 +26,14 @@ const Modal: FC<ModalProps> = ({
   title,
   children,
   actionTitle,
-  closeTitle = 'Cancel',
+  closeTitle = "Cancel",
   actionTitleLoading,
   onClose,
   onAction,
   ...rest
 }) => {
   return (
-    <ChakraModal size={'xl'} isOpen={isOpen} onClose={onClose} {...rest}>
+    <ChakraModal size={"xl"} isOpen={isOpen} onClose={onClose} {...rest}>
       <ModalOverlay />
       <ModalContent maxH="800px" overflow="auto">
         <ModalHeader>{title}</ModalHeader>
@@ -42,7 +42,14 @@ const Modal: FC<ModalProps> = ({
 
         <ModalFooter>
           {onAction && (
-            <Button isLoading={actionTitleLoading} bg="primary.500" textColor="white" mr={3} onClick={onAction}>
+            <Button
+              _hover={{ bg: "primary.600" }}
+              isLoading={actionTitleLoading}
+              bg="primary.500"
+              textColor="white"
+              mr={3}
+              onClick={onAction}
+            >
               {actionTitle}
             </Button>
           )}

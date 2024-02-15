@@ -1,5 +1,3 @@
-"use client";
-
 import { Stack, Button, useToast, Text, Box, HStack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -57,6 +55,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
       duration: 60,
       maxParticipants: 5,
       price: 0,
+      hours: [],
     },
     resolver: yupResolver(MeetSchema),
   });
@@ -104,6 +103,7 @@ const CreateMeet: FC<CreateMeetProps> = () => {
   }
 
   function onSubmit(values: any) {
+    console.log("values", values);
     const meetValues = {
       ...values,
       hours: values.hours.map((hour: any) => {

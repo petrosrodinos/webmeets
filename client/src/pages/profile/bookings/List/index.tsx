@@ -64,22 +64,21 @@ const ProfileList: FC<ProfileListProps> = ({ bookings, refetch }) => {
           </Thead>
           <Tbody>
             {bookings &&
-              bookings.map((booking) => {
+              bookings.map((booking, index) => {
                 return (
-                  <>
-                    <Tr
-                      _hover={{ cursor: "pointer", color: "blue.500" }}
-                      onClick={() => {
-                        handleBooking(booking);
-                      }}
-                    >
-                      <Td>{bookingName || booking.meet.name}</Td>
-                      <Td>{booking.meet.name}</Td>
-                      <Td>{booking.participants.length}</Td>
-                      <Td>{formatDate(booking.date)}</Td>
-                      <Td>{booking.status}</Td>
-                    </Tr>
-                  </>
+                  <Tr
+                    key={index}
+                    _hover={{ cursor: "pointer", color: "blue.500" }}
+                    onClick={() => {
+                      handleBooking(booking);
+                    }}
+                  >
+                    <Td>{bookingName || booking.meet.name}</Td>
+                    <Td>{booking.meet.name}</Td>
+                    <Td>{booking.participants.length}</Td>
+                    <Td>{formatDate(booking.date)}</Td>
+                    <Td>{booking.status}</Td>
+                  </Tr>
                 );
               })}
           </Tbody>
