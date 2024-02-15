@@ -1,33 +1,27 @@
+import { getAuthHeaders, getHeaders } from "./utils/utils";
 import axios from "axios";
-import { getAuthState } from "../store/authStore";
 import { formatProfile } from "./formatter/profile";
 import { formatMeet } from "./formatter/meet";
 import { API_URL } from "constants/api";
 import { Meet } from "interfaces/meet";
-import { CreateProfile, Profile } from "interfaces/profile";
+import { CreateProfile, Profile, UpdateProfile } from "interfaces/profile";
 
 export const createProfile = async (payload: CreateProfile) => {
   try {
-    const result = await axios.post(`${API_URL}profiles`, payload, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${getAuthState().token}`,
-      },
-    });
+    const result = await axios.post(`${API_URL}profiles`, payload, getHeaders());
     return result.data;
   } catch (err: any) {
     throw err?.response?.data;
   }
 };
 
-export const editProfile = async (payload: CreateProfile) => {
+export const editProfile = async (payload: UpdateProfile) => {
   try {
-    const result = await axios.patch(`${API_URL}profiles`, payload, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${getAuthState().token}`,
-      },
-    });
+    const result = await axios.patch(
+      `${API_URL}profiles/${payload.profileId}`,
+      payload,
+      getAuthHeaders()
+    );
     return result.data;
   } catch (err: any) {
     throw err?.response?.data;

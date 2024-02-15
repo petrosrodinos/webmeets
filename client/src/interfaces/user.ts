@@ -11,6 +11,7 @@ export interface SignUp {
   phone: string;
   avatar: string;
   isBusiness: boolean;
+  birthDate: string;
 }
 
 export interface User {
@@ -18,4 +19,14 @@ export interface User {
   firstname: string;
   lastname: string;
   avatar: string;
+}
+
+export interface EditUser {
+  userId: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  avatar: string;
+  birthDate: string;
 }

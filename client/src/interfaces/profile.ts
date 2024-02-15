@@ -1,4 +1,4 @@
-import { User } from './user';
+import { User } from "./user";
 
 export interface CreateProfile extends Address {
   country: string;
@@ -26,6 +26,20 @@ export interface Profile extends Address {
   phone?: string;
   email?: string;
   createdAt: string;
+}
+
+export interface UpdateProfile extends Address {
+  profileId: string;
+  country?: string;
+  categories?: string[];
+  bio?: string;
+  certificates?: { name: string; file: File }[];
+  isOnline?: boolean;
+  avatar?: File;
+  banner?: File;
+  phone?: string;
+  email?: string;
+  [key: string]: string | string[] | File | boolean | undefined | { name: string; file: File }[];
 }
 
 export interface Address {

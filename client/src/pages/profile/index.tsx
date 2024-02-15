@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Flex,
   Box,
@@ -24,14 +22,14 @@ import {
   editProfile as editUserProfile,
   getProfileById,
 } from "services/profile";
-import { useState, FC } from "react";
+import { useState, FC, useEffect } from "react";
 import TextArea from "components/ui/TextArea";
 import Modal from "components/ui/Modal";
 import TagSelector from "components/ui/TagSelector";
 import { SERVICE_CATEGORIES_ARRAY } from "constants/optionsData";
 import Select from "components/ui/Select";
 import { COUNTRIES } from "constants/optionsData";
-import { CreateProfile } from "interfaces/profile";
+import { CreateProfile, UpdateProfile } from "interfaces/profile";
 import { MultiFilePickerItemData } from "interfaces/components";
 import MultiFilePicker from "components/ui/MultiFilePicker";
 import { Roles } from "enums/roles";
@@ -39,11 +37,11 @@ import { authStore } from "store/authStore";
 import { useNavigate } from "react-router-dom";
 
 const Profile: FC = () => {
-  const navigate = useNavigate();
   const { profileId, updateProfile } = authStore((state) => state);
   const toast = useToast();
   const [isPhysical, setisPhysical] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -68,10 +66,33 @@ const Profile: FC = () => {
   });
 
   const { mutate: editProfileMutation, isLoading: isEditing } = useMutation(
-    (data: CreateProfile) => {
+    (data: UpdateProfile) => {
       return editUserProfile(data);
     }
   );
+
+  useEffect(() => {
+    console.log("errors", errors);
+  }, [errors]);
+
+  useEffect(() => {
+    reset({
+      country: profileData?.country,
+      categories: profileData?.categories,
+      bio: profileData?.bio,
+      isOnline: profileData?.isOnline,
+      avatar: profileData?.avatar,
+      banner: profileData?.banner,
+      certificates: profileData?.certificates,
+      phone: profileData?.phone,
+      email: profileData?.email,
+      address: profileData?.address,
+      city: profileData?.city,
+      area: profileData?.area,
+      postalCode: profileData?.postalCode,
+    });
+    console.log("profileData", profileData);
+  }, [profileData]);
 
   const onSubmit: SubmitHandler<any> = (values: CreateProfile) => {
     console.log(values);
@@ -255,6 +276,7 @@ const Profile: FC = () => {
                   onChange={handleCheckBoxChange}
                   colorScheme="teal"
                   size="lg"
+                  checked={true}
                 />
 
                 {isPhysical && (
@@ -296,7 +318,7 @@ const Profile: FC = () => {
                 )}
 
                 <Button
-                  isLoading={isLoading}
+                  isLoading={isLoading || isEditing}
                   type="submit"
                   loadingText="Submitting"
                   size="lg"
