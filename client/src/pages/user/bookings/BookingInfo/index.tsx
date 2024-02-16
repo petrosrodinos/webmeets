@@ -31,6 +31,7 @@ import { authStore } from "store/authStore";
 import { editParticipant } from "services/booking";
 import { useNavigate } from "react-router-dom";
 import AvailabilityPeriods from "pages/meets/Meet/CreateBooking/AvailabilityPeriods";
+import { useBooking } from "hooks/booking";
 
 interface BookingInfoProps {
   booking: Booking;
@@ -42,11 +43,13 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
   const navigate = useNavigate();
   const { userId } = authStore((state) => state);
   const toast = useToast();
+  const { isEditable } = useBooking(booking);
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const [participant, setParticipant] = useState<BookingParticipant>();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isEditDateModalOpen, setIsEditDateModalOpen] = useState(false);
   const [reason, setReason] = useState("");
+
   const { mutate: editBookingMutation, isLoading } = useMutation(editBooking);
   const { mutate: cancelBookingMutation, isLoading: isCanceling } = useMutation(cancelBooking);
   const { mutate: editParticipantMutation } = useMutation(editParticipant);
@@ -345,7 +348,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 aria-label="Find availability for this date"
                 icon={<MdEdit />}
                 onClick={toggleEditDateModal}
-                isDisabled={booking.status == BookingStatuses.CANCELLED}
+                isDisabled={!isEditable}
               />
             </HStack>
 
@@ -355,7 +358,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 placeholder="Enter location"
                 error={errors.location?.message}
                 register={register("location")}
-                disabled={booking.status == BookingStatuses.CANCELLED}
+                disabled={!isEditable}
               />
             )}
 
@@ -366,8 +369,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               register={register("notes")}
             />
 
-            {(booking.status != BookingStatuses.CANCELLED ||
-              new Date(booking.date) < new Date()) && (
+            {isEditable && (
               <Button
                 rightIcon={<FaCheck />}
                 isLoading={isLoading}
@@ -382,15 +384,15 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             )}
           </Box>
 
-          <Box
-            display="flex"
-            flexDirection="column"
-            rounded={"lg"}
-            bg={useColorModeValue("white", "gray.700")}
-            boxShadow={"lg"}
-            p={3}
-          >
-            {booking.status != BookingStatuses.CANCELLED && (
+          {isEditable && (
+            <Box
+              display="flex"
+              flexDirection="column"
+              rounded={"lg"}
+              bg={useColorModeValue("white", "gray.700")}
+              boxShadow={"lg"}
+              p={3}
+            >
               <>
                 <Button
                   onClick={handleJoinBooking}
@@ -405,8 +407,8 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                   Cancel
                 </Button>
               </>
-            )}
-          </Box>
+            </Box>
+          )}
         </Stack>
       </form>
     </>

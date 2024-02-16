@@ -8,12 +8,13 @@ import { Booking } from "interfaces/booking";
 import Modal from "components/ui/Modal";
 import { BookingCalendarEvent } from "interfaces/components";
 import BookingInfo from "./BookingInfo";
-import { BookingStatuses } from "enums/booking";
+import { useBooking } from "hooks/booking";
 
 const UserBookings: FC = () => {
   const { userId } = authStore();
   const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const { eventColor } = useBooking(selectedBooking);
 
   const {
     data: bookings,
@@ -40,12 +41,6 @@ const UserBookings: FC = () => {
       }
     },
   });
-
-  const eventColor = (booking: Booking) => {
-    if (booking.date > new Date().toUTCString()) return "green";
-    if (booking.date < new Date().toUTCString()) return "grey";
-    if (booking.status == BookingStatuses.CANCELLED) return "red";
-  };
 
   const handleDateClick = (arg: any) => {
     console.log(arg);

@@ -4,7 +4,7 @@ import Modal from "components/ui/Modal";
 import { BookingCalendarEvent } from "interfaces/components";
 import { Booking } from "interfaces/booking";
 import BookingInfo from "./BookingInfo";
-import { BookingStatuses } from "enums/booking";
+import { useBooking } from "hooks/booking";
 
 interface ProfileCalendarProps {
   bookings: Booking[];
@@ -14,6 +14,7 @@ interface ProfileCalendarProps {
 const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
   const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const { eventColor } = useBooking(selectedBooking);
 
   useEffect(() => {
     const events: BookingCalendarEvent[] = bookings?.map((booking) => {
@@ -25,19 +26,12 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
         startEditable: true,
         durationEditable: true,
         color: eventColor(booking),
-
         // start: booking.start,
         // end: booking.end,
       };
     });
     setEvents(events);
   }, [bookings]);
-
-  const eventColor = (booking: Booking) => {
-    if (booking.date > new Date().toUTCString()) return "green";
-    if (booking.date < new Date().toUTCString()) return "grey";
-    if (booking.status == BookingStatuses.CANCELLED) return "red";
-  };
 
   const handleDateClick = (arg: any) => {
     console.log(arg);
