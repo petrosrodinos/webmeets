@@ -22,22 +22,25 @@ export class ReviewsController {
   }
 
   @Get()
-  findAll() {
-    return this.reviewsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reviewsService.findOne(+id);
+  @ApiOkResponse({ type: Review })
+  findAll(@Query() query: any) {
+    return this.reviewsService.findAll(query);
   }
 
   @Patch(':id')
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Review })
   update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
-    return this.reviewsService.update(+id, updateReviewDto);
+    return this.reviewsService.update(id, updateReviewDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reviewsService.remove(+id);
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Review })
+  remove(@Param('id') id: string, @Req() req: Express.Request) {
+    const { userId } = req.user;
+    return this.reviewsService.remove(id, userId);
   }
 }

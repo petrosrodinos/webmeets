@@ -41,19 +41,27 @@ export class ReviewsService {
     return review.save();
   }
 
-  findAll() {
-    return `This action returns all reviews`;
+  findAll(query: any) {
+    const reviews: any = this.reviewModel.find({ ...query }).populate('userId', '-password -phone -email -birthDate');
+
+    if (!reviews || reviews?.length < 0) {
+      throw new NotFoundException('No reviews found');
+    }
+
+    return reviews;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} review`;
-  }
-
-  update(id: number, updateReviewDto: UpdateReviewDto) {
+  update(id: string, updateReviewDto: UpdateReviewDto) {
     return `This action updates a #${id} review`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  async remove(id: string, userId: string) {
+    const deletedReview = await this.reviewModel.findOneAndDelete({ _id: id, userId });
+
+    if (!deletedReview) {
+      throw new NotFoundException('Review not found');
+    }
+
+    return deletedReview;
   }
 }

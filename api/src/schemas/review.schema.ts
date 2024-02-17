@@ -17,6 +17,9 @@ export class Review {
   review: string;
 
   @Prop()
+  rating: number;
+
+  @Prop()
   answer: string;
 }
 
