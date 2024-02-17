@@ -11,6 +11,7 @@ import { UserModule } from './api/users/users.module';
 import { ProfileModule } from './api/profiles/profiles.module';
 import { MeetModule } from './api/meets/meets.module';
 import { BookingsModule } from './api/bookings/bookings.module';
+import { ReviewsModule } from './api/reviews/reviews.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { BookingsModule } from './api/bookings/bookings.module';
     BookingsModule,
     RoomsModule,
     StripeModule,
+    ReviewsModule,
   ],
   providers: [
     {
