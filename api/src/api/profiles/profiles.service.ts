@@ -8,6 +8,7 @@ import { S3Service } from 'src/aws-s3/aws-s3.service';
 import { Roles } from 'src/enums/roles';
 import { Meet } from 'src/schemas/meet.schema';
 import { CreateJwtService } from '../auth/jwt/jwt.service';
+import { MeetVisibilityTypes } from 'src/enums/meet';
 
 @Injectable()
 export class ProfileService {
@@ -128,7 +129,9 @@ export class ProfileService {
       if (!profile) {
         throw new NotFoundException('Could not find profile.');
       }
-      const meets = await this.meetModel.find({ profileId: id }).populate('userId profileId', '-password -email -phone');
+      const meets = await this.meetModel
+        .find({ profileId: id, visibility: MeetVisibilityTypes.PUBLIC })
+        .populate('userId profileId', '-password -email -phone');
 
       return {
         profile,

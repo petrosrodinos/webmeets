@@ -23,9 +23,9 @@ import { FiHome, FiTrendingUp, FiCompass, FiSettings } from "react-icons/fi";
 import { LinkItemProps, NavItemProps } from "..";
 import { Roles } from "../../../enums/roles";
 import { authStore } from "../../../store/authStore";
-import { navigationStore } from "../../../store/navigationStore";
+import { useSelectedLink } from "hooks/selectedLink";
 import { preferencesStore } from "../../../store/preferencesStore";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
@@ -84,7 +84,7 @@ const AvatarMenuItems = [
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const navigate = useNavigate();
   const { isLoggedIn, username, avatar, role, logOut } = authStore((state) => state);
-  const { selectedLink } = navigationStore((state) => state);
+  const { selectedLink } = useSelectedLink();
   const { colorMode, toggleColorMode } = useColorMode();
   const { setPreferences, roleView } = preferencesStore((state) => state);
 
@@ -135,14 +135,16 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           display={{ base: "none", md: "flex" }}
         >
           {HeaderLinks.map((link, index) => (
-            <NavLink
-              selected={selectedLink == link.id}
-              key={index}
-              path={link.path}
-              icon={link?.icon}
-            >
-              {link.name}
-            </NavLink>
+            <Link key={index} to={link.path}>
+              <NavLink
+                selected={selectedLink == link.id}
+                key={index}
+                icon={link?.icon}
+                path={link.path}
+              >
+                {link.name}
+              </NavLink>
+            </Link>
           ))}
         </HStack>
       </HStack>

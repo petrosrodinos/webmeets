@@ -309,16 +309,17 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               boxShadow={"lg"}
               p={3}
             >
-              <Button
-                mb={5}
-                onClick={handleJoinBooking}
-                isDisabled={!canJoin}
-                colorScheme="green"
-                variant="outline"
-                mt={5}
-              >
-                Join
-              </Button>
+              {booking.meet.type == MeetTypes.REMOTE && (
+                <Button
+                  onClick={handleJoinBooking}
+                  colorScheme="green"
+                  variant="outline"
+                  isDisabled={!canJoin}
+                  mt={5}
+                >
+                  Join
+                </Button>
+              )}
               <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
                 Cancel
               </Button>

@@ -22,9 +22,8 @@ import { useEffect, useState } from "react";
 import { CiChat2 } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { Roles } from "../../enums/roles";
-import { selectedLink } from "../../hooks/selectedLink";
+import { useSelectedLink } from "../../hooks/selectedLink";
 import { authStore } from "../../store/authStore";
-import { navigationStore } from "../../store/navigationStore";
 import { preferencesStore } from "../../store/preferencesStore";
 export interface LinkItemProps {
   name: string;
@@ -56,16 +55,12 @@ export const DrawerLinks: Array<LinkItemProps> = [
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const { selectedLink } = navigationStore();
+  const { selectedLink } = useSelectedLink();
   const { roleView } = preferencesStore();
   const [drawerLinks, setDrawerLinks] = useState<LinkItemProps[]>([]);
 
   useEffect(() => {
-    if (roleView === Roles.ADMIN) {
-      setDrawerLinks(DrawerLinks.filter((link) => link.role === Roles.ADMIN));
-    } else {
-      setDrawerLinks(DrawerLinks.filter((link) => link.role === Roles.USER));
-    }
+    setDrawerLinks(DrawerLinks.filter((link) => link.role === roleView));
   }, [roleView]);
 
   return (

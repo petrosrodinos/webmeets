@@ -1,13 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { DrawerLinks } from "../components/Navigation";
 import { HeaderLinks } from "../components/Navigation/NavigationBar";
-import { navigationStore } from "../store/navigationStore";
+// import { navigationStore } from "../store/navigationStore";
 
-export const selectedLink = () => {
+export const useSelectedLink = () => {
+  const [selectedLink, setSelectedLink] = useState<string>("");
   const pathname = window.location.pathname;
   const searchParams = useSearchParams();
-  const { setSelectedLink } = navigationStore((state) => state);
+  // const { setSelectedLink } = navigationStore((state) => state);
   const allLinks = [...DrawerLinks, ...HeaderLinks];
   useEffect(() => {
     const selectedLinkId = allLinks.findIndex((link) => link.path === pathname);
@@ -16,4 +17,8 @@ export const selectedLink = () => {
       return;
     }
   }, [pathname, searchParams]);
+
+  return {
+    selectedLink,
+  };
 };
