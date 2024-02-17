@@ -21,23 +21,19 @@ export class DailyService {
         `${this.DAILY_DOMAIN}rooms`,
         {
           properties: {
-            enable_chat: false,
-            enable_screenshare: false,
-            // enable_knocking: false,
+            enable_chat: true,
+            enable_screenshare: true,
             start_video_off: true,
             start_audio_off: true,
-            // owner_only_broadcast: true,
-            // enable_recording: false,
-            // enable_grid_view: false,
+            ...payload,
           },
           privacy: 'public',
         },
         this.headers,
       );
-
       return response.data;
     } catch (error) {
-      return error;
+      throw new Error(error);
     }
   }
 

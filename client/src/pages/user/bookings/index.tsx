@@ -31,10 +31,10 @@ const UserBookings: FC = () => {
             resourceId: booking.id,
             startEditable: false,
             durationEditable: false,
-            className: "event-item",
             color: eventColor(booking),
-            // start: booking.start,
-            // end: booking.end,
+            classNames: ["event-item"],
+            // start: "2023-18-02T10:00:00",
+            // end: "2023-18-02T11:00:00",
           };
         });
         setEvents(events);

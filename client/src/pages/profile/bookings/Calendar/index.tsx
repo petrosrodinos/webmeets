@@ -26,6 +26,7 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
         startEditable: true,
         durationEditable: true,
         color: eventColor(booking),
+        classNames: ["event-item"],
         // start: booking.start,
         // end: booking.end,
       };

@@ -25,7 +25,6 @@ import { MeetTypes } from "enums/meet";
 import { FaCheck } from "react-icons/fa6";
 import Modal from "components/ui/Modal";
 import { Roles } from "enums/roles";
-import { BookingStatuses } from "enums/booking";
 import { MdEdit } from "react-icons/md";
 import { authStore } from "store/authStore";
 import { editParticipant } from "services/booking";
@@ -43,7 +42,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
   const navigate = useNavigate();
   const { userId } = authStore((state) => state);
   const toast = useToast();
-  const { isEditable } = useBooking(booking);
+  const { isEditable, canJoin } = useBooking(booking);
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const [participant, setParticipant] = useState<BookingParticipant>();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -95,7 +94,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
       },
       {
         label: "Notes",
-        value: booking.participants[0].notes || "",
+        value: booking.participants[0].notes || "-",
       },
       {
         label: "Phone Number",
@@ -103,24 +102,9 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         type: MeetTypes.IN_PERSON,
       },
       {
-        label: "City",
-        value: booking?.meet?.city || "NOT-SET",
-        type: MeetTypes.IN_PERSON,
-      },
-      {
         label: "Address",
-        value: booking?.meet?.address || "NOT-SET",
+        value: `${booking?.meet?.city} ${booking?.meet?.address}, ${booking?.meet?.postalCode}`,
         type: MeetTypes.IN_PERSON,
-      },
-      {
-        label: "Postal Code",
-        value: booking?.meet?.postalCode || "NOT-SET",
-        type: MeetTypes.IN_PERSON,
-      },
-      {
-        label: "Meet URL",
-        value: "http:someurl",
-        type: MeetTypes.REMOTE,
       },
       {
         label: "Location",
@@ -363,7 +347,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             )}
 
             <TextArea
-              disabled={booking.status == BookingStatuses.CANCELLED}
+              disabled={!isEditable}
               label="Notes"
               placeholder="Add some notes"
               register={register("notes")}
@@ -384,7 +368,30 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             )}
           </Box>
 
-          {isEditable && (
+          {booking.activity.length > 0 && (
+            <>
+              <Text fontWeight="bold">Activity</Text>
+              <Box
+                display="flex"
+                flexDirection="column"
+                rounded={"lg"}
+                bg={useColorModeValue("white", "gray.700")}
+                boxShadow={"lg"}
+                p={3}
+              >
+                {booking?.activity?.map((activity, index) => (
+                  <HStack key={index}>
+                    <div>
+                      Booking cancelled by {activity.role == Roles.ADMIN ? "Creator " : "User "}
+                      because {activity.description} on {formatDate(activity.createdAt, true)}
+                    </div>
+                  </HStack>
+                ))}
+              </Box>
+            </>
+          )}
+
+          {isEditable && canJoin && (
             <Box
               display="flex"
               flexDirection="column"
@@ -396,14 +403,20 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               <>
                 <Button
                   onClick={handleJoinBooking}
-                  isLoading={isLoading}
                   colorScheme="green"
                   variant="outline"
+                  isDisabled={!canJoin}
                   mt={5}
                 >
                   Join
                 </Button>
-                <Button mt={5} colorScheme="red" variant="outline" onClick={toggleCancelModal}>
+                <Button
+                  isDisabled={!isEditable}
+                  mt={5}
+                  colorScheme="red"
+                  variant="outline"
+                  onClick={toggleCancelModal}
+                >
                   Cancel
                 </Button>
               </>

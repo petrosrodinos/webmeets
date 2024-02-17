@@ -38,7 +38,7 @@ interface BookingInfoProps {
 
 const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) => {
   const toast = useToast();
-  const { isEditable } = useBooking(booking);
+  const { isEditable, canJoin } = useBooking(booking);
   const [bookingInfo, setBookingInfo] = useState<BookingInfoItem[]>();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isEditDateModalOpen, setIsEditDateModalOpen] = useState(false);
@@ -62,13 +62,21 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         value: booking.meet.name,
       },
       {
+        label: "Date",
+        value: formatDate(booking?.date, true) || "NOT-SET",
+      },
+      {
         label: "Duration",
         value: String(booking?.meet?.duration) || "NOT-SET",
       },
       {
-        label: "Meet URL",
-        value: "http:someurl",
-        type: MeetTypes.REMOTE,
+        label: "Price",
+        value: `${booking?.meet?.price}€`,
+      },
+      {
+        label: "Address",
+        value: `${booking?.meet?.city} ${booking?.meet?.address}, ${booking?.meet?.postalCode}`,
+        type: MeetTypes.IN_PERSON,
       },
       {
         label: "Location",
@@ -284,7 +292,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                   <HStack key={index}>
                     <Text>
                       Booking cancelled by {activity.role == Roles.ADMIN ? "Creator " : "User "}
-                      because {activity.description} at {formatDate(activity.createdAt)}
+                      because {activity.description} on {formatDate(activity.createdAt, true)}
                     </Text>
                   </HStack>
                 ))}
@@ -292,7 +300,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             </>
           )}
 
-          {isEditable && (
+          {isEditable && canJoin && (
             <Box
               display="flex"
               flexDirection="column"
@@ -304,7 +312,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               <Button
                 mb={5}
                 onClick={handleJoinBooking}
-                isLoading={isLoading}
+                isDisabled={!canJoin}
                 colorScheme="green"
                 variant="outline"
                 mt={5}

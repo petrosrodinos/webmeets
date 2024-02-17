@@ -8,9 +8,9 @@ export interface FilePicker {
   file: File;
 }
 
-export type FilePickerAccept = 'image/*' | '.pdf' | '.doc' | '.docx';
+export type FilePickerAccept = "image/*" | ".pdf" | ".doc" | ".docx";
 
-export type PreviewType = 'avatar' | 'banner' | 'pdf';
+export type PreviewType = "avatar" | "banner" | "pdf";
 
 export interface MultiFilePickerItemData {
   name: string;
@@ -33,19 +33,13 @@ export interface BookingCalendarEvent {
   resourceId?: string;
   startEditable?: boolean;
   durationEditable?: boolean;
-  date: Date;
+  date?: Date;
   className?: string;
-  start?: Date;
+  start?: any;
   color?: string;
-  end?: Date;
+  end?: any;
   allDay?: boolean;
-  extendedProps?: {
-    status: string;
-    profileId: string;
-    meetId: string;
-    notes: string;
-    participants: number;
-  };
+  extendedProps?: any;
   backgroundColor?: string;
   borderColor?: string;
   textColor?: string;

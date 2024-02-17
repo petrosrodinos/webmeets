@@ -94,11 +94,7 @@ export const bookingAvailability = async (query: BookingAvailability): Promise<B
 export const joinBooking = async (payload: { bookingId: string }): Promise<any> => {
   try {
     const { bookingId } = payload;
-    const result = await axios.post(
-      `${API_URL}bookings/${bookingId}/join-room`,
-      {},
-      getAuthHeaders()
-    );
+    const result = await axios.post(`${API_URL}bookings/${bookingId}/join`, {}, getAuthHeaders());
     const formattedBooking = formatBooking(result.data.booking);
     return {
       booking: formattedBooking,

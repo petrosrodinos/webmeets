@@ -151,10 +151,10 @@ export class BookingsService {
     return booking.populate('userId meetId profileId', '-password');
   }
 
-  async joinRoom(bookingId: string, req: Express.Request) {
+  async join(bookingId: string, req: Express.Request) {
     const { userId, profileId } = req.user;
     let room: any;
-    const booking = await this.bookingModel.findById(bookingId).populate('userId meetId profileId', '-password');
+    const booking: any = await this.bookingModel.findById(bookingId).populate('userId meetId profileId', '-password');
     if (!booking) {
       throw new NotFoundException('Could not find booking.');
     }
@@ -171,14 +171,23 @@ export class BookingsService {
       throw new ForbiddenException('You are not allowed to enter this booking.');
     }
 
-    if (booking.roomName) {
-      room = await this.dailyService.getRoom(booking.roomName);
-    } else {
-      if (profileId) {
-        room = await this.dailyService.createRoom({});
-        booking.roomName = room.name;
-        await booking.save();
+    try {
+      if (booking.roomName) {
+        room = await this.dailyService.getRoom(booking.roomName);
+      } else {
+        if (profileId) {
+          const roomSettings = {
+            max_participants: booking.meetId.maxParticipants,
+            nbf: new Date(booking.date).getTime(),
+            exp: new Date(booking.date).getTime() + booking.meetId.duration * 6000,
+          };
+          room = await this.dailyService.createRoom(roomSettings);
+          booking.roomName = room.name;
+          await booking.save();
+        }
       }
+    } catch (error) {
+      throw new Error(error);
     }
 
     return {

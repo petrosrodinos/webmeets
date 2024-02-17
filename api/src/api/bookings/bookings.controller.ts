@@ -96,9 +96,9 @@ export class BookingsController {
   @ApiOkResponse({ type: Booking })
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
-  @Post(':id/join-room')
+  @Post(':id/join')
   joinRoom(@Param('id') id: string, @Req() req: Express.Request) {
-    return this.bookingsService.joinRoom(id, req);
+    return this.bookingsService.join(id, req);
   }
 
   @ApiOkResponse({ type: Booking })
