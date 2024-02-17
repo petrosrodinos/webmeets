@@ -14,6 +14,9 @@ export class MeetService {
     private s3Service: S3Service,
   ) {}
   async create(userId: string, profileId: string, createMeetDto: CreateMeetDto, files: Express.Multer.File[]) {
+    if (!profileId) {
+      throw new ForbiddenException('You have to create a profile to create a meet.');
+    }
     try {
       const images = [];
       for (let i = 0; i < files?.length; i++) {
@@ -80,9 +83,9 @@ export class MeetService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string, profileId: string) {
     try {
-      const deletedMeet = await this.meetModel.findOneAndDelete({ _id: id });
+      const deletedMeet = await this.meetModel.findOneAndDelete({ _id: id, profileId });
       if (!deletedMeet) {
         throw new NotFoundException('Could not find meet.');
       }

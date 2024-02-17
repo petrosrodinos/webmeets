@@ -64,8 +64,9 @@ export class MeetController {
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: Meet })
-  remove(@Param('id') id: string) {
-    return this.meetService.remove(id);
+  remove(@Param('id') id: string, @Req() req: Express.Request) {
+    const { profileId } = req.user;
+    return this.meetService.remove(id, profileId);
   }
 
   @UseGuards(JwtGuard)
