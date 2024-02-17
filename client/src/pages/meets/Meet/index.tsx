@@ -219,7 +219,7 @@ const MeetPage: FC = () => {
                 )}
               </Stack>
             </VStack>
-            <Reviews />
+            <Reviews meet={meet} />
           </Stack>
         </>
       )}

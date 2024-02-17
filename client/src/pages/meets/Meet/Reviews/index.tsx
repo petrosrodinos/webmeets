@@ -8,11 +8,16 @@ import { CreateReview, Review as ReviewInt } from "interfaces/review";
 import TextArea from "components/ui/TextArea";
 import Rating from "components/ui/Rating";
 import { authStore } from "store/authStore";
+import { Meet } from "interfaces/meet";
 
-const Reviews: FC = () => {
+interface ReviewsProps {
+  meet: Meet;
+}
+
+const Reviews: FC<ReviewsProps> = ({ meet }) => {
   const { id } = useParams();
   const toast = useToast();
-  const { isLoggedIn } = authStore();
+  const { isLoggedIn, profileId } = authStore();
 
   const [review, setReview] = useState<CreateReview>({
     meetId: id as string,
@@ -75,7 +80,7 @@ const Reviews: FC = () => {
           <Review key={index} review={review} />
         ))}
       </List>
-      {isLoggedIn && (
+      {isLoggedIn && profileId != meet?.profile?.id && (
         <VStack alignItems={"flex-start"} width={"100%"}>
           <Text position={"relative"} top={4}>
             Rating
@@ -85,6 +90,7 @@ const Reviews: FC = () => {
             onChange={handleReviewChange}
             placeholder="Tell us your opinion"
             label="Your review"
+            value={review.review}
           ></TextArea>
           <Button
             isLoading={isLoading}
