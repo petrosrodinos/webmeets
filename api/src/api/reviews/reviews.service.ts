@@ -1,11 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Booking } from 'src/schemas/booking.schema';
+import { Model, Error } from 'mongoose';
+import { Review } from 'src/schemas/review.schema';
 
 @Injectable()
 export class ReviewsService {
-  create(createReviewDto: CreateReviewDto) {
-    return 'This action adds a new review';
+  constructor(
+    @InjectModel(Review.name)
+    private reviewModel: Model<Review>,
+    @InjectModel(Booking.name)
+    private bookingModel: Model<Booking>,
+  ) {}
+
+  create(createReviewDto: CreateReviewDto, userId: string) {
+    const review = new this.reviewModel({
+      ...createReviewDto,
+      userId,
+    });
+
+    return review.save();
   }
 
   findAll() {
