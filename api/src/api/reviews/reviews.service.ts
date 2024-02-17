@@ -41,8 +41,11 @@ export class ReviewsService {
     return review.save();
   }
 
-  findAll(query: any) {
-    const reviews: any = this.reviewModel.find({ ...query }).populate('userId', '-password -phone -email -birthDate');
+  findMeetReviews(meetId: string) {
+    const reviews: any = this.reviewModel
+      .find({ meetId })
+      .populate('userId', '-password -phone -email -birthDate')
+      .sort({ createdAt: -1 });
 
     if (!reviews || reviews?.length < 0) {
       throw new NotFoundException('No reviews found');

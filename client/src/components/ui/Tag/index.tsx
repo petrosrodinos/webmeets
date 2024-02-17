@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { Tag as ChakraTag, TagCloseButton, TagLabel } from '@chakra-ui/react';
+import { FC } from "react";
+import { Tag as ChakraTag, TagCloseButton, TagLabel } from "@chakra-ui/react";
 
 type TagProps = {
   value: string;
@@ -11,7 +11,16 @@ type TagProps = {
   props?: any;
 } & React.ComponentProps<typeof ChakraTag>;
 
-const Tag: FC<TagProps> = ({ value, onClose, onTagClick, style, active = false, id, props, ...rest }) => {
+const Tag: FC<TagProps> = ({
+  value,
+  onClose,
+  onTagClick,
+  style,
+  active = false,
+  id,
+  props,
+  ...rest
+}) => {
   const handleClose = () => {
     onClose?.(value);
   };
@@ -24,15 +33,15 @@ const Tag: FC<TagProps> = ({ value, onClose, onTagClick, style, active = false, 
       <ChakraTag
         style={{
           ...style,
-          backgroundColor: active ? '#ea4896' : '',
-          cursor: !!handleTagClick ? 'pointer' : 'default',
-          color: active ? 'white' : '',
+          backgroundColor: active ? "#ea4896" : "",
+          cursor: !!onTagClick ? "pointer" : "default",
+          color: active ? "white" : "",
         }}
-        _hover={!!handleTagClick ? { backgroundColor: '#ea4896', color: 'white' } : {}}
+        _hover={!!onTagClick ? { backgroundColor: "#ea4896", color: "white" } : {}}
         onClick={handleTagClick}
         size="lg"
         borderRadius="full"
-        variant={!!onTagClick ? 'outline' : 'solid'}
+        variant={!!onTagClick ? "outline" : "solid"}
         colorScheme="primary"
         {...props}
         {...rest}

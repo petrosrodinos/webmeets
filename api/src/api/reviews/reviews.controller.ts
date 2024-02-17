@@ -21,10 +21,10 @@ export class ReviewsController {
     return this.reviewsService.create(createReviewDto, userId);
   }
 
-  @Get()
+  @Get(':meetId')
   @ApiOkResponse({ type: Review })
-  findAll(@Query() query: any) {
-    return this.reviewsService.findAll(query);
+  findAll(@Param('meetId') meetId: string) {
+    return this.reviewsService.findMeetReviews(meetId);
   }
 
   @Patch(':id')
