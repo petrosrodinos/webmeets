@@ -241,7 +241,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 const NavLink = ({ icon, path, selected, children, ...rest }: NavItemProps) => {
   return (
     <Box
-      as="a"
       px={2}
       py={1}
       rounded={"md"}
@@ -249,6 +248,7 @@ const NavLink = ({ icon, path, selected, children, ...rest }: NavItemProps) => {
       _hover={{
         textDecoration: "none",
         bg: "primary.400",
+        color: "white",
       }}
       href={path}
       {...rest}
