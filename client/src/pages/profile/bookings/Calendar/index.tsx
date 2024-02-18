@@ -9,9 +9,10 @@ import { useBooking } from "hooks/booking";
 interface ProfileCalendarProps {
   bookings: Booking[];
   refetch: any;
+  onDateClick: (date: string) => void;
 }
 
-const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
+const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch, onDateClick }) => {
   const [events, setEvents] = useState<BookingCalendarEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const { eventColor } = useBooking(selectedBooking);
@@ -35,7 +36,7 @@ const ProfileCalendar: FC<ProfileCalendarProps> = ({ bookings, refetch }) => {
   }, [bookings]);
 
   const handleDateClick = (arg: any) => {
-    console.log(arg);
+    onDateClick(arg.dateStr);
   };
 
   const handleEventClick = (arg: any) => {

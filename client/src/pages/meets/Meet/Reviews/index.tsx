@@ -1,4 +1,14 @@
-import { Button, Card, List, VStack, useColorModeValue, Text, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Card,
+  List,
+  VStack,
+  useColorModeValue,
+  Text,
+  useToast,
+  Alert,
+  AlertIcon,
+} from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { getReviews, createReview, deleteReview } from "services/reviews";
 import { useQuery, useMutation } from "react-query";
@@ -110,6 +120,12 @@ const Reviews: FC<ReviewsProps> = ({ meet }) => {
           />
         ))}
       </List>
+      {reviews?.length == 0 && (
+        <Alert mt={5} status="warning">
+          <AlertIcon />
+          There are no reviews yet.
+        </Alert>
+      )}
       {isLoggedIn && profileId != meet?.profile?.id && (
         <VStack alignItems={"flex-start"} width={"100%"}>
           <Text position={"relative"} top={4}>

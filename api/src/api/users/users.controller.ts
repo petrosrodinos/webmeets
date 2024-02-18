@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, UseGuards, Req } from '@nestjs/common';
+import { Body, Controller, Get, Patch, UseGuards, Req, Query, ForbiddenException, Param } from '@nestjs/common';
 import { User } from 'src/schemas/user.schema';
 import { JwtGuard } from '../auth/guard';
 import { UpdateUserDto } from './dto';
@@ -6,15 +6,31 @@ import { UserService } from './users.service';
 import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(JwtGuard)
-@Controller('user')
+@Controller('users')
 @ApiTags('User')
 @ApiOkResponse({ type: User })
 @ApiBearerAuth()
 export class UserController {
   constructor(private userService: UserService) {}
-  @Get('me')
-  getMe(@Req() req: Express.Request) {
+
+  @Get('')
+  @ApiOkResponse({ type: [User] })
+  @ApiBearerAuth()
+  findAll(@Req() req: Express.Request, @Query() query: any) {
+    const { profileId } = req.user;
+    if (!profileId) {
+      return new ForbiddenException('You are not allowed to access this resource');
+    }
+    return this.userService.findAll(query);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string, @Req() req: Express.Request) {
     const userId = req.user.userId;
+
+    if (id !== userId) {
+      return new ForbiddenException('You are not allowed to access this resource');
+    }
 
     return this.userService.findOne(userId);
   }

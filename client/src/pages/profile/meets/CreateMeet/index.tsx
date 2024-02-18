@@ -118,9 +118,6 @@ const CreateMeet: FC<CreateMeetProps> = () => {
         };
       }),
     };
-    console.log("final", meetValues);
-
-    // return;
 
     createMeetMutation(meetValues, {
       onSuccess: (data) => {
@@ -190,11 +187,8 @@ const CreateMeet: FC<CreateMeetProps> = () => {
               leftIcon={<IoIosArrowBack />}
               width={100}
               onClick={() => setActiveStep(activeStep - 1)}
-              bg={"secondary.900"}
-              color={"white"}
-              _hover={{
-                bg: "primary.600",
-              }}
+              colorScheme={"primary"}
+              variant={"outline"}
             >
               Back
             </Button>

@@ -11,6 +11,15 @@ export class UserService {
     private userModel: Model<User>,
   ) {}
 
+  async findAll(query: any = {}) {
+    try {
+      let users = await this.userModel.find(query, { password: 0 });
+      return users;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
   async findOne(id: string) {
     try {
       let user = (await this.userModel.findById(id, { password: 0 })).populate('profileId');
@@ -31,18 +40,6 @@ export class UserService {
       }
       delete updatedUser.password;
       return updatedUser;
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
-  }
-
-  async findUserByField(field: string) {
-    try {
-      let user = await this.userModel.findOne({ field });
-      if (!user) {
-        throw new NotFoundException('Could not find User.');
-      }
-      return user;
     } catch (error) {
       throw new NotFoundException(error.message);
     }
