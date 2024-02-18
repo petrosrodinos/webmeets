@@ -15,11 +15,13 @@ import {
   Button,
   HStack,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Step1 from "./Step1";
 import CreateBookingForm from "pages/meets/Meet/CreateBooking/CreateBookingForm";
 import { Meet } from "interfaces/meet";
+import { MeetTypes } from "enums/meet";
 
 interface CreateProfileBookingProps {
   date?: string;
@@ -27,6 +29,7 @@ interface CreateProfileBookingProps {
 }
 
 const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) => {
+  const toast = useToast();
   const [isLargerThan470] = useMediaQuery("(min-width: 470px)");
   const [participants, setParticipants] = useState<string[]>([]);
   const [selectedMeet, setSelectedMeet] = useState<Meet>();
@@ -46,7 +49,7 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) 
     {
       title: "Info",
       description: "Booking Info",
-      step: ({ meet }: any) => <CreateBookingForm meet={meet} onClose={onClose} />,
+      step: (meet: Meet) => <CreateBookingForm meet={meet} onClose={onClose} />,
     },
   ];
 
@@ -68,8 +71,16 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) 
   };
 
   async function handleNext() {
-    setActiveStep(activeStep + 1);
-    if (selectedMeet && participants.length > 1 && activeStep === 1) {
+    if (selectedMeet && participants.length >= 1 && activeStep === 1) {
+      setActiveStep(activeStep + 1);
+    } else {
+      toast({
+        title: "Please select a meet and at least 1 participant",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
     }
   }
 
@@ -102,7 +113,7 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) 
         ))}
       </Stepper>
       <Stack mx={"auto"} width="100%" spacing={4}>
-        {steps[activeStep - 1].step(selectedMeet || {})}
+        {steps[activeStep - 1].step(selectedMeet as Meet)}
 
         <HStack alignItems="left">
           {activeStep > 1 && (
