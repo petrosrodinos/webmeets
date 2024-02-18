@@ -1,6 +1,6 @@
 import { Button, Card, List, VStack, useColorModeValue, Text, useToast } from "@chakra-ui/react";
 import { FC, useState } from "react";
-import { getReviews, createReview } from "services/reviews";
+import { getReviews, createReview, deleteReview } from "services/reviews";
 import { useQuery, useMutation } from "react-query";
 import { useParams } from "react-router-dom";
 import Review from "./Review";
@@ -28,6 +28,7 @@ const Reviews: FC<ReviewsProps> = ({ meet }) => {
   const { data: reviews, refetch } = useQuery(["reviews", id], () => getReviews(id as string));
 
   const { mutate: createReviewMutation, isLoading } = useMutation(createReview);
+  const { mutate: deleteReviewMutation, isLoading: isDeleting } = useMutation(deleteReview);
 
   const handleCreateReview = () => {
     if (review.rating === 0 || review.review === "") {
@@ -64,6 +65,30 @@ const Reviews: FC<ReviewsProps> = ({ meet }) => {
     });
   };
 
+  const handleReviewDelete = (id: string) => {
+    deleteReviewMutation(id, {
+      onSuccess: () => {
+        refetch();
+        toast({
+          title: "Review deleted",
+          description: "Your review has been deleted successfully",
+          position: "top",
+          isClosable: true,
+          status: "success",
+        });
+      },
+      onError: (error: any) => {
+        toast({
+          title: error.message,
+          description: "Could not delete review. Please try later.",
+          position: "top",
+          isClosable: true,
+          status: "error",
+        });
+      },
+    });
+  };
+
   const handleRatingChange = (value: number) => {
     setReview({ ...review, rating: value });
   };
@@ -77,7 +102,12 @@ const Reviews: FC<ReviewsProps> = ({ meet }) => {
     <Card alignSelf={"flex-start"} width={"100%"} bg={useColorModeValue("white", "gray.700")} p={3}>
       <List pr={2} maxH={"500px"} overflowX={"auto"} width={"100%"} spacing={3}>
         {reviews?.map((review: ReviewInt, index: number) => (
-          <Review key={index} review={review} />
+          <Review
+            onDelete={handleReviewDelete}
+            key={index}
+            review={review}
+            isDeleting={isDeleting}
+          />
         ))}
       </List>
       {isLoggedIn && profileId != meet?.profile?.id && (

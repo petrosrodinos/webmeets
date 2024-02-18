@@ -23,3 +23,12 @@ export const getReviews = async (meetId: string): Promise<Review[]> => {
     throw err?.response?.data;
   }
 };
+
+export const deleteReview = async (id: string) => {
+  try {
+    const result = await axios.delete(`${API_URL}reviews/${id}`, getAuthHeaders());
+    return result.data;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};

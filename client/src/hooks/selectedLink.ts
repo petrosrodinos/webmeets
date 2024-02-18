@@ -11,7 +11,7 @@ export const useSelectedLink = () => {
   // const { setSelectedLink } = navigationStore((state) => state);
   const allLinks = [...DrawerLinks, ...HeaderLinks];
   useEffect(() => {
-    const selectedLinkId = allLinks.findIndex((link) => pathname.includes(link.path));
+    const selectedLinkId = allLinks.findIndex((link) => pathname == link.path);
     if (selectedLinkId > -1) {
       setSelectedLink((selectedLinkId + 1).toString());
       return;
