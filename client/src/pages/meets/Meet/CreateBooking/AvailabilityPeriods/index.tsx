@@ -3,7 +3,7 @@ import { BookingAvailability, BookingPeriod } from "interfaces/booking";
 import { formatDate, formatDateAndTime } from "lib/date";
 import { bookingAvailability } from "services/booking";
 import { Alert, AlertIcon, SimpleGrid, Text, useToast } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import { useMutation } from "react-query";
 import Spinner from "components/ui/Spinner";
@@ -12,13 +12,18 @@ import "./style.css";
 interface AvailabilityPeriodsProps {
   meetId: string;
   style?: any;
+  selectedDate?: string;
   onPeriodSelected: (date: string) => void;
 }
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({ meetId, onPeriodSelected }) => {
+const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({
+  meetId,
+  selectedDate,
+  onPeriodSelected,
+}) => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>("");
   const [date, setDate] = useState<Value>(new Date());
   const [availablePeriods, setAvailablePeriods] = useState<BookingPeriod[]>();
@@ -27,13 +32,39 @@ const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({ meetId, onPeriodSel
   const { mutate: bookingAvailabilityMutation, isLoading: isFindingAvailability } =
     useMutation(bookingAvailability);
 
+  useEffect(() => {
+    if (selectedDate) {
+      const newDate = new Date(selectedDate);
+      setDate(newDate);
+      const payload = {
+        from: newDate.toISOString(),
+        to: newDate.toISOString(),
+        meetId,
+      };
+      fetchAvailability(payload);
+    }
+  }, [selectedDate]);
+
   const handleDateChange = (date: any) => {
     setDate(date);
-    const payload: BookingAvailability = {
-      from: date[0].toISOString(),
-      to: date[1].toISOString(),
-      meetId,
-    };
+    let payload: BookingAvailability;
+    if (date.length == undefined) {
+      payload = {
+        from: new Date(date).toISOString(),
+        to: new Date(date).toISOString(),
+        meetId,
+      };
+    } else {
+      payload = {
+        from: date[0].toISOString(),
+        to: date[1].toISOString(),
+        meetId,
+      };
+    }
+    fetchAvailability(payload);
+  };
+
+  const fetchAvailability = async (payload: BookingAvailability) => {
     bookingAvailabilityMutation(payload, {
       onSuccess: (data: any) => {
         setAvailablePeriods(data);
@@ -62,14 +93,24 @@ const AvailabilityPeriods: FC<AvailabilityPeriodsProps> = ({ meetId, onPeriodSel
 
   return (
     <div style={{ width: "100%" }}>
-      <Calendar
-        minDate={new Date()}
-        className="date-picker"
-        selectRange
-        view="month"
-        onChange={handleDateChange}
-        value={date}
-      />
+      {selectedDate ? (
+        <Calendar
+          minDate={new Date()}
+          className="date-picker"
+          view="month"
+          onChange={handleDateChange}
+          value={date}
+        />
+      ) : (
+        <Calendar
+          minDate={new Date()}
+          className="date-picker"
+          view="month"
+          selectRange
+          onChange={handleDateChange}
+          value={date}
+        />
+      )}
       <Spinner mt={5} loading={isFindingAvailability} />
       {availablePeriods?.map((period: BookingPeriod, index: number) => {
         return (

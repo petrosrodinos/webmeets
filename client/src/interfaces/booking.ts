@@ -1,14 +1,16 @@
-import { Meet } from './meet';
-import { Profile } from './profile';
-import { User } from './user';
-import { MeetTypes } from 'enums/meet';
-import { Roles } from 'enums/roles';
+import { BookingActivityStatuses, BookingStatuses } from "enums/booking";
+import { Meet } from "./meet";
+import { Profile } from "./profile";
+import { User } from "./user";
+import { MeetTypes } from "enums/meet";
+import { Roles } from "enums/roles";
 
 export interface NewBooking {
   profileId: string;
   meetId: string;
   date: Date;
   location?: string;
+  notes?: string;
   participants: {
     userId: string;
     notes: string;
@@ -21,7 +23,8 @@ export interface Booking {
   meet: Meet;
   location?: string;
   date: string;
-  status: 'pending' | 'accepted' | 'rejected' | 'cancelled' | 'completed';
+  notes?: string;
+  status: BookingStatuses;
   participants: BookingParticipant[];
   activity: BookingActivity[];
   createdAt: string;
@@ -29,7 +32,7 @@ export interface Booking {
 
 export interface BookingActivity {
   id: string;
-  type: 'cancelled' | 'accepted' | 'rejected';
+  type: BookingActivityStatuses;
   description: string;
   role: Roles;
   user: User;

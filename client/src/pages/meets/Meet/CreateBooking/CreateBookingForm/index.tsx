@@ -14,10 +14,17 @@ import { Meet } from "interfaces/meet";
 
 interface CreateBookingFormProps {
   meet: Meet;
-  onClose: () => void;
+  participants?: string[];
+  selectedDate?: string;
+  onClose?: () => void;
 }
 
-const CreateBookingForm: FC<CreateBookingFormProps> = ({ meet, onClose }) => {
+const CreateBookingForm: FC<CreateBookingFormProps> = ({
+  meet,
+  participants,
+  selectedDate,
+  onClose,
+}) => {
   const toast = useToast();
   const { userId } = authStore((state) => state);
 
@@ -103,6 +110,7 @@ const CreateBookingForm: FC<CreateBookingFormProps> = ({ meet, onClose }) => {
           <Text>Select a date to find you a booking</Text>
 
           <AvailabilityPeriods
+            selectedDate={selectedDate}
             onPeriodSelected={handlePeriodSelected}
             meetId={meet?.id as string}
           />
@@ -135,9 +143,11 @@ const CreateBookingForm: FC<CreateBookingFormProps> = ({ meet, onClose }) => {
             >
               Create
             </Button>
-            <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
+            {!participants?.length && (
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+            )}
           </DrawerFooter>
         </Stack>
       </form>

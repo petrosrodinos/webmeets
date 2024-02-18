@@ -21,14 +21,12 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Step1 from "./Step1";
 import CreateBookingForm from "pages/meets/Meet/CreateBooking/CreateBookingForm";
 import { Meet } from "interfaces/meet";
-import { MeetTypes } from "enums/meet";
 
 interface CreateProfileBookingProps {
   date?: string;
-  onClose: () => void;
 }
 
-const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) => {
+const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date }) => {
   const toast = useToast();
   const [isLargerThan470] = useMediaQuery("(min-width: 470px)");
   const [participants, setParticipants] = useState<string[]>([]);
@@ -49,7 +47,9 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) 
     {
       title: "Info",
       description: "Booking Info",
-      step: (meet: Meet) => <CreateBookingForm meet={meet} onClose={onClose} />,
+      step: ({ meet, participants }: any) => (
+        <CreateBookingForm meet={meet} participants={participants} selectedDate={date} />
+      ),
     },
   ];
 
@@ -69,9 +69,9 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) 
   const handleParticipantRemove = (userId: string) => {
     setParticipants((prev) => prev.filter((p) => p !== userId));
   };
-
+  //&& participants.length >= 1
   async function handleNext() {
-    if (selectedMeet && participants.length >= 1 && activeStep === 1) {
+    if (selectedMeet && activeStep === 1) {
       setActiveStep(activeStep + 1);
     } else {
       toast({
@@ -113,7 +113,7 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) 
         ))}
       </Stepper>
       <Stack mx={"auto"} width="100%" spacing={4}>
-        {steps[activeStep - 1].step(selectedMeet as Meet)}
+        {steps[activeStep - 1].step({ meet: selectedMeet as Meet, participants: participants })}
 
         <HStack alignItems="left">
           {activeStep > 1 && (

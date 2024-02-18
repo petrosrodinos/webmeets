@@ -20,11 +20,15 @@ const ProfileBookings: FC = () => {
   );
 
   const handleDateClick = (date: string) => {
+    if (new Date(date) < new Date()) return;
     setSelectedDate(date);
     toggleModal();
   };
 
   const toggleModal = () => {
+    if (selectedDate) {
+      setSelectedDate(undefined);
+    }
     setIsModalOpen(!isModalOpen);
   };
 
