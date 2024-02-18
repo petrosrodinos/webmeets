@@ -6,18 +6,20 @@ import { getMeets } from "services/meets";
 import Spinner from "components/ui/Spinner";
 import Select from "components/ui/Select";
 import { OptionItem } from "interfaces/components";
-import { FormLabel, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import { FormLabel, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import ParticipantSearch from "./ParticipantSearch";
 import { User } from "interfaces/user";
+import Participants from "./Participants";
 
 interface Step1Props {
   onParticipantSelect: (userId: string) => void;
+  onParticipantRemove: (userId: string) => void;
   onMeetSelect: (meet: Meet) => void;
 }
 
-const Step1: FC<Step1Props> = ({ onParticipantSelect, onMeetSelect }) => {
+const Step1: FC<Step1Props> = ({ onParticipantSelect, onParticipantRemove, onMeetSelect }) => {
   const { userId } = authStore((state) => state);
-  const [participants, setParticipants] = useState<User[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<User[]>([]);
 
   const { data: meets, isLoading } = useQuery(["meets"], () => getMeets({ userId }));
 
@@ -28,9 +30,16 @@ const Step1: FC<Step1Props> = ({ onParticipantSelect, onMeetSelect }) => {
   };
 
   const handleParticipantSelect = (participant: User) => {
-    setParticipants((prev) => [...prev, participant]);
+    if (selectedParticipants.find((p) => p.id === participant.id)) return;
+    setSelectedParticipants((prev) => [...prev, participant]);
     onParticipantSelect(participant.id);
   };
+
+  const handleParticipantRemove = (userId: string) => {
+    setSelectedParticipants((prev) => prev.filter((p) => p.id !== userId));
+    onParticipantRemove(userId);
+  };
+
   const meetOptions = useMemo(() => {
     return meets?.map((meet) => ({ value: meet.id, label: meet.name }));
   }, [meets]);
@@ -44,7 +53,7 @@ const Step1: FC<Step1Props> = ({ onParticipantSelect, onMeetSelect }) => {
         label="Meets"
         placeholder="Select meet"
       />
-      <FormLabel mt={5}>Select participants</FormLabel>
+      <FormLabel mt={5}>Find participants</FormLabel>
       <Tabs isFitted variant="enclosed">
         <TabList mb="1em">
           <Tab>Webmeets user</Tab>
@@ -59,6 +68,12 @@ const Step1: FC<Step1Props> = ({ onParticipantSelect, onMeetSelect }) => {
           </TabPanel>
         </TabPanels>
       </Tabs>
+      {selectedParticipants.length > 0 && (
+        <>
+          <FormLabel mt={5}>Selected participants</FormLabel>
+          <Participants participants={selectedParticipants} onRemove={handleParticipantRemove} />
+        </>
+      )}
     </div>
   );
 };

@@ -36,7 +36,11 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) 
       title: "Meet/Participants",
       description: "Select meet and participants",
       step: () => (
-        <Step1 onParticipantSelect={handleParticipantSelect} onMeetSelect={handleMeetSelect} />
+        <Step1
+          onParticipantSelect={handleParticipantSelect}
+          onParticipantRemove={handleParticipantRemove}
+          onMeetSelect={handleMeetSelect}
+        />
       ),
     },
     {
@@ -51,12 +55,16 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date, onClose }) 
     count: steps.length,
   });
 
+  const handleMeetSelect = (meet: Meet) => {
+    setSelectedMeet(meet);
+  };
+
   const handleParticipantSelect = (userId: string) => {
     setParticipants((prev) => [...prev, userId]);
   };
 
-  const handleMeetSelect = (meet: Meet) => {
-    setSelectedMeet(meet);
+  const handleParticipantRemove = (userId: string) => {
+    setParticipants((prev) => prev.filter((p) => p !== userId));
   };
 
   async function handleNext() {

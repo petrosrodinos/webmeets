@@ -5,6 +5,7 @@ import { getUsers } from "services/user";
 import { useMutation } from "react-query";
 import Spinner from "components/ui/Spinner";
 import Participants from "../Participants";
+import { Alert, AlertIcon } from "@chakra-ui/react";
 
 interface ParticipantSearchProps {
   type: "webmeets" | "other";
@@ -23,13 +24,11 @@ const ParticipantSearch: FC<ParticipantSearchProps> = ({ onParticipantSelect, ty
         { phone: value },
         {
           onSuccess: (data) => {
-            console.log("ad", data);
             setParticipants(data);
           },
         }
       );
     }
-    // onParticipantSelect(e.target.value);
   };
 
   return (
@@ -43,7 +42,13 @@ const ParticipantSearch: FC<ParticipantSearchProps> = ({ onParticipantSelect, ty
         onChange={handlePhoneChange}
       />
       <Spinner loading={isGettingUsers} />
-      <Participants participants={participants} />
+      {participants.length === 0 && (
+        <Alert mt={5} status="warning">
+          <AlertIcon />
+          No users found.
+        </Alert>
+      )}
+      <Participants participants={participants} onSelect={onParticipantSelect} />
     </div>
   );
 };

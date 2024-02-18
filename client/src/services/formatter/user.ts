@@ -9,6 +9,8 @@ export const formatUser = (data: any): User | null => {
       firstname: data.firstname,
       lastname: data.lastname,
       avatar: data.avatar,
+      phone: data.phone,
+      email: data.email,
     };
   }
 };

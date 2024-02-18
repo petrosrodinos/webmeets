@@ -19,6 +19,8 @@ export interface User {
   firstname: string;
   lastname: string;
   avatar: string;
+  phone: string;
+  email: string;
 }
 
 export interface EditUser {
