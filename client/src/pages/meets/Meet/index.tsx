@@ -75,11 +75,11 @@ const MeetPage: FC = () => {
                   >
                     ${meet.price}
                   </Text>
-                  <Link to={`/profiles/${meet?.profile?.id}`}>
-                    <HStack mb={2} mt={2}>
-                      <Avatar src={meet.profile?.avatar}></Avatar>
+                  <HStack mb={2} mt={2}>
+                    <Avatar src={meet.profile?.avatar}></Avatar>
+                    <Link style={{ maxWidth: "min-content" }} to={`/profiles/${meet?.profile?.id}`}>
                       <Text
-                        width="fit-content"
+                        width="max-content"
                         mb={1}
                         height="max-content"
                         p={1}
@@ -92,8 +92,8 @@ const MeetPage: FC = () => {
                       >
                         {meet.user?.firstname} {meet.user?.lastname}
                       </Text>
-                    </HStack>
-                  </Link>
+                    </Link>
+                  </HStack>
                   <Tag maxWidth="fit-content" value={meet.category} />
 
                   <Rating value={meet.rating} />

@@ -1,4 +1,4 @@
-import { Avatar, HStack, ListItem, Text, VStack, Divider } from "@chakra-ui/react";
+import { Avatar, HStack, ListItem, Text, VStack, Divider, Stack } from "@chakra-ui/react";
 import Rating from "components/ui/Rating";
 import { Review as ReviewInt } from "interfaces/review";
 import { FC } from "react";
@@ -14,18 +14,18 @@ const Review: FC<ReviewProps> = ({ review }) => {
         <HStack width={"100%"}>
           <Avatar size="xs" name={review.user.firstname} src={review.user.avatar} />
           <HStack width={"100%"} justifyContent={"space-between"}>
-            <VStack alignItems={"flex-start"} gap={-1}>
+            <Stack flexDirection={{ base: "row", md: "column" }} alignItems={"flex-start"} gap={-1}>
               <Text fontWeight={"500"}>
                 {review.user.firstname} {review.user.lastname}
               </Text>
               <Rating size={15} value={review.rating} />
-            </VStack>
-            <Text color={"gray.500"} fontSize={"sm"} fontStyle={"italic"}>
+            </Stack>
+            <Text color={"gray.500"} fontSize={"sm"} position={"relative"} top="-3">
               {review.createdAt}
             </Text>
           </HStack>
         </HStack>
-        <Text color={"gray.500"} fontSize={"sm"} fontStyle={"italic"}>
+        <Text ml={8} color={"gray.500"} fontSize={"sm"} fontStyle={"italic"}>
           {review.review}
         </Text>
       </VStack>
