@@ -8,7 +8,6 @@ import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 @UseGuards(JwtGuard)
 @Controller('users')
 @ApiTags('User')
-@ApiOkResponse({ type: User })
 @ApiBearerAuth()
 export class UserController {
   constructor(private userService: UserService) {}
@@ -25,6 +24,8 @@ export class UserController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: User })
   findOne(@Param('id') id: string, @Req() req: Express.Request) {
     const userId = req.user.userId;
 
@@ -35,11 +36,14 @@ export class UserController {
     return this.userService.findOne(userId);
   }
 
-  @Patch()
+  @Patch(':id')
   @ApiBearerAuth()
   @ApiOkResponse({ type: User })
-  editUser(@Req() req: Express.Request, @Body() updateUserDto: UpdateUserDto) {
+  editUser(@Param('id') id: string, @Req() req: Express.Request, @Body() updateUserDto: UpdateUserDto) {
     const userId = req.user.userId;
+    if (id !== userId) {
+      return new ForbiddenException('You are not allowed to access this resource');
+    }
     return this.userService.update(userId, updateUserDto);
   }
 }
