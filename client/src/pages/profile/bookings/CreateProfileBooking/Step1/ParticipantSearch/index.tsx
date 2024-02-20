@@ -6,7 +6,6 @@ import { useMutation } from "react-query";
 import Spinner from "components/ui/Spinner";
 import Participants from "../Participants";
 import { Alert, AlertIcon } from "@chakra-ui/react";
-
 interface ParticipantSearchProps {
   type: "webmeets" | "other";
   onParticipantSelect: (participant: User) => void;

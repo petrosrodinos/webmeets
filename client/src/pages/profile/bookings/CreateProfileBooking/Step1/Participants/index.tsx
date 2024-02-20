@@ -2,6 +2,7 @@ import { HStack, Avatar, Text, Box, useColorModeValue, VStack } from "@chakra-ui
 import { User } from "interfaces/user";
 import { FC } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { authStore } from "store/authStore";
 
 interface ParticipantsProps {
   participants: User[];
@@ -10,11 +11,18 @@ interface ParticipantsProps {
 }
 
 const Participants: FC<ParticipantsProps> = ({ participants, onSelect, onRemove }) => {
+  const { userId } = authStore();
+
+  const handleSelect = (participant: User) => {
+    if (participant.id !== userId) {
+      onSelect?.(participant);
+    }
+  };
   return (
     <div>
       {participants.map((participant) => (
         <Box
-          onClick={() => onSelect?.(participant)}
+          onClick={() => handleSelect?.(participant)}
           mt={3}
           display="flex"
           flexDirection="column"
@@ -23,12 +31,14 @@ const Participants: FC<ParticipantsProps> = ({ participants, onSelect, onRemove 
           boxShadow={"lg"}
           p={3}
           _hover={
-            onSelect
+            onSelect && participant.id !== userId
               ? {
                   cursor: "pointer",
                   bg: useColorModeValue("gray.100", "gray.600"),
                 }
-              : {}
+              : {
+                  cursor: "not-allowed",
+                }
           }
         >
           <HStack justifyContent={"space-between"}>

@@ -2,6 +2,7 @@ import axios from "axios";
 import { API_URL } from "constants/api";
 import { createParams, getAuthHeaders, getHeaders } from "./utils/utils";
 import { formatUser } from "./formatter/user";
+import { User } from "interfaces/user";
 
 export const getUser = async () => {
   try {
@@ -12,7 +13,7 @@ export const getUser = async () => {
   }
 };
 
-export const getUsers = async (query: { [key: string]: string } = {}) => {
+export const getUsers = async (query: { [key: string]: string } = {}): Promise<User[]> => {
   try {
     const res = await axios.get(`${API_URL}users?${createParams(query)}`, getHeaders());
     const data = res.data;
