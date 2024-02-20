@@ -69,16 +69,16 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
     setBookingInfo([
       {
         label: "Meet",
-        value: booking?.meet?.name || "NOT-SET",
+        value: booking?.meet?.name || "-",
       },
       {
         label: "Date",
-        value: formatDate(booking?.date, true) || "NOT-SET",
+        value: formatDate(booking?.date, true) || "-",
       },
 
       {
         label: "Duration",
-        value: booking?.meet?.duration.toString() || "NOT-SET",
+        value: booking?.meet?.duration.toString() || "-",
       },
       {
         label: "Price",
@@ -97,8 +97,12 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         value: booking.participants[0].notes || "-",
       },
       {
+        label: "Profile Notes",
+        value: `${booking?.notes || "-"}`,
+      },
+      {
         label: "Phone Number",
-        value: booking?.meet?.phone || "NOT-SET",
+        value: booking?.meet?.phone || "-",
         type: MeetTypes.IN_PERSON,
       },
       {
@@ -108,7 +112,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
       },
       {
         label: "Location",
-        value: booking?.location || "NOT-SET",
+        value: booking?.location || "-",
         type: MeetTypes.CLIENTS_LOCATION,
       },
     ]);

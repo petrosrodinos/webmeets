@@ -63,15 +63,19 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
       },
       {
         label: "Date",
-        value: formatDate(booking?.date, true) || "NOT-SET",
+        value: formatDate(booking?.date, true) || "-",
       },
       {
         label: "Duration",
-        value: String(booking?.meet?.duration) || "NOT-SET",
+        value: String(booking?.meet?.duration) || "-",
       },
       {
         label: "Price",
         value: `${booking?.meet?.price}€`,
+      },
+      {
+        label: "Profile Notes",
+        value: `${booking?.notes || "-"}`,
       },
       {
         label: "Address",
