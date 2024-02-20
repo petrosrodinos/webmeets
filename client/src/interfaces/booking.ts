@@ -11,10 +11,12 @@ export interface NewBooking {
   date: Date;
   location?: string;
   notes?: string;
-  participants: {
-    userId: string;
-    notes: string;
-  }[];
+  participants: NewBookingParticipant[];
+}
+
+export interface NewBookingParticipant {
+  userId: string;
+  notes?: string;
 }
 
 export interface Booking {

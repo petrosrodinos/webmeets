@@ -19,6 +19,10 @@ export class CreateBookingDto {
   @IsString()
   location: string;
 
+  @IsString()
+  @IsOptional()
+  notes: string;
+
   @IsEnum(BookingStatuses)
   @IsOptional()
   status: string;

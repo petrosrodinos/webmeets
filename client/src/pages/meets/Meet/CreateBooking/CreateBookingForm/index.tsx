@@ -62,42 +62,46 @@ const CreateBookingForm: FC<CreateBookingFormProps> = ({
       });
       return;
     }
-    createBookingMutation(
-      {
-        meetId: meet.id,
-        profileId: meet?.profile?.id as string,
-        location: data.location,
-        date: data.date,
-        participants: [
-          {
-            userId,
-            notes: data.notes,
-          },
-        ],
+    const payload = {
+      meetId: meet.id,
+      profileId: meet?.profile?.id as string,
+      location: data.location,
+      date: data.date,
+      notes: participants ? data.notes : undefined,
+      participants: participants
+        ? participants.map((p) => ({
+            userId: p,
+            notes: "",
+          }))
+        : [
+            {
+              userId,
+              notes: data.notes,
+            },
+          ],
+    };
+    createBookingMutation(payload, {
+      onSuccess: () => {
+        toast({
+          title: "Booking created",
+          description: "Your booking was created successfully",
+          position: "top",
+          isClosable: true,
+          status: "success",
+        });
+        // const paymentUrl = data.payment.url;
+        // window.open(paymentUrl, '_blank');
       },
-      {
-        onSuccess: () => {
-          toast({
-            title: "Booking created",
-            description: "Your booking was created successfully",
-            position: "top",
-            isClosable: true,
-            status: "success",
-          });
-          // const paymentUrl = data.payment.url;
-          // window.open(paymentUrl, '_blank');
-        },
-        onError: (error: any) => {
-          toast({
-            title: "Could not create booking",
-            description: error.message,
-            position: "top",
-            isClosable: true,
-            status: "error",
-          });
-        },
-      }
-    );
+      onError: (error: any) => {
+        toast({
+          title: "Could not create booking",
+          description: error.message,
+          position: "top",
+          isClosable: true,
+          status: "error",
+        });
+      },
+    });
   };
 
   const handlePeriodSelected = (date: string) => {
@@ -133,6 +137,7 @@ const CreateBookingForm: FC<CreateBookingFormProps> = ({
           <DrawerFooter borderTopWidth="1px">
             <Button
               disabled={isLoading}
+              isLoading={isLoading}
               _hover={{
                 bg: "primary.600",
               }}
