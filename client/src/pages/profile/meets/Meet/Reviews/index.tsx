@@ -2,6 +2,7 @@ import { FC } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getReviews } from "services/reviews";
+import Rating from "components/ui/Rating";
 import {
   Table,
   TableContainer,
@@ -35,7 +36,9 @@ const Reviews: FC = () => {
                     {review.user.firstname} {review.user.lastname}
                   </Td>
                   <Td>{review.review}</Td>
-                  <Td>{review.rating}</Td>
+                  <Td>
+                    <Rating value={review.rating} size={20}></Rating>
+                  </Td>
                   <Td>{review.createdAt}</Td>
                 </Tr>
               );
