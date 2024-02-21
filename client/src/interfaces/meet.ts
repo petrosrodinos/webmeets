@@ -1,6 +1,6 @@
-import { MeetTypes, VisibilityTypes } from 'enums/meet';
-import { Address, Profile } from './profile';
-import { User } from './user';
+import { MeetTypes, VisibilityTypes } from "enums/meet";
+import { Address, Profile } from "./profile";
+import { User } from "./user";
 
 export interface Period {
   id: string;
@@ -59,7 +59,6 @@ export interface Meet extends Address {
   category: string;
   phone?: string;
   duration: number;
-  rating: number;
   maxParticipants: number;
   images: { id: string; file: string }[];
   price: number;

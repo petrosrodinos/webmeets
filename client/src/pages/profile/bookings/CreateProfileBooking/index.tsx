@@ -84,6 +84,10 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date }) => {
     }
   }
 
+  const handleBack = () => {
+    setActiveStep(activeStep - 1);
+  };
+
   return (
     <>
       <Stepper
@@ -121,7 +125,7 @@ const CreateProfileBooking: FC<CreateProfileBookingProps> = ({ date }) => {
               size="md"
               leftIcon={<IoIosArrowBack />}
               width={100}
-              onClick={() => setActiveStep(activeStep - 1)}
+              onClick={handleBack}
               colorScheme={"primary"}
               variant={"outline"}
             >

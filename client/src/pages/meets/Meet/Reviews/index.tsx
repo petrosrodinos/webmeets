@@ -10,8 +10,8 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import { FC, useState } from "react";
-import { getReviews, createReview, deleteReview } from "services/reviews";
-import { useQuery, useMutation } from "react-query";
+import { createReview, deleteReview } from "services/reviews";
+import { useMutation } from "react-query";
 import { useParams } from "react-router-dom";
 import Review from "./Review";
 import { CreateReview, Review as ReviewInt } from "interfaces/review";
@@ -22,9 +22,11 @@ import { Meet } from "interfaces/meet";
 
 interface ReviewsProps {
   meet: Meet;
+  reviews: ReviewInt[];
+  refetch: () => void;
 }
 
-const Reviews: FC<ReviewsProps> = ({ meet }) => {
+const Reviews: FC<ReviewsProps> = ({ meet, reviews, refetch }) => {
   const { id } = useParams();
   const toast = useToast();
   const { isLoggedIn, profileId } = authStore();
@@ -34,8 +36,6 @@ const Reviews: FC<ReviewsProps> = ({ meet }) => {
     rating: 0,
     review: "",
   });
-
-  const { data: reviews, refetch } = useQuery(["reviews", id], () => getReviews(id as string));
 
   const { mutate: createReviewMutation, isLoading } = useMutation(createReview);
   const { mutate: deleteReviewMutation, isLoading: isDeleting } = useMutation(deleteReview);

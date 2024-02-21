@@ -20,6 +20,7 @@ export default defineConfig({
       "validation-schemas": "/src/validation-schemas",
       services: "/src/services",
       constants: "/src/constants",
+      router: "/src/router",
     },
   },
   server: {

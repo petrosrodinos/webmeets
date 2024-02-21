@@ -20,7 +20,6 @@ export const formatMeet = (meet: any): Meet => ({
   address: meet.address,
   area: meet.area,
   postalCode: meet.postalCode,
-  rating: meet?.rating || 0,
   hours: formatHours(meet.hours),
   closingPeriods: formatClosingPeriods(meet?.closures || []),
   images: formatImages(meet.images),
