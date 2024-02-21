@@ -41,9 +41,9 @@ export class ReviewsService {
     return review.save();
   }
 
-  findMeetReviews(meetId: string) {
+  findAll(query: any) {
     const reviews: any = this.reviewModel
-      .find({ meetId })
+      .find({ ...query })
       .populate('userId', '-password -phone -email -birthDate')
       .sort({ createdAt: -1 });
 
