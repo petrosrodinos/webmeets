@@ -1,4 +1,4 @@
-import { getAuthState } from '../../store/authStore';
+import { getAuthState } from "../../store/authStore";
 
 export const createParams = (params: { [key: string]: string }) => {
   return new URLSearchParams(params).toString();
@@ -7,7 +7,7 @@ export const createParams = (params: { [key: string]: string }) => {
 export const getHeaders = () => {
   return {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${getAuthState().token}`,
     },
   };

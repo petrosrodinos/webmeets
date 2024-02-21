@@ -1,4 +1,12 @@
-import { Avatar, HStack, ListItem, Text, VStack, Divider, Stack } from "@chakra-ui/react";
+import {
+  Avatar,
+  HStack,
+  ListItem,
+  Text,
+  VStack,
+  Divider,
+  Stack,
+} from "@chakra-ui/react";
 import Modal from "components/ui/Modal";
 import Rating from "components/ui/Rating";
 import { Review as ReviewInt } from "interfaces/review";
@@ -38,13 +46,22 @@ const Review: FC<ReviewProps> = ({ review, isDeleting, onDelete }) => {
         actionTitleLoading={isDeleting}
       >
         <Text fontWeight={"500"}>
-          Are you sure you want to delete this review? This action cannot be undone.
+          Are you sure you want to delete this review? This action cannot be
+          undone.
         </Text>
       </Modal>
       <ListItem mb={5}>
-        <VStack display={"flex"} justifyContent={"flex-start"} alignItems={"flex-start"}>
+        <VStack
+          display={"flex"}
+          justifyContent={"flex-start"}
+          alignItems={"flex-start"}
+        >
           <HStack width={"100%"}>
-            <Avatar size="xs" name={review.user.firstname} src={review.user.avatar} />
+            <Avatar
+              size="xs"
+              name={review.user.firstname}
+              src={review.user.avatar}
+            />
             <HStack width={"100%"} justifyContent={"space-between"}>
               <Stack
                 flexDirection={{ base: "row", md: "column" }}
