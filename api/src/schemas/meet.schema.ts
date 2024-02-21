@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
-import { MeetVisibilityTypes } from 'src/enums/meet';
-import { MeetType } from 'src/types/meet';
+import { MeetType, MeetVisibilityTypes } from 'src/enums/meet';
 
 @Schema()
 export class Period {
@@ -76,7 +75,10 @@ export class Meet {
   @Prop()
   duration: number;
 
-  @Prop()
+  @Prop({
+    type: String,
+    enum: MeetType,
+  })
   type: MeetType;
 
   @Prop({

@@ -1,9 +1,8 @@
 import { IsOptional, IsString, IsArray, Validate, IsEnum } from 'class-validator';
-import { MeetType } from 'src/types/meet';
 import { CreateHourDto } from '../hours/dto/create-hour.dto';
 import { CreateClosureDto } from '../closures/dto/create-closure.dto';
 import { IsNumberOrString } from 'src/validators/IsNumberOrString';
-import { MeetVisibilityTypes } from 'src/enums/meet';
+import { MeetType, MeetVisibilityTypes } from 'src/enums/meet';
 
 export class CreateMeetDto {
   @IsString()
