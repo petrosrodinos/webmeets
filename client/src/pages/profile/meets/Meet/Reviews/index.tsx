@@ -15,7 +15,6 @@ import {
 const Reviews: FC = () => {
   const { id } = useParams();
   const { data } = useQuery(["reviews", id], () => getReviews(id as string));
-  console.log(data);
   return (
     <div>
       <TableContainer>
