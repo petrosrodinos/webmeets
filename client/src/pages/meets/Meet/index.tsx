@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import {
   Box,
   Container,
@@ -27,8 +27,6 @@ import { authStore } from "store/authStore";
 import { MeetTypes } from "enums/meet";
 import { Link, useParams } from "react-router-dom";
 import Reviews from "./Reviews";
-import { getReviews } from "services/reviews";
-import { Review } from "interfaces/review";
 
 const MeetPage: FC = () => {
   const { id } = useParams();
@@ -37,15 +35,6 @@ const MeetPage: FC = () => {
   const toast = useToast();
 
   const { data: meet, isLoading } = useQuery(["meet", id], () => getMeet(id as string));
-  const { data: reviews, refetch } = useQuery(["reviews", id], () => getReviews(id as string));
-
-  const averageRating = useMemo(() => {
-    if (reviews) {
-      const total = reviews.reduce((acc, review) => acc + review.rating, 0);
-      return total / reviews.length;
-    }
-    return 0;
-  }, [reviews]);
 
   const handleBook = () => {
     if (!isLoggedIn) {
@@ -108,7 +97,7 @@ const MeetPage: FC = () => {
                   </HStack>
                   <Tag maxWidth="fit-content" value={meet.category} />
 
-                  <Rating value={averageRating || 0} />
+                  <Rating value={meet.rating} />
                 </Box>
 
                 <Stack
@@ -231,7 +220,7 @@ const MeetPage: FC = () => {
                 )}
               </Stack>
             </VStack>
-            <Reviews meet={meet} reviews={reviews as Review[]} refetch={refetch} />
+            <Reviews meet={meet} />
           </Stack>
         </>
       )}

@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { createReview, deleteReview } from "services/reviews";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Review from "./Review";
 import { CreateReview, Review as ReviewInt } from "interfaces/review";
@@ -19,14 +19,13 @@ import TextArea from "components/ui/TextArea";
 import Rating from "components/ui/Rating";
 import { authStore } from "store/authStore";
 import { Meet } from "interfaces/meet";
+import { getReviews } from "services/reviews";
 
 interface ReviewsProps {
   meet: Meet;
-  reviews: ReviewInt[];
-  refetch: () => void;
 }
 
-const Reviews: FC<ReviewsProps> = ({ meet, reviews, refetch }) => {
+const Reviews: FC<ReviewsProps> = ({ meet }) => {
   const { id } = useParams();
   const toast = useToast();
   const { isLoggedIn, profileId } = authStore();
@@ -37,6 +36,7 @@ const Reviews: FC<ReviewsProps> = ({ meet, reviews, refetch }) => {
     review: "",
   });
 
+  const { data: reviews, refetch } = useQuery(["reviews", id], () => getReviews(id as string));
   const { mutate: createReviewMutation, isLoading } = useMutation(createReview);
   const { mutate: deleteReviewMutation, isLoading: isDeleting } = useMutation(deleteReview);
 
@@ -65,8 +65,8 @@ const Reviews: FC<ReviewsProps> = ({ meet, reviews, refetch }) => {
       },
       onError: (error: any) => {
         toast({
-          title: error.message,
-          description: "Could not create review. Please try later.",
+          title: "Could not create review.",
+          description: error.message,
           position: "top",
           isClosable: true,
           status: "error",

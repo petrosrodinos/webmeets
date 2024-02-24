@@ -67,6 +67,12 @@ export class Meet {
   category: string;
 
   @Prop({
+    type: [Number],
+    default: [],
+  })
+  ratings: number[];
+
+  @Prop({
     type: [ImageSchema],
     required: true,
   })

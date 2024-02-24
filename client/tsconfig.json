@@ -21,8 +21,6 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "./src"
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }],
   "paths": {
     "src/*": ["./src/*"],
     "components/*": ["./src/components/*"],
@@ -37,5 +35,7 @@
     "interfaces/*": ["./src/interfaces/*"],
     "validation-schemas/*": ["./src/validation-schemas/*"],
     "services/*": ["./src/services/*"]
-  }
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Booking, Participant } from 'src/schemas/booking.schema';
 import { Model } from 'mongoose';
 import { Review } from 'src/schemas/review.schema';
+import { Meet } from 'src/schemas/meet.schema';
 
 @Injectable()
 export class ReviewsService {
@@ -13,6 +14,8 @@ export class ReviewsService {
     private reviewModel: Model<Review>,
     @InjectModel(Booking.name)
     private bookingModel: Model<Booking>,
+    @InjectModel(Meet.name)
+    private meetModel: Model<Meet>,
   ) {}
 
   async create(createReviewDto: CreateReviewDto, userId: string) {
@@ -38,7 +41,15 @@ export class ReviewsService {
       userId,
     });
 
-    return review.save();
+    await review.save();
+
+    const meet = await this.meetModel.findById(createReviewDto.meetId);
+
+    meet.ratings.push(createReviewDto.rating);
+
+    await meet.save();
+
+    return review;
   }
 
   findMeetReviews(meetId: string) {

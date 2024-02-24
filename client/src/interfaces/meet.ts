@@ -59,6 +59,7 @@ export interface Meet extends Address {
   category: string;
   phone?: string;
   duration: number;
+  rating: number;
   maxParticipants: number;
   images: { id: string; file: string }[];
   price: number;
