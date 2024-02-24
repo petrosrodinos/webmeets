@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, Req, ForbiddenException } from '@nestjs/common';
 import { CreateChatDto, CreateMessageDto } from './dto/create-chat.dto';
 import { Chat, Message } from 'src/schemas/chat.schema';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -18,8 +18,10 @@ export class ChatController {
   }
 
   @Get()
-  findAll(@Query() query: any) {
-    return this.chatService.findAll(query);
+  findAll(@Req() req: Express.Request) {
+    const { userId } = req.user;
+
+    return this.chatService.findAll(userId);
   }
 
   @Get(':id')

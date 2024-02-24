@@ -16,11 +16,11 @@ export class ChatService {
     return chat;
   }
 
-  async findAll(query: any) {
+  async findAll(userId: string) {
     try {
       const chats = await this.chatModel
         .find({
-          ...query,
+          members: userId,
         })
         .populate(
           'profileId meetId meetId.profileId members bookingId.profileId bookingId messages.senderId',

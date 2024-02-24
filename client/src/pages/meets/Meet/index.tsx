@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   Box,
   Container,
@@ -17,7 +17,7 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { getMeet } from "services/meets";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import Spinner from "components/ui/Spinner";
 import Carousel from "components/ui/Carousel";
 import Rating from "components/ui/Rating";
@@ -25,15 +25,25 @@ import Tag from "components/ui/Tag";
 import CreateBooking from "./CreateBooking";
 import { authStore } from "store/authStore";
 import { MeetTypes } from "enums/meet";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Reviews from "./Reviews";
+import { LuSend } from "react-icons/lu";
+import { createChat } from "services/chats";
+import { NewChat } from "interfaces/chat";
 
 const MeetPage: FC = () => {
   const { id } = useParams();
-  const { isLoggedIn, profileId } = authStore((state) => state);
-  const { data: meet, isLoading } = useQuery(["meet", id], () => getMeet(id as string));
+  const { isLoggedIn, profileId, userId } = authStore((state) => state);
+
+  const { mutate: createChatMutation } = useMutation(createChat);
+
+  const { data: meet, isLoading } = useQuery(["meet", id], () =>
+    getMeet(id as string)
+  );
   const { isOpen, onClose, onOpen } = useDisclosure();
   const toast = useToast();
+
+  const navigate = useNavigate();
 
   const handleBook = () => {
     if (!isLoggedIn) {
@@ -48,6 +58,25 @@ const MeetPage: FC = () => {
       return;
     }
     onOpen();
+  };
+
+  const handleSendMessage = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Sign in to send a message!",
+        description:
+          "You need to be signed in to send a message or create an account if you do not have one.",
+        position: "top",
+        isClosable: true,
+        status: "warning",
+      });
+      return;
+    }
+    createChatMutation({
+      members: [meet?.user?.id, userId],
+      name: meet?.name,
+    } as NewChat);
+    navigate(`/user/messages`);
   };
 
   return (
@@ -75,9 +104,26 @@ const MeetPage: FC = () => {
                   >
                     ${meet.price}
                   </Text>
+                  <Button
+                    borderColor={"primary.500"}
+                    color={"primary.500"}
+                    _hover={{
+                      bg: "primary.600",
+                      color: "white",
+                    }}
+                    height={"30px"}
+                    variant={"outline"}
+                    rightIcon={<LuSend />}
+                    onClick={handleSendMessage}
+                  >
+                    Send Message
+                  </Button>
                   <HStack mb={2} mt={2}>
                     <Avatar src={meet.profile?.avatar}></Avatar>
-                    <Link style={{ maxWidth: "min-content" }} to={`/profiles/${meet?.profile?.id}`}>
+                    <Link
+                      style={{ maxWidth: "min-content" }}
+                      to={`/profiles/${meet?.profile?.id}`}
+                    >
                       <Text
                         width="max-content"
                         mb={1}
@@ -102,7 +148,11 @@ const MeetPage: FC = () => {
                 <Stack
                   spacing={{ base: 4, sm: 6 }}
                   direction={"column"}
-                  divider={<StackDivider borderColor={useColorModeValue("gray.200", "gray.600")} />}
+                  divider={
+                    <StackDivider
+                      borderColor={useColorModeValue("gray.200", "gray.600")}
+                    />
+                  }
                 >
                   <VStack spacing={{ base: 4, sm: 6 }}>
                     <Text
@@ -114,9 +164,10 @@ const MeetPage: FC = () => {
                       {meet.description}
                     </Text>
                     <Text fontSize={"lg"}>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aliquid amet at
-                      delectus doloribus dolorum expedita hic, ipsum maxime modi nam officiis porro,
-                      quae, quisquam quos reprehenderit velit? Natus, totam.
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Ad aliquid amet at delectus doloribus dolorum expedita
+                      hic, ipsum maxime modi nam officiis porro, quae, quisquam
+                      quos reprehenderit velit? Natus, totam.
                     </Text>
                   </VStack>
                   {/* <Box>
