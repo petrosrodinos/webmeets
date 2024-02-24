@@ -12,6 +12,7 @@ import { ProfileModule } from './api/profiles/profiles.module';
 import { MeetModule } from './api/meets/meets.module';
 import { BookingsModule } from './api/bookings/bookings.module';
 import { ReviewsModule } from './api/reviews/reviews.module';
+import { MessagesModule } from './api/messages/messages.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ReviewsModule } from './api/reviews/reviews.module';
     RoomsModule,
     StripeModule,
     ReviewsModule,
+    MessagesModule,
   ],
   providers: [
     {
