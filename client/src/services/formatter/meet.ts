@@ -12,7 +12,8 @@ export const formatMeet = (meet: any): Meet => ({
   category: meet.category,
   duration: meet.duration,
   rating:
-    meet.ratings.reduce((acc: number, rating: number) => acc + rating, 0) / meet.ratings.length,
+    meet?.reviews?.reduce((acc: number, review: any) => acc + review.rating, 0) /
+      meet?.reviews?.length || 0,
   maxParticipants: meet.maxParticipants,
   price: meet.price,
   type: meet.type,

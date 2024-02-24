@@ -45,7 +45,7 @@ export class ReviewsService {
 
     const meet = await this.meetModel.findById(createReviewDto.meetId);
 
-    meet.ratings.push(createReviewDto.rating);
+    meet.reviews.push(review._id);
 
     await meet.save();
 
@@ -75,6 +75,12 @@ export class ReviewsService {
     if (!deletedReview) {
       throw new NotFoundException('Review not found');
     }
+
+    const meet = await this.meetModel.findById(deletedReview.meetId);
+
+    meet.reviews = meet.reviews.filter((review) => review.toString() != id);
+
+    await meet.save();
 
     return deletedReview;
   }

@@ -66,11 +66,8 @@ export class Meet {
   @Prop()
   category: string;
 
-  @Prop({
-    type: [Number],
-    default: [],
-  })
-  ratings: number[];
+  @Prop({ type: [Types.ObjectId], ref: 'Review' })
+  reviews: Types.ObjectId[];
 
   @Prop({
     type: [ImageSchema],
