@@ -7,6 +7,6 @@ export class IsNumberOrString implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    return '($value) must be number or string';
+    return `${args.value} must be number or string`;
   }
 }

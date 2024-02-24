@@ -15,7 +15,11 @@ import {
 
 export const createBooking = async (payload: NewBooking) => {
   try {
-    const result = await axios.post(`${API_URL}bookings`, payload, getAuthHeaders());
+    const result = await axios.post(
+      `${API_URL}bookings`,
+      payload,
+      getAuthHeaders()
+    );
     return result.data;
   } catch (err: any) {
     throw err?.response?.data;
@@ -24,10 +28,17 @@ export const createBooking = async (payload: NewBooking) => {
 
 //{profileId} for getting profile bookings
 //{userId} for getting user bookings
-export const getBookings = async (query: { [key: string]: string }): Promise<Booking[]> => {
+export const getBookings = async (query: {
+  [key: string]: string;
+}): Promise<Booking[]> => {
   try {
-    const result = await axios.get(`${API_URL}bookings?${createParams(query)}`, getAuthHeaders());
-    const formattedData = result.data.map((booking: any) => formatBooking(booking));
+    const result = await axios.get(
+      `${API_URL}bookings?${createParams(query)}`,
+      getAuthHeaders()
+    );
+    const formattedData = result.data.map((booking: any) =>
+      formatBooking(booking)
+    );
     return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
@@ -49,7 +60,9 @@ export const editBooking = async (payload: EditBooking): Promise<Booking> => {
   }
 };
 
-export const editParticipant = async (payload: EditBookingParticipant): Promise<Booking> => {
+export const editParticipant = async (
+  payload: EditBookingParticipant
+): Promise<Booking> => {
   try {
     const { bookingId, participantId, ...restPayload } = payload;
     const result = await axios.patch(
@@ -64,7 +77,9 @@ export const editParticipant = async (payload: EditBookingParticipant): Promise<
   }
 };
 
-export const cancelBooking = async (payload: CancelBooking): Promise<Booking> => {
+export const cancelBooking = async (
+  payload: CancelBooking
+): Promise<Booking> => {
   try {
     const result = await axios.post(
       `${API_URL}bookings/${payload.bookingId}/cancel`,
@@ -78,7 +93,9 @@ export const cancelBooking = async (payload: CancelBooking): Promise<Booking> =>
   }
 };
 
-export const bookingAvailability = async (query: BookingAvailability): Promise<BookingPeriod[]> => {
+export const bookingAvailability = async (
+  query: BookingAvailability
+): Promise<BookingPeriod[]> => {
   try {
     const result = await axios.get(
       `${API_URL}bookings/${query.meetId}/availability?${createParams(query)}`,
@@ -91,10 +108,16 @@ export const bookingAvailability = async (query: BookingAvailability): Promise<B
   }
 };
 
-export const joinBooking = async (payload: { bookingId: string }): Promise<any> => {
+export const joinBooking = async (payload: {
+  bookingId: string;
+}): Promise<any> => {
   try {
     const { bookingId } = payload;
-    const result = await axios.post(`${API_URL}bookings/${bookingId}/join`, {}, getAuthHeaders());
+    const result = await axios.post(
+      `${API_URL}bookings/${bookingId}/join`,
+      {},
+      getAuthHeaders()
+    );
     const formattedBooking = formatBooking(result.data.booking);
     return {
       booking: formattedBooking,

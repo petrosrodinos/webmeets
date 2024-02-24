@@ -7,7 +7,7 @@ import { JwtGuard } from '../auth/guard';
 import { Review } from 'src/schemas/review.schema';
 
 @Controller('reviews')
-@ApiTags('Reviews')
+@ApiTags('Review')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
@@ -21,10 +21,10 @@ export class ReviewsController {
     return this.reviewsService.create(createReviewDto, userId);
   }
 
-  @Get(':meetId')
+  @Get()
   @ApiOkResponse({ type: Review })
-  findAll(@Param('meetId') meetId: string) {
-    return this.reviewsService.findMeetReviews(meetId);
+  findAll(@Query() query: any) {
+    return this.reviewsService.findAll(query);
   }
 
   @Patch(':id')
