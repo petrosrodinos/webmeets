@@ -21,6 +21,12 @@ export class ReviewsController {
     return this.reviewsService.create(createReviewDto, userId);
   }
 
+  @Get(':meetId')
+  @ApiOkResponse({ type: Review })
+  findMeetReviews(@Param('meetId') meetId: string, @Query() query: any) {
+    return this.reviewsService.findAll({ ...query, meetId });
+  }
+
   @Get()
   @ApiOkResponse({ type: Review })
   findAll(@Query() query: any) {

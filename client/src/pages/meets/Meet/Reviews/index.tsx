@@ -19,7 +19,7 @@ import TextArea from "components/ui/TextArea";
 import Rating from "components/ui/Rating";
 import { authStore } from "store/authStore";
 import { Meet } from "interfaces/meet";
-import { getReviews } from "services/reviews";
+import { getMeetReviews } from "services/reviews";
 
 interface ReviewsProps {
   meet: Meet;
@@ -36,7 +36,7 @@ const Reviews: FC<ReviewsProps> = ({ meet }) => {
     review: "",
   });
 
-  const { data: reviews, refetch } = useQuery(["reviews", id], () => getReviews(id as string));
+  const { data: reviews, refetch } = useQuery(["reviews", id], () => getMeetReviews(id as string));
   const { mutate: createReviewMutation, isLoading } = useMutation(createReview);
   const { mutate: deleteReviewMutation, isLoading: isDeleting } = useMutation(deleteReview);
 

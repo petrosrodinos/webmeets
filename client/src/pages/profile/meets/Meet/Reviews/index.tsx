@@ -1,23 +1,13 @@
 import { FC } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { getReviews } from "services/reviews";
+import { getMeetReviews } from "services/reviews";
 import Rating from "components/ui/Rating";
-import {
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 
 const Reviews: FC = () => {
   const { id } = useParams();
-  const { data } = useQuery(["reviews"], () =>
-    getReviews({ meetId: id as string })
-  );
+  const { data } = useQuery(["reviews"], () => getMeetReviews(id as string));
   return (
     <div>
       <TableContainer>

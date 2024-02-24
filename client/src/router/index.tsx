@@ -16,7 +16,7 @@ import UserPage from "pages/user/messages";
 import UserBookings from "pages/user/bookings";
 import UserMessages from "pages/user/messages";
 import MeetPage from "pages/meets/Meet";
-import ProfileMeet from "pages/profile/meets/Meet/page";
+import ProfileMeet from "pages/profile/meets/Meet";
 import About from "pages/about";
 
 const Router: FC = () => {
