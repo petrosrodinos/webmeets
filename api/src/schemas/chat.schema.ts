@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
 @Schema()
-export class MessageResponse {
+export class Message {
   @Prop({ type: Types.ObjectId, ref: 'User' })
   senderId: Types.ObjectId;
 
@@ -10,11 +10,11 @@ export class MessageResponse {
   message: string;
 }
 
-const MessageResponseShema = SchemaFactory.createForClass(MessageResponse);
+const MessageShema = SchemaFactory.createForClass(Message);
 @Schema({
   timestamps: true,
 })
-export class Message {
+export class Chat {
   @Prop()
   name: string;
 
@@ -25,12 +25,12 @@ export class Message {
   type: string;
 
   @Prop({
-    type: [MessageResponseShema],
+    type: [MessageShema],
     required: true,
   })
-  messages: MessageResponse[];
+  messages: Message[];
 
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: [Types.ObjectId], ref: 'User' })
   members: Types.ObjectId[];
 
   @Prop({ type: Types.ObjectId, ref: 'Profile' })
@@ -43,4 +43,4 @@ export class Message {
   bookingId: Types.ObjectId;
 }
 
-export const MessageShema = SchemaFactory.createForClass(Message);
+export const ChatShema = SchemaFactory.createForClass(Chat);

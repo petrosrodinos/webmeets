@@ -12,7 +12,7 @@ import { ProfileModule } from './api/profiles/profiles.module';
 import { MeetModule } from './api/meets/meets.module';
 import { BookingsModule } from './api/bookings/bookings.module';
 import { ReviewsModule } from './api/reviews/reviews.module';
-import { MessagesModule } from './api/messages/messages.module';
+import { ChatsModule } from './api/chats/chats.module';
 
 @Module({
   imports: [
@@ -36,7 +36,7 @@ import { MessagesModule } from './api/messages/messages.module';
     RoomsModule,
     StripeModule,
     ReviewsModule,
-    MessagesModule,
+    ChatsModule,
   ],
   providers: [
     {

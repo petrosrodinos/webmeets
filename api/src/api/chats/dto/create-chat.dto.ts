@@ -1,6 +1,7 @@
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, Validate, IsOptional, IsString, IsMongoId } from 'class-validator';
+// import { IsMongoId } from 'src/validators/IsMongoId';
 
-export class CreateMessageDto {
+export class CreateChatDto {
   @IsString()
   name: string;
 
@@ -12,26 +13,28 @@ export class CreateMessageDto {
   @IsOptional()
   type: string;
 
-  @IsString()
+  @IsMongoId()
   @IsOptional()
   profileId: string;
 
-  @IsString()
+  @IsMongoId()
   @IsOptional()
   meetId: string;
 
-  @IsString()
+  @IsMongoId()
   @IsOptional()
   bookingId: string;
 
   @IsArray()
+  @IsMongoId({ each: true })
   members: string[];
 
   @IsArray()
-  messages: CreateMessageResponseDto[];
+  @IsOptional()
+  messages: CreateMessageDto[];
 }
 
-export class CreateMessageResponseDto {
+export class CreateMessageDto {
   @IsString()
   senderId: string;
 

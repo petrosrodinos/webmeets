@@ -7,7 +7,7 @@ import { JwtGuard } from '../auth/guard';
 import { Review } from 'src/schemas/review.schema';
 
 @Controller('reviews')
-@ApiTags('Reviews')
+@ApiTags('Review')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
