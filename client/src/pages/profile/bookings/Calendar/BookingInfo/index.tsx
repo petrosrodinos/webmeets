@@ -250,7 +250,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                   <Avatar size="sm" src={participant.user.avatar} />
                   <VStack>
                     <Text>{`${participant.user.firstname} ${participant.user.lastname}`}</Text>
-                    <Text>Notes:{participant.notes}</Text>
+                    <Text>Notes:{participant.notes || "-"}</Text>
                   </VStack>
                 </HStack>
               );

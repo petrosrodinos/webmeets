@@ -19,31 +19,52 @@ export class BookingsService {
     private dailyService: DailyService,
   ) {}
 
-  async create(createBookingDto: CreateBookingDto, paymentId: string, userId: string) {
+  async create(createBookingDto: CreateBookingDto, paymentId: string, req: Express.Request) {
+    const { userId, profileId } = req.user;
+
     try {
       const existingBooking = await this.bookingModel.findOne({
         meetId: createBookingDto.meetId,
         date: createBookingDto.date,
       });
       if (existingBooking) {
-        const isExistingParticipant = existingBooking.participants.find((participant: Participant) => {
-          return participant.userId == userId;
-        });
-        if (isExistingParticipant) {
-          throw new ForbiddenException('You are already a participant in this booking.');
+        let isExistingParticipant: Participant;
+
+        //if booking is created from meet owner
+        if (existingBooking.profileId == profileId) {
+          //check if any of createBookingDto.participants exist in existingBooking.participants
+          existingBooking.participants.forEach((existingParticipant: Participant) => {
+            createBookingDto.participants.forEach((participant: Participant) => {
+              if (existingParticipant.userId == participant.userId) {
+                isExistingParticipant = participant;
+              }
+            });
+          });
+          if (isExistingParticipant) {
+            throw new ForbiddenException('A user is already a participant in this booking.');
+          }
+        } else {
+          //if booking is created from user
+          isExistingParticipant = existingBooking.participants.find((participant: Participant) => {
+            return participant.userId == userId;
+          });
+          if (isExistingParticipant) {
+            throw new ForbiddenException('You are already a participant in this booking.');
+          }
         }
+
         const { participants, ..._ } = createBookingDto;
 
         existingBooking.participants.push(...participants);
         await existingBooking.save();
         return existingBooking;
       } else {
-        const { participants, ...restDto } = createBookingDto;
+        // const { participants, ...restDto } = createBookingDto;
         const booking = new this.bookingModel({
-          ...restDto,
+          ...createBookingDto,
           paymentId,
         });
-        booking.participants.push(...participants);
+        // booking.participants.push(...participants);
         await booking.save();
         return booking;
       }

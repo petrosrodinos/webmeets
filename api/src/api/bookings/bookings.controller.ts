@@ -34,7 +34,7 @@ export class BookingsController {
     //   price,
     // });
 
-    const booking = await this.bookingsService.create(createBookingDto, 'payment.id', userId);
+    const booking = await this.bookingsService.create(createBookingDto, 'payment.id', req);
 
     return {
       booking,
