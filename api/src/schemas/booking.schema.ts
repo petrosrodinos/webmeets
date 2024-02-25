@@ -63,9 +63,9 @@ export class Booking {
   status: BookingStatuses;
 
   @Prop({
-    type: Date,
+    type: String,
   })
-  date: Date;
+  date: string;
 
   @Prop({
     type: String,

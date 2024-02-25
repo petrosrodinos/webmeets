@@ -14,6 +14,7 @@ import {
   Avatar,
   IconButton,
   Tooltip,
+  VStack,
 } from "@chakra-ui/react";
 import Input from "components/ui/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -384,14 +385,11 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 boxShadow={"lg"}
                 p={3}
               >
-                {booking?.activity?.map((activity, index) => (
-                  <HStack key={index}>
-                    <div>
-                      Booking cancelled by {activity.role == Roles.ADMIN ? "Creator " : "User "}
-                      because {activity.description} on {formatDate(activity.createdAt, true)}
-                    </div>
-                  </HStack>
-                ))}
+                <VStack alignItems={"flex-start"} spacing={3}>
+                  {booking?.activity?.map((activity, index) => (
+                    <Text key={index}>{activity.description}</Text>
+                  ))}
+                </VStack>
               </Box>
             </>
           )}

@@ -303,14 +303,11 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 boxShadow={"lg"}
                 p={3}
               >
-                {booking?.activity?.map((activity, index) => (
-                  <HStack key={index}>
-                    <Text>
-                      Booking cancelled by {activity.role == Roles.ADMIN ? "Creator " : "User "}
-                      because {activity.description} on {formatDate(activity.createdAt, true)}
-                    </Text>
-                  </HStack>
-                ))}
+                <VStack alignItems={"flex-start"} spacing={3}>
+                  {booking?.activity?.map((activity, index) => (
+                    <Text key={index}>{activity.description}</Text>
+                  ))}
+                </VStack>
               </Box>
             </>
           )}

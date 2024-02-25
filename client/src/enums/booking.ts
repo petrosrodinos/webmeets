@@ -10,4 +10,6 @@ export enum BookingActivityStatuses {
   CANCELLED = "cancelled",
   ACCEPTED = "accepted",
   REJECTED = "rejected",
+  RESCHEDULED = "rescheduled",
+  CHANGED_LOCATION = "changed-location",
 }

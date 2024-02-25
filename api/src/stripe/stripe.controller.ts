@@ -4,13 +4,17 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { BookingStatuses } from 'src/enums/booking';
 import { ApiTags } from '@nestjs/swagger';
 import { BookingsService } from 'src/api/bookings/bookings.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Booking } from 'src/schemas/booking.schema';
 
 @Controller('stripe')
 @ApiTags('Stripe')
 export class StripeController {
   constructor(
     private readonly stripeService: StripeService,
-    private bookingService: BookingsService,
+    @InjectModel(Booking.name)
+    private bookingModel: Model<Booking>,
   ) {}
 
   @Post('hooks')
@@ -24,8 +28,8 @@ export class StripeController {
         const session = event.data.object;
         console.log('session', session);
         try {
-          const booking = await this.bookingService.findAll({ paymentId: session.id });
-          const updated = this.bookingService.update(booking[0]._id.toString(), { status: BookingStatuses.CREATED });
+          const booking = await this.bookingModel.findOne({ paymentId: session.id });
+          const updated = await this.bookingModel.updateOne({ _id: booking._id }, { status: BookingStatuses.CREATED });
           console.log('updated', updated);
         } catch (e) {
           return {

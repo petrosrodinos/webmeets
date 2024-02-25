@@ -115,13 +115,46 @@ export class BookingsService {
     }
   }
 
-  async update(id: string, updateBookingDto: UpdateBookingDto) {
+  async update(id: string, updateBookingDto: UpdateBookingDto, req: Express.Request) {
+    const { userId, profileId } = req.user;
+
     try {
-      const updatedBooking = await this.bookingModel.findByIdAndUpdate(id, updateBookingDto, { new: true });
-      if (!updatedBooking) {
+      const booking = await this.bookingModel.findById(id);
+      if (!booking) {
         throw new NotFoundException(`Could not find booking.`);
       }
-      return updatedBooking.populate('userId meetId profileId', '-password');
+
+      const role = profileId == booking.profileId ? Roles.ADMIN : Roles.USER;
+
+      let newActivity = null;
+      if (updateBookingDto.location && booking.location != updateBookingDto.location) {
+        newActivity = {
+          type: BookingActivityType.CHANGED_LOCATION,
+          description: `Location changed  by ${role}, from ${booking.location} to ${updateBookingDto.location}`,
+          role,
+          userId,
+        };
+        booking.activities.push(newActivity);
+      }
+
+      if (updateBookingDto.date && booking.date != updateBookingDto.date) {
+        newActivity = {
+          type: BookingActivityType.RESCHEDULED,
+          description: `Date changed by ${role}, from ${new Date(booking.date).toDateString()} to ${new Date(
+            updateBookingDto.date,
+          ).toDateString()}`,
+          role,
+          userId,
+        };
+        booking.activities.push(newActivity);
+      }
+
+      booking.location = updateBookingDto.location ? updateBookingDto.location : booking.location;
+      booking.date = updateBookingDto.date ? updateBookingDto.date : booking.date;
+
+      await booking.save();
+
+      return booking.populate('userId meetId profileId', '-password');
     } catch (error) {
       throw new NotFoundException(error.message);
     }
@@ -151,7 +184,7 @@ export class BookingsService {
 
     const newActivity = {
       type: BookingActivityType.CANCELLED,
-      description: reason,
+      description: `Booking cancelled by ${role} for reason: ${reason} at ${new Date().toUTCString()}`,
       role,
       userId,
     };
@@ -169,12 +202,6 @@ export class BookingsService {
         return participant.userId != userId;
       });
     }
-
-    // if (userRole == Roles.USER) {
-    //   booking.participants = booking.participants.filter((participant: Participant) => {
-    //     return participant.userId != userId;
-    //   });
-    // }
 
     await booking.save();
     return booking.populate('userId meetId profileId', '-password');

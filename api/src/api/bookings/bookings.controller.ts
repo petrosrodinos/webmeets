@@ -67,8 +67,8 @@ export class BookingsController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: Booking })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
-    return this.bookingsService.update(id, updateBookingDto);
+  update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto, @Req() req: Express.Request) {
+    return this.bookingsService.update(id, updateBookingDto, req);
   }
 
   @UseGuards(JwtGuard)
