@@ -132,6 +132,7 @@ export class BookingsService {
       type: BookingActivityType.CANCELLED,
       description: reason,
       role,
+      userId,
     };
 
     booking.activities.push(newActivity);

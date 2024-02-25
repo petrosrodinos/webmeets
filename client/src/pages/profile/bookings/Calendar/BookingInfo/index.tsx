@@ -15,6 +15,8 @@ import {
   IconButton,
   VStack,
   Tooltip,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import Input from "components/ui/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -231,7 +233,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
               })}
             </List>
           </Box>
-          <Text fontWeight="bold">Participants:</Text>
+          <Text fontWeight="bold">Info</Text>
           <Box
             display="flex"
             flexDirection="column"
@@ -240,6 +242,8 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             boxShadow={"lg"}
             p={3}
           >
+            <Text fontWeight="bold">Participants</Text>
+
             {booking.participants?.map((participant, index) => {
               return (
                 <HStack key={index}>
@@ -251,7 +255,13 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 </HStack>
               );
             })}
-            <HStack mt={10}>
+            {booking.participants.length == 0 && (
+              <Alert status="warning">
+                <AlertIcon />
+                There are no participants yet.
+              </Alert>
+            )}
+            <HStack mt={5}>
               <Input
                 disabled={true}
                 label="Date"

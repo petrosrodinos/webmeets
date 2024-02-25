@@ -10,10 +10,15 @@ export class Activity {
     enum: Object.values(BookingActivityType),
   })
   type: string;
+
   @Prop()
   description: string;
+
   @Prop()
   role: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  userId: Types.ObjectId;
 }
 
 const ActivitySchema = SchemaFactory.createForClass(Activity);
