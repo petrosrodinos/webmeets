@@ -86,7 +86,7 @@ export class BookingsService {
     try {
       const booking = await this.bookingModel.findById(id).populate('userId meetId profileId', '-password');
       if (!booking) {
-        throw new NotFoundException(`Booking with id ${id} not found.`);
+        throw new NotFoundException(`Could not find booking.`);
       }
       return booking;
     } catch (error) {
@@ -98,7 +98,7 @@ export class BookingsService {
     try {
       const updatedBooking = await this.bookingModel.findByIdAndUpdate(id, updateBookingDto, { new: true });
       if (!updatedBooking) {
-        throw new NotFoundException(`Booking with id ${id} not found.`);
+        throw new NotFoundException(`Could not find booking.`);
       }
       return updatedBooking.populate('userId meetId profileId', '-password');
     } catch (error) {
@@ -110,7 +110,7 @@ export class BookingsService {
     try {
       const deletedBooking = await this.bookingModel.findByIdAndDelete(id);
       if (!deletedBooking) {
-        throw new NotFoundException(`Booking with id ${id} not found.`);
+        throw new NotFoundException(`Could not find booking.`);
       }
       return deletedBooking;
     } catch (error) {
@@ -120,7 +120,7 @@ export class BookingsService {
 
   async cancel(bookingId: string, cancelBookingDto: CancelBookingDto, req: Express.Request) {
     const { reason, role } = cancelBookingDto;
-    const { userId, role: userRole } = req.user;
+    const { userId, profileId } = req.user;
     const booking = await this.bookingModel.findById(bookingId);
     if (!booking) {
       throw new NotFoundException('Could not find booking.');
@@ -136,16 +136,23 @@ export class BookingsService {
 
     booking.activities.push(newActivity);
 
-    if (meet.maxParticipants == 1 || userRole == Roles.ADMIN) {
+    if (meet.maxParticipants == 1 || profileId == booking.profileId) {
       booking.status = BookingStatuses.CANCELLED;
       //send notification to all participants if cancelled by admin
     }
 
-    if (userRole == Roles.USER) {
+    //if cancelled by user, remove user from participants
+    if (profileId != booking.profileId) {
       booking.participants = booking.participants.filter((participant: Participant) => {
         return participant.userId != userId;
       });
     }
+
+    // if (userRole == Roles.USER) {
+    //   booking.participants = booking.participants.filter((participant: Participant) => {
+    //     return participant.userId != userId;
+    //   });
+    // }
 
     await booking.save();
     return booking.populate('userId meetId profileId', '-password');
