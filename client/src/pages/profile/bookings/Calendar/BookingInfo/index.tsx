@@ -14,6 +14,7 @@ import {
   Avatar,
   IconButton,
   VStack,
+  Tooltip,
 } from "@chakra-ui/react";
 import Input from "components/ui/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -304,31 +305,46 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             </>
           )}
 
-          {isEditable && canJoin && (
-            <Box
-              display="flex"
-              flexDirection="column"
-              rounded={"lg"}
-              bg={useColorModeValue("white", "gray.700")}
-              boxShadow={"lg"}
-              p={3}
-            >
-              {booking.meet.type == MeetTypes.REMOTE && (
+          <Box
+            display="flex"
+            flexDirection="column"
+            rounded={"lg"}
+            bg={useColorModeValue("white", "gray.700")}
+            boxShadow={"lg"}
+            p={3}
+          >
+            {booking.meet.type == MeetTypes.REMOTE && (
+              <Tooltip
+                hasArrow
+                label={
+                  !canJoin && isEditable
+                    ? "This button will be enabled when booking time arrives"
+                    : ""
+                }
+                bg="primary.500"
+                color="white"
+              >
                 <Button
                   onClick={handleJoinBooking}
                   colorScheme="green"
                   variant="outline"
                   isDisabled={!canJoin}
                   mt={5}
+                  mb={3}
                 >
                   Join
                 </Button>
-              )}
-              <Button colorScheme="red" variant="outline" onClick={toggleCancelModal}>
-                Cancel
-              </Button>
-            </Box>
-          )}
+              </Tooltip>
+            )}
+            <Button
+              isDisabled={!isEditable}
+              colorScheme="red"
+              variant="outline"
+              onClick={toggleCancelModal}
+            >
+              Cancel
+            </Button>
+          </Box>
         </Stack>
       </form>
     </>

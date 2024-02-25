@@ -13,6 +13,7 @@ import {
   HStack,
   Avatar,
   IconButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import Input from "components/ui/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -395,39 +396,46 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             </>
           )}
 
-          {isEditable && canJoin && (
-            <Box
-              display="flex"
-              flexDirection="column"
-              rounded={"lg"}
-              bg={useColorModeValue("white", "gray.700")}
-              boxShadow={"lg"}
-              p={3}
-            >
-              <>
-                {booking.meet.type == MeetTypes.REMOTE && (
-                  <Button
-                    onClick={handleJoinBooking}
-                    colorScheme="green"
-                    variant="outline"
-                    isDisabled={!canJoin}
-                    mt={5}
-                  >
-                    Join
-                  </Button>
-                )}
+          <Box
+            display="flex"
+            flexDirection="column"
+            rounded={"lg"}
+            bg={useColorModeValue("white", "gray.700")}
+            boxShadow={"lg"}
+            p={3}
+          >
+            {booking.meet.type == MeetTypes.REMOTE && (
+              <Tooltip
+                hasArrow
+                label={
+                  !canJoin && isEditable
+                    ? "This button will be enabled when booking time arrives"
+                    : ""
+                }
+                bg="primary.500"
+                color="white"
+              >
                 <Button
-                  isDisabled={!isEditable}
-                  mt={5}
-                  colorScheme="red"
+                  onClick={handleJoinBooking}
+                  colorScheme="green"
                   variant="outline"
-                  onClick={toggleCancelModal}
+                  isDisabled={!canJoin}
+                  mt={5}
+                  mb={3}
                 >
-                  Cancel
+                  Join
                 </Button>
-              </>
-            </Box>
-          )}
+              </Tooltip>
+            )}
+            <Button
+              isDisabled={!isEditable}
+              colorScheme="red"
+              variant="outline"
+              onClick={toggleCancelModal}
+            >
+              Cancel
+            </Button>
+          </Box>
         </Stack>
       </form>
     </>
