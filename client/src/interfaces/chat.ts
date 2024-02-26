@@ -1,3 +1,5 @@
+import { Meet } from "./meet";
+import { Profile } from "./profile";
 import { User } from "./user";
 
 export interface NewChat {
@@ -15,7 +17,7 @@ export interface NewMessage {
 }
 
 export interface Message {
-  senderId: User;
+  sender: User;
   message: string;
 }
 
@@ -25,4 +27,6 @@ export interface Chat {
   members: User[];
   messages: Message[];
   createdAt: string;
+  meet: Meet;
+  profile: Profile;
 }

@@ -75,6 +75,8 @@ const MeetPage: FC = () => {
     createChatMutation({
       members: [meet?.user?.id, userId],
       name: meet?.name,
+      meetId: meet?.id,
+      profileId: meet?.profile?.id,
     } as NewChat);
     navigate(`/user/messages`);
   };

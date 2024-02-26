@@ -31,6 +31,8 @@ export const createChat = async (payload: NewChat) => {
       payload,
       getAuthHeaders()
     );
+    // const formattedData = formatChat(result.data);
+    // return formattedData;
     return result.data;
   } catch (err: any) {
     throw err?.response?.data;
@@ -44,7 +46,8 @@ export const createMessage = async (chatId: string, payload: NewMessage) => {
       payload,
       getAuthHeaders()
     );
-    return result.data;
+    const formattedData = formatChat(result.data);
+    return formattedData;
   } catch (err: any) {
     throw err?.response?.data;
   }

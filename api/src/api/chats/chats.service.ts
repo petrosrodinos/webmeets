@@ -60,7 +60,10 @@ export class ChatService {
       }
       chat.messages.push(createMessageDto);
       await chat.save();
-      return chat.messages[chat.messages.length - 1];
+      return chat.populate(
+        'profileId meetId meetId.profileId members bookingId.profileId bookingId messages.senderId',
+        '-password -email -phone -birthDate',
+      );
     } catch (error) {
       throw new NotFoundException(error.message);
     }
