@@ -7,6 +7,7 @@ import {
   Text,
   VStack,
   IconButton,
+  Flex,
 } from "@chakra-ui/react";
 import Input from "components/ui/Input";
 import { Chat, NewMessage, Message } from "interfaces/chat";
@@ -18,6 +19,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { authStore } from "store/authStore";
 import { LuSendHorizonal } from "react-icons/lu";
 import Spinner from "components/ui/Spinner";
+import { ref } from "yup";
 
 const UserMessages: FC = () => {
   const { userId } = authStore((state) => state);
@@ -27,9 +29,19 @@ const UserMessages: FC = () => {
   const [messages, setMessages] = useState<Chat["messages"]>([]);
 
   const navigate = useNavigate();
-  const { id } = useParams();
 
-  const { data: chats, isLoading } = useQuery<Chat[]>("chats", getChats);
+  const {
+    data: chats,
+    isLoading,
+    refetch,
+  } = useQuery<Chat[]>({
+    queryKey: "chats",
+    refetchOnMount: "always",
+    refetchIntervalInBackground: true,
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
+    queryFn: getChats,
+  });
 
   const { mutate: sendMessage, isLoading: isSendingMessage } = useMutation(
     ({ message, id }: { message: NewMessage; id: string }) =>
@@ -44,10 +56,7 @@ const UserMessages: FC = () => {
     // console.log(selectedChat);
   };
 
-  // console.log(selectedChat?.messages);
-
   const hadleMessageSend = () => {
-    console.log("newMessage");
     if (newMessage.trim() === "") return;
     sendMessage(
       {
@@ -72,6 +81,7 @@ const UserMessages: FC = () => {
           };
           setMessages((prev) => [...prev, newMessage]);
           setNewMessage("");
+          refetch();
         },
       }
     );
@@ -94,7 +104,12 @@ const UserMessages: FC = () => {
         height={"88vh"}
       >
         <HStack spacing={15} alignItems="flex-start">
-          <Box borderRight="1px solid gray" height={"85.5vh"} pr={3}>
+          <Box
+            borderRight="1px solid gray"
+            height={"85.5vh"}
+            pr={3}
+            overflowY="auto"
+          >
             <Text
               size="md"
               style={{
@@ -105,7 +120,7 @@ const UserMessages: FC = () => {
               Messages({chats?.length})
             </Text>
             <Input placeholder="Search messages" icon={CiSearch} />
-            <Box marginTop={4}>
+            <Box marginTop={4} pr={3} overflowY="auto">
               {chats?.map((chat, index) => (
                 <List
                   key={index}
@@ -149,9 +164,22 @@ const UserMessages: FC = () => {
               ))}
             </Box>
           </Box>
+
           <Box width="100%" height="100%">
+            <HStack pb={4}>
+              <Icon boxSize={6}></Icon>
+              <Text letterSpacing={1} color="primary.700" fontWeight="bold">
+                {selectedChat?.name}
+              </Text>
+            </HStack>
             <VStack alignItems="space-between" height="100%">
-              <VStack width="100%" alignItems="flex-start" height="80vh">
+              <VStack
+                width="100%"
+                alignItems="flex-start"
+                height="77vh"
+                overflowY="auto"
+                pr={3}
+              >
                 {selectedChat?.messages.map((message, index) => (
                   <Box
                     key={index}
@@ -171,12 +199,13 @@ const UserMessages: FC = () => {
                   </Box>
                 ))}
               </VStack>
+
               <HStack>
                 <Input
                   placeholder="Send a message..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={handleEnterPress}
+                  onKeyDown={handleEnterPress}
                   // rigthIcon={<LuSendHorizonal />}
                   // onClick={hadleMessageSend}
                 ></Input>
@@ -185,6 +214,7 @@ const UserMessages: FC = () => {
                   icon={<LuSendHorizonal />}
                   onClick={hadleMessageSend}
                   bg={"primary.500"}
+                  isLoading={isSendingMessage}
                 ></IconButton>
               </HStack>
             </VStack>
