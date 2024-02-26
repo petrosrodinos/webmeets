@@ -20,7 +20,7 @@ import { LuSendHorizonal } from "react-icons/lu";
 import Spinner from "components/ui/Spinner";
 
 const Chat: FC = () => {
-  const { userId } = authStore((state) => state);
+  const { userId, profileId } = authStore((state) => state);
   const selectedChatRef = useRef<boolean>(false);
 
   const [selectedChat, setSelectedChat] = useState<ChatProp>();
@@ -74,13 +74,20 @@ const Chat: FC = () => {
     }
   };
 
-  const hadleLastMessage = (chat: ChatProp) => {
+  const handleLastMessage = (chat: ChatProp) => {
     const lastMessage = chat.messages[chat.messages.length - 1];
     return lastMessage;
   };
 
   const getAvatar = (chat: any) => {
     if (chat?.meet.id && chat?.profile.id) return chat.profile?.avatar;
+    if (chat?.profile.id === profileId) {
+      chat?.members.find(
+        (member: any) => member.id !== userId && chat?.members.avatar
+      );
+      console.log("chat?.members.avatar ", chat?.members.avatar);
+      return chat?.members.avatar;
+    }
   };
 
   useEffect(() => {
@@ -158,9 +165,9 @@ const Chat: FC = () => {
                         color={useColorModeValue("gray.500", "white")}
                       >
                         {chat.messages.length > 0
-                          ? userId === hadleLastMessage(chat).sender.id
-                            ? "You: " + hadleLastMessage(chat).message
-                            : ""
+                          ? userId === handleLastMessage(chat).sender.id
+                            ? "You: " + handleLastMessage(chat).message
+                            : handleLastMessage(chat).message
                           : "No message yet"}
                       </Text>
                     </div>
