@@ -14,6 +14,16 @@ export const getChats = async (): Promise<Chat[]> => {
   }
 };
 
+export const getChat = async (id: string): Promise<Chat> => {
+  try {
+    const result = await axios.get(`${API_URL}chats/${id}`, getAuthHeaders());
+    const formattedData = formatChat(result.data);
+    return formattedData;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
+};
+
 export const createChat = async (payload: NewChat) => {
   try {
     const result = await axios.post(

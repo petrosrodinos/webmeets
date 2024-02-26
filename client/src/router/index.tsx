@@ -42,6 +42,7 @@ const Router: FC = () => {
       <Route path="/user" element={<UserPage />} />
       <Route path="/user/bookings" element={<UserBookings />} />
       <Route path="/user/messages" element={<UserMessages />} />
+      <Route path="/user/messages/:id" element={<UserMessages />} />
     </Routes>
   );
 };
