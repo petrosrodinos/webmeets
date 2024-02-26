@@ -6,12 +6,13 @@ import {
   useColorModeValue,
   Text,
   VStack,
+  IconButton,
 } from "@chakra-ui/react";
 import Input from "components/ui/Input";
-import { Chat } from "interfaces/chat";
+import { Chat, NewMessage, Message } from "interfaces/chat";
 import { FC, useState } from "react";
-import { useQuery } from "react-query";
-import { getChats } from "services/chats";
+import { useMutation, useQuery } from "react-query";
+import { getChats, createMessage } from "services/chats";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate, useParams } from "react-router-dom";
 import { authStore } from "store/authStore";
@@ -20,16 +21,66 @@ import Spinner from "components/ui/Spinner";
 
 const UserMessages: FC = () => {
   const { userId } = authStore((state) => state);
+
   const [selectedChat, setSelectedChat] = useState<Chat>();
+  const [newMessage, setNewMessage] = useState<string>("");
+  const [messages, setMessages] = useState<Chat["messages"]>([]);
+
   const navigate = useNavigate();
   const { id } = useParams();
+
   const { data: chats, isLoading } = useQuery<Chat[]>("chats", getChats);
+
+  const { mutate: sendMessage, isLoading: isSendingMessage } = useMutation(
+    ({ message, id }: { message: NewMessage; id: string }) =>
+      createMessage(id, message)
+  );
 
   const handleSelectedChat = async (chatId: string) => {
     const selectedChat = chats?.find((chat) => chat.id === chatId);
     setSelectedChat(selectedChat);
     navigate(`/user/messages/${chatId}`);
+    setMessages(selectedChat?.messages || []);
     // console.log(selectedChat);
+  };
+
+  // console.log(selectedChat?.messages);
+
+  const hadleMessageSend = () => {
+    console.log("newMessage");
+    if (newMessage.trim() === "") return;
+    sendMessage(
+      {
+        message: {
+          message: newMessage,
+          senderId: userId,
+        },
+        id: selectedChat?.id || "",
+      },
+      {
+        onSuccess: (data) => {
+          const newMessage: Message = {
+            message: data.message,
+            senderId: {
+              id: userId,
+              firstname: data.senderId.firstname,
+              lastname: data.senderId.lastname,
+              avatar: data.senderId.avatar,
+              email: data.senderId.email,
+              phone: data.senderId.phone,
+            },
+          };
+          setMessages((prev) => [...prev, newMessage]);
+          setNewMessage("");
+        },
+      }
+    );
+  };
+
+  const handleEnterPress = (event: any) => {
+    if (event.key === "Enter") {
+      hadleMessageSend();
+    }
   };
 
   return (
@@ -110,7 +161,7 @@ const UserMessages: FC = () => {
                     mb={4}
                     bg={
                       message.senderId.id === userId
-                        ? useColorModeValue("white", "gray.900")
+                        ? useColorModeValue("white", "gray.600")
                         : useColorModeValue("gray.100", "black")
                     }
                     alignSelf={message.senderId.id === userId ? "flex-end" : ""}
@@ -123,8 +174,18 @@ const UserMessages: FC = () => {
               <HStack>
                 <Input
                   placeholder="Send a message..."
-                  rigthIcon={<LuSendHorizonal />}
-                ></Input>{" "}
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleEnterPress}
+                  // rigthIcon={<LuSendHorizonal />}
+                  // onClick={hadleMessageSend}
+                ></Input>
+                <IconButton
+                  aria-label="Send message"
+                  icon={<LuSendHorizonal />}
+                  onClick={hadleMessageSend}
+                  bg={"primary.500"}
+                ></IconButton>
               </HStack>
             </VStack>
           </Box>
