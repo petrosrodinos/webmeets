@@ -93,6 +93,13 @@ const UserMessages: FC = () => {
     }
   };
 
+  const hadleLastMessage = (chat: Chat) => {
+    const lastMessage = chat.messages[chat.messages.length - 1];
+    return lastMessage;
+  };
+
+  console.log(chats);
+
   return (
     <>
       {<Spinner loading={isLoading}></Spinner>}
@@ -156,7 +163,11 @@ const UserMessages: FC = () => {
                         fontSize="sm"
                         color={useColorModeValue("gray.500", "white")}
                       >
-                        What is the latest with Chakra UI
+                        {chat.messages.length > 0
+                          ? userId === hadleLastMessage(chat).senderId.id
+                            ? "You: " + hadleLastMessage(chat).message
+                            : ""
+                          : "No message yet"}
                       </Text>
                     </div>
                   </HStack>
