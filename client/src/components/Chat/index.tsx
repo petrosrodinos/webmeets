@@ -14,7 +14,7 @@ import { FC, useEffect, useState, useRef } from "react";
 import { useMutation, useQuery } from "react-query";
 import { getChats, createMessage } from "services/chats";
 import { CiSearch } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { authStore } from "store/authStore";
 import { LuSendHorizonal } from "react-icons/lu";
 import Spinner from "components/ui/Spinner";
@@ -22,12 +22,14 @@ import { User } from "interfaces/user";
 
 const Chat: FC = () => {
   const { userId, profileId } = authStore((state) => state);
+  const { id } = useParams();
   const selectedChatRef = useRef<boolean>(false);
 
   const [selectedChat, setSelectedChat] = useState<ChatProp>();
   const [newMessage, setNewMessage] = useState<string>("");
-  const [timeOpen, setTimeOpen] = useState<boolean>(false);
+  const [messageTimeOpen, setMessageTimeOpen] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
+  const [openMessages, setOpenMessages] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
@@ -90,8 +92,12 @@ const Chat: FC = () => {
     return lastMessage;
   };
 
-  const handleTime = () => {
-    setTimeOpen(!timeOpen);
+  const handleMessageClick = (id: string) => {
+    if (openMessages.includes(id)) {
+      setOpenMessages(openMessages.filter((messageId) => messageId !== id));
+      return;
+    }
+    setOpenMessages([...openMessages, id]);
   };
 
   const hadleSearchValue = (e: any) => {
@@ -145,6 +151,13 @@ const Chat: FC = () => {
       }
     }
   }, [chats]);
+
+  useEffect(() => {
+    if (chats && id) {
+      const chat = chats.find((chat) => chat.id === id);
+      setSelectedChat(chat);
+    }
+  }, [chats, id]);
 
   // useEffect(() => {
   //   let lastMessage: any = document?.getElementById?.(
@@ -261,7 +274,7 @@ const Chat: FC = () => {
                   height="77vh"
                   overflowY="auto"
                 >
-                  {selectedChat?.messages.map((message, index) => (
+                  {selectedChat?.messages.map((message, index: any) => (
                     <HStack
                       key={index}
                       pt={3}
@@ -280,7 +293,7 @@ const Chat: FC = () => {
                       ></Avatar>
                       <VStack height={"100%"} alignItems="flex-start" gap={0}>
                         <Box
-                          // onClick={handleTime}
+                          onClick={() => handleMessageClick(index)}
                           key={index}
                           p={3}
                           maxWidth={"220px"}
@@ -297,13 +310,13 @@ const Chat: FC = () => {
                             {message.message}
                           </Text>
                         </Box>
-                        {/* {timeOpen && (
+                        {openMessages.includes(index) && (
                           <Text
                             color={useColorModeValue("gray.400", "gray.500")}
                           >
                             {message.createdAt}
                           </Text>
-                        )} */}
+                        )}
                       </VStack>
                     </HStack>
                   ))}

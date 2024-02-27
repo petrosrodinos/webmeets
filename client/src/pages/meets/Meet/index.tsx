@@ -72,13 +72,29 @@ const MeetPage: FC = () => {
       });
       return;
     }
-    createChatMutation({
-      members: [meet?.user?.id, userId],
-      name: meet?.name,
-      meetId: meet?.id,
-      profileId: meet?.profile?.id,
-    } as NewChat);
-    navigate(`/user/messages`);
+    createChatMutation(
+      {
+        members: [meet?.user?.id, userId],
+        name: meet?.name,
+        meetId: meet?.id,
+        profileId: meet?.profile?.id,
+      } as NewChat,
+      {
+        onSuccess: (data) => {
+          console.log("data, ", data);
+          navigate(`/user/messages/${data._id}`);
+        },
+        onError: (error: any) => {
+          toast({
+            title: "An error occurred.",
+            description: error.message,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -106,20 +122,22 @@ const MeetPage: FC = () => {
                   >
                     ${meet.price}
                   </Text>
-                  <Button
-                    borderColor={"primary.500"}
-                    color={"primary.500"}
-                    _hover={{
-                      bg: "primary.600",
-                      color: "white",
-                    }}
-                    height={"30px"}
-                    variant={"outline"}
-                    rightIcon={<LuSend />}
-                    onClick={handleSendMessage}
-                  >
-                    Send Message
-                  </Button>
+                  {meet?.profile?.id !== profileId && (
+                    <Button
+                      borderColor={"primary.500"}
+                      color={"primary.500"}
+                      _hover={{
+                        bg: "primary.600",
+                        color: "white",
+                      }}
+                      height={"30px"}
+                      variant={"outline"}
+                      rightIcon={<LuSend />}
+                      onClick={handleSendMessage}
+                    >
+                      Send Message
+                    </Button>
+                  )}
                   <HStack mb={2} mt={2}>
                     <Avatar src={meet.profile?.avatar}></Avatar>
                     <Link

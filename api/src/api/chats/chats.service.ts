@@ -3,6 +3,7 @@ import { CreateChatDto } from './dto/create-chat.dto';
 import { Chat } from 'src/schemas/chat.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Error } from 'mongoose';
+import { User } from 'src/schemas/user.schema';
 
 @Injectable()
 export class ChatService {
@@ -10,10 +11,20 @@ export class ChatService {
     @InjectModel(Chat.name)
     private chatModel: Model<Chat>,
   ) {}
-  async create(createChatDto: CreateChatDto) {
-    const chat = new this.chatModel(createChatDto);
-    await chat.save();
-    return chat;
+  async create(createChatDto: CreateChatDto, req: Express.Request) {
+    const { userId } = req.user;
+
+    const existingChat = await this.chatModel.findOne({
+      members: userId,
+      meetId: createChatDto.meetId,
+    });
+    if (existingChat) {
+      return existingChat;
+    } else {
+      const chat = new this.chatModel(createChatDto);
+      await chat.save();
+      return chat;
+    }
   }
 
   async findAll(userId: string) {

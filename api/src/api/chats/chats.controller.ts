@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, Req, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, Req, ForbiddenException } from '@nestjs/common';
 import { CreateChatDto, CreateMessageDto } from './dto/create-chat.dto';
 import { Chat, Message } from 'src/schemas/chat.schema';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -9,12 +9,18 @@ import { ChatService } from './chats.service';
 @UseGuards(JwtGuard)
 @ApiTags('Chat')
 export class ChatController {
+  meetService: any;
   constructor(private readonly chatService: ChatService) {}
   @Post()
   @ApiBearerAuth()
   @ApiOkResponse({ type: Chat })
-  create(@Body() createChatDto: CreateChatDto) {
-    return this.chatService.create(createChatDto);
+  async create(@Req() req: Express.Request, @Body() createChatDto: CreateChatDto) {
+    const { profileId } = req.user;
+    if (createChatDto.profileId == profileId) {
+      throw new ForbiddenException('You cannot chat with yourself.');
+    }
+
+    return this.chatService.create(createChatDto, req);
   }
 
   @Get()
