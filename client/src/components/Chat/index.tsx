@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { authStore } from "store/authStore";
 import { LuSendHorizonal } from "react-icons/lu";
 import Spinner from "components/ui/Spinner";
-import { formatDate } from "lib/date";
+import { User } from "interfaces/user";
 
 const Chat: FC = () => {
   const { userId, profileId } = authStore((state) => state);
@@ -27,6 +27,7 @@ const Chat: FC = () => {
   const [selectedChat, setSelectedChat] = useState<ChatProp>();
   const [newMessage, setNewMessage] = useState<string>("");
   const [timeOpen, setTimeOpen] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -37,6 +38,14 @@ const Chat: FC = () => {
   } = useQuery<ChatProp[]>({
     queryKey: "chats",
     queryFn: getChats,
+    select: (data) => {
+      if (searchValue) {
+        return data?.filter((chat) =>
+          chat.name.toLowerCase().includes(searchValue.toLowerCase())
+        );
+      }
+      return data;
+    },
   });
 
   const { mutate: sendMessage, isLoading: isSendingMessage } = useMutation(
@@ -50,7 +59,7 @@ const Chat: FC = () => {
     navigate(`/user/messages/${chatId}`);
   };
 
-  const hadleMessageSend = () => {
+  const handleMessageSend = () => {
     if (newMessage.trim() === "") return;
     sendMessage(
       {
@@ -72,7 +81,7 @@ const Chat: FC = () => {
 
   const handleEnterPress = (event: any) => {
     if (event.key === "Enter") {
-      hadleMessageSend();
+      handleMessageSend();
     }
   };
 
@@ -85,6 +94,10 @@ const Chat: FC = () => {
     setTimeOpen(!timeOpen);
   };
 
+  const hadleSearchValue = (e: any) => {
+    setSearchValue(e.target.value);
+  };
+
   const getAvatar = (chat: any) => {
     if (chat?.meet.id) {
       if (chat?.profile.id !== profileId) {
@@ -95,6 +108,23 @@ const Chat: FC = () => {
         );
         return user[0]?.avatar;
       }
+    }
+  };
+
+  const getMessageAvatar = (chat: any, sender: User) => {
+    if (
+      userId === sender.id &&
+      (chat?.profile.id !== profileId || chat?.profile.id === profileId)
+    ) {
+      return sender?.avatar;
+    }
+    if (userId !== sender.id && chat?.profile.id !== profileId) {
+      return chat.profile?.avatar;
+    }
+
+    if (userId !== sender.id && chat?.profile.id === profileId) {
+      const user = chat?.members.filter((member: any) => member.id !== userId);
+      return user[0]?.avatar;
     }
   };
 
@@ -156,7 +186,12 @@ const Chat: FC = () => {
               >
                 Messages({chats?.length})
               </Text>
-              <Input placeholder="Search messages" icon={CiSearch} />
+              <Input
+                placeholder="Search messages"
+                icon={CiSearch}
+                value={searchValue}
+                onChange={hadleSearchValue}
+              />
               <Box marginTop={4} pr={3} overflowY="auto">
                 {chats?.map((chat, index) => (
                   <List
@@ -228,18 +263,20 @@ const Chat: FC = () => {
                 >
                   {selectedChat?.messages.map((message, index) => (
                     <HStack
-                      p={3}
+                      key={index}
+                      pt={3}
+                      pl={3}
+                      pr={3}
                       alignItems="flex-start"
                       alignSelf={message.sender.id === userId ? "flex-end" : ""}
                       flexDirection={
                         message.sender.id === userId ? "row-reverse" : "row"
                       }
-                      mb={4}
                     >
                       <Avatar
                         boxSize={6}
                         mt={"2px"}
-                        // is={getAvatar(selectedChat)}
+                        src={getMessageAvatar(selectedChat, message.sender)}
                       ></Avatar>
                       <VStack height={"100%"} alignItems="flex-start" gap={0}>
                         <Box
@@ -281,7 +318,7 @@ const Chat: FC = () => {
                   <IconButton
                     aria-label="Send message"
                     icon={<LuSendHorizonal color={"white"} />}
-                    onClick={hadleMessageSend}
+                    onClick={handleMessageSend}
                     bg={"primary.500"}
                     isLoading={isSendingMessage}
                     _hover={{
