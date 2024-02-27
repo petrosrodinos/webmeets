@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { authStore } from "store/authStore";
 import { LuSendHorizonal } from "react-icons/lu";
 import Spinner from "components/ui/Spinner";
+import { formatDate } from "lib/date";
 
 const Chat: FC = () => {
   const { userId, profileId } = authStore((state) => state);
@@ -25,6 +26,7 @@ const Chat: FC = () => {
 
   const [selectedChat, setSelectedChat] = useState<ChatProp>();
   const [newMessage, setNewMessage] = useState<string>("");
+  const [timeOpen, setTimeOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -77,6 +79,10 @@ const Chat: FC = () => {
   const handleLastMessage = (chat: ChatProp) => {
     const lastMessage = chat.messages[chat.messages.length - 1];
     return lastMessage;
+  };
+
+  const handleTime = () => {
+    setTimeOpen(!timeOpen);
   };
 
   const getAvatar = (chat: any) => {
@@ -224,16 +230,20 @@ const Chat: FC = () => {
                     <HStack
                       p={3}
                       alignItems="flex-start"
-                      height="100%"
                       alignSelf={message.sender.id === userId ? "flex-end" : ""}
                       flexDirection={
                         message.sender.id === userId ? "row-reverse" : "row"
                       }
                       mb={4}
                     >
-                      <Avatar boxSize={6} mt={"2px"}></Avatar>
+                      <Avatar
+                        boxSize={6}
+                        mt={"2px"}
+                        // is={getAvatar(selectedChat)}
+                      ></Avatar>
                       <VStack height={"100%"} alignItems="flex-start" gap={0}>
                         <Box
+                          // onClick={handleTime}
                           key={index}
                           p={3}
                           maxWidth={"220px"}
@@ -250,14 +260,18 @@ const Chat: FC = () => {
                             {message.message}
                           </Text>
                         </Box>
-                        <Text color={useColorModeValue("gray.400", "gray.500")}>
-                          sss
-                        </Text>
+                        {/* {timeOpen && (
+                          <Text
+                            color={useColorModeValue("gray.400", "gray.500")}
+                          >
+                            {message.createdAt}
+                          </Text>
+                        )} */}
                       </VStack>
                     </HStack>
                   ))}
                 </VStack>
-                <HStack>
+                <HStack pl={3}>
                   <Input
                     placeholder="Send a message..."
                     value={newMessage}

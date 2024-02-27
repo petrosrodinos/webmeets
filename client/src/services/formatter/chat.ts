@@ -1,4 +1,4 @@
-import { formatDate } from "@fullcalendar/core/index.js";
+import { formatDate } from "lib/date";
 import { formatUser } from "./user";
 import { formatMeet } from "./meet";
 import { Chat } from "interfaces/chat";
@@ -10,10 +10,10 @@ export const formatChat = (chat: any): Chat => ({
   id: chat._id,
   members: chat.members.map((member: any) => formatUser(member)),
   messages: chat.messages.map((message: any) => ({
-    ...message,
     sender: formatUser(message.senderId),
+    message: message.message,
+    createdAt: formatDate(message.createdAt, true),
   })),
-  createdAt: formatDate(chat.createdAt),
   name: chat.name,
   meet: formatMeet(chat.meetId),
   profile: formatProfile(chat.profileId) as Profile,

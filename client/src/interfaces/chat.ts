@@ -1,3 +1,4 @@
+import { create } from "zustand";
 import { Meet } from "./meet";
 import { Profile } from "./profile";
 import { User } from "./user";
@@ -19,6 +20,7 @@ export interface NewMessage {
 export interface Message {
   sender: User;
   message: string;
+  createdAt: string;
 }
 
 export interface Chat {
@@ -26,7 +28,6 @@ export interface Chat {
   id: string;
   members: User[];
   messages: Message[];
-  createdAt: string;
   meet: Meet;
   profile: Profile;
 }

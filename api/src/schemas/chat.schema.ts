@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class Message {
   @Prop({ type: Types.ObjectId, ref: 'User' })
   senderId: Types.ObjectId;
