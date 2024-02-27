@@ -77,10 +77,6 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         value: `${booking?.meet?.price}€`,
       },
       {
-        label: "Profile Notes",
-        value: `${booking?.notes || "-"}`,
-      },
-      {
         label: "Address",
         value: `${booking?.meet?.city} ${booking?.meet?.address}, ${booking?.meet?.postalCode}`,
         type: MeetTypes.IN_PERSON,
@@ -89,6 +85,10 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
         label: "Location",
         value: booking?.location || "",
         type: MeetTypes.CLIENTS_LOCATION,
+      },
+      {
+        label: "Profile Notes",
+        value: `${booking?.notes || "-"}`,
       },
     ]);
   }, []);

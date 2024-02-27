@@ -12,7 +12,7 @@ import {
   useColorModeValue,
   HStack,
   Avatar,
-  IconButton,
+  // IconButton,
   Tooltip,
   VStack,
 } from "@chakra-ui/react";
@@ -27,7 +27,7 @@ import { MeetTypes } from "enums/meet";
 import { FaCheck } from "react-icons/fa6";
 import Modal from "components/ui/Modal";
 import { Roles } from "enums/roles";
-import { MdEdit } from "react-icons/md";
+// import { MdEdit } from "react-icons/md";
 import { authStore } from "store/authStore";
 import { editParticipant } from "services/booking";
 import { useNavigate } from "react-router-dom";
@@ -323,7 +323,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
             boxShadow={"lg"}
             p={3}
           >
-            <HStack>
+            {/* <HStack>
               <Input
                 disabled={true}
                 label="Date"
@@ -340,7 +340,7 @@ const BookingInfo: FC<BookingInfoProps> = ({ booking, onDateChange, onCancel }) 
                 onClick={toggleEditDateModal}
                 isDisabled={!isEditable}
               />
-            </HStack>
+            </HStack> */}
 
             {booking.meet.type == MeetTypes.CLIENTS_LOCATION && (
               <Input
