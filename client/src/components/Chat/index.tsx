@@ -27,7 +27,6 @@ const Chat: FC = () => {
 
   const [selectedChat, setSelectedChat] = useState<ChatProp>();
   const [newMessage, setNewMessage] = useState<string>("");
-  const [messageTimeOpen, setMessageTimeOpen] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
   const [openMessages, setOpenMessages] = useState<string[]>([]);
 
@@ -170,7 +169,6 @@ const Chat: FC = () => {
   //   });
   // }, [selectedChat?.messages]);
 
-  console.log(selectedChat);
   return (
     <>
       <Spinner loading={isLoading}></Spinner>
@@ -312,6 +310,7 @@ const Chat: FC = () => {
                         </Box>
                         {openMessages.includes(index) && (
                           <Text
+                            fontSize={10}
                             color={useColorModeValue("gray.400", "gray.500")}
                           >
                             {message.createdAt}
