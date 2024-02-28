@@ -33,12 +33,17 @@ import { NewChat } from "interfaces/chat";
 
 const MeetPage: FC = () => {
   const { id } = useParams();
-  const { isLoggedIn, profileId } = authStore((state) => state);
+  const { isLoggedIn, profileId, userId } = authStore((state) => state);
+
+  const { mutate: createChatMutation } = useMutation(createChat);
+
   const { data: meet, isLoading } = useQuery(["meet", id], () =>
     getMeet(id as string)
   );
   const { isOpen, onClose, onOpen } = useDisclosure();
   const toast = useToast();
+
+  const navigate = useNavigate();
 
   const handleBook = () => {
     if (!isLoggedIn) {
