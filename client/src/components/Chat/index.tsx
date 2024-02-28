@@ -7,6 +7,7 @@ import {
   VStack,
   IconButton,
   Avatar,
+  Tooltip,
 } from "@chakra-ui/react";
 import Input from "components/ui/Input";
 import { Chat as ChatProp, NewMessage } from "interfaces/chat";
@@ -290,24 +291,30 @@ const Chat: FC = () => {
                         src={getMessageAvatar(selectedChat, message.sender)}
                       ></Avatar>
                       <VStack height={"100%"} alignItems="flex-start" gap={0}>
-                        <Box
-                          onClick={() => handleMessageClick(index)}
-                          key={index}
-                          p={3}
-                          maxWidth={"220px"}
-                          rounded={"lg"}
-                          boxShadow={"xs"}
-                          bg={
-                            message.sender.id === userId
-                              ? useColorModeValue("white", "gray.600")
-                              : useColorModeValue("gray.100", "primary.500")
-                          }
-                          display="flex"
+                        <Tooltip
+                          hasArrow
+                          label={message.createdAt}
+                          bg={useColorModeValue("gray.400", "gray.500")}
                         >
-                          <Text maxWidth={"220px"} width={"100%"}>
-                            {message.message}
-                          </Text>
-                        </Box>
+                          <Box
+                            onClick={() => handleMessageClick(index)}
+                            key={index}
+                            p={3}
+                            maxWidth={"220px"}
+                            rounded={"lg"}
+                            boxShadow={"xs"}
+                            bg={
+                              message.sender.id === userId
+                                ? useColorModeValue("white", "gray.600")
+                                : useColorModeValue("gray.100", "primary.500")
+                            }
+                            display="flex"
+                          >
+                            <Text maxWidth={"220px"} width={"100%"}>
+                              {message.message}
+                            </Text>
+                          </Box>
+                        </Tooltip>
                         {openMessages.includes(index) && (
                           <Text
                             fontSize={10}
