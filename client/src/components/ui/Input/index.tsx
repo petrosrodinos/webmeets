@@ -23,6 +23,7 @@ interface AdditionalProps {
   icon?: any;
   name?: any;
   disabled?: boolean;
+  rigthIcon?: any;
 }
 
 type InputProps = ChakraInputProps & AdditionalProps;
@@ -36,6 +37,7 @@ const Input: FC<InputProps> = ({
   register,
   error,
   icon: Icon,
+  rigthIcon,
   props,
   ...rest
 }) => {
@@ -60,9 +62,21 @@ const Input: FC<InputProps> = ({
         />
         {password && (
           <InputRightElement h={"full"}>
-            <Button variant={"ghost"} onClick={() => setShowPassword((prev) => !prev)}>
+            <Button
+              variant={"ghost"}
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
               {showPassword ? <AiFillEye /> : <FaRegEyeSlash />}
             </Button>
+          </InputRightElement>
+        )}
+        {rigthIcon && (
+          <InputRightElement h={"full"}>
+            <Button
+              variant={"ghost"}
+              onClick={() => {}}
+              rightIcon={rigthIcon}
+            ></Button>
           </InputRightElement>
         )}
       </InputGroup>

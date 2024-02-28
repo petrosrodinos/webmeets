@@ -1,7 +1,8 @@
 import { FC } from "react";
+import Chat from "components/Chat";
 
 const UserMessages: FC = () => {
-  return <div>user UserMessages</div>;
+  return <Chat />;
 };
 
 export default UserMessages;

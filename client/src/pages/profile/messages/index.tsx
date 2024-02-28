@@ -1,7 +1,8 @@
+import Chat from "components/Chat";
 import { FC } from "react";
 
 const ProfileMessages: FC = () => {
-  return <div>ProfileMessages</div>;
+  return <Chat />;
 };
 
 export default ProfileMessages;

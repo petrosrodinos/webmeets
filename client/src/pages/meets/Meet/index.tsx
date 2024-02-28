@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   Box,
   Container,
@@ -17,7 +17,7 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { getMeet } from "services/meets";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import Spinner from "components/ui/Spinner";
 import Carousel from "components/ui/Carousel";
 import Rating from "components/ui/Rating";
@@ -25,18 +25,20 @@ import Tag from "components/ui/Tag";
 import CreateBooking from "./CreateBooking";
 import { authStore } from "store/authStore";
 import { MeetTypes } from "enums/meet";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Reviews from "./Reviews";
+import { LuSend } from "react-icons/lu";
+import { createChat } from "services/chats";
+import { NewChat } from "interfaces/chat";
 
 const MeetPage: FC = () => {
   const { id } = useParams();
   const { isLoggedIn, profileId } = authStore((state) => state);
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const toast = useToast();
-
   const { data: meet, isLoading } = useQuery(["meet", id], () =>
     getMeet(id as string)
   );
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const toast = useToast();
 
   const handleBook = () => {
     if (!isLoggedIn) {
@@ -51,6 +53,43 @@ const MeetPage: FC = () => {
       return;
     }
     onOpen();
+  };
+
+  const handleSendMessage = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Sign in to send a message!",
+        description:
+          "You need to be signed in to send a message or create an account if you do not have one.",
+        position: "top",
+        isClosable: true,
+        status: "warning",
+      });
+      return;
+    }
+    createChatMutation(
+      {
+        members: [meet?.user?.id, userId],
+        name: meet?.name,
+        meetId: meet?.id,
+        profileId: meet?.profile?.id,
+      } as NewChat,
+      {
+        onSuccess: (data) => {
+          console.log("data, ", data);
+          navigate(`/user/messages/${data._id}`);
+        },
+        onError: (error: any) => {
+          toast({
+            title: "An error occurred.",
+            description: error.message,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -78,6 +117,22 @@ const MeetPage: FC = () => {
                   >
                     ${meet.price}
                   </Text>
+                  {meet?.profile?.id !== profileId && (
+                    <Button
+                      borderColor={"primary.500"}
+                      color={"primary.500"}
+                      _hover={{
+                        bg: "primary.600",
+                        color: "white",
+                      }}
+                      height={"30px"}
+                      variant={"outline"}
+                      rightIcon={<LuSend />}
+                      onClick={handleSendMessage}
+                    >
+                      Send Message
+                    </Button>
+                  )}
                   <HStack mb={2} mt={2}>
                     <Avatar src={meet.profile?.avatar}></Avatar>
                     <Link
