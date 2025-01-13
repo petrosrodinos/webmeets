@@ -4,8 +4,7 @@ import Carousel from "../Carousel";
 import Rating from "../Rating";
 import Tag from "../Tag";
 import { Meet } from "../../../interfaces/meet";
-import { authStore } from "../../../store/authStore";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface MeetCardProps {
   meet: Meet;
@@ -14,28 +13,9 @@ interface MeetCardProps {
   handleBook?: (meet: Meet) => void;
 }
 
-const MeetCard: FC<MeetCardProps> = ({
-  meet,
-  fromProfile = false,
-  fromProfiles = false,
-  handleBook,
-}) => {
-  const navigate = useNavigate();
-  const { profileId } = authStore((state) => state);
-  const {
-    id,
-    name,
-    description,
-    images,
-    createdAt,
-    price,
-    maxParticipants,
-    duration,
-    category,
-    rating,
-    profile,
-    user,
-  } = meet;
+const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false }) => {
+  const { id, name, description, images, price, maxParticipants, duration, category, rating } =
+    meet;
 
   // const handleVisitClick = () => {
   //   if (fromProfile) {

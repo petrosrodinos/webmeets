@@ -1,7 +1,7 @@
-import { cleanEnv, str } from "envalid";
+// import { cleanEnv, str } from "envalid";
 
-const env = cleanEnv(process.env, {
-  API_URL: str(),
-});
+// const env = cleanEnv(process.env, {
+//   API_URL: str(),
+// });
 
-export default env;
+// export default env;

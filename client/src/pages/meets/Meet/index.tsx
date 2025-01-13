@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   Box,
   Container,
@@ -37,9 +37,7 @@ const MeetPage: FC = () => {
 
   const { mutate: createChatMutation } = useMutation(createChat);
 
-  const { data: meet, isLoading } = useQuery(["meet", id], () =>
-    getMeet(id as string)
-  );
+  const { data: meet, isLoading } = useQuery(["meet", id], () => getMeet(id as string));
   const { isOpen, onClose, onOpen } = useDisclosure();
   const toast = useToast();
 
@@ -140,10 +138,7 @@ const MeetPage: FC = () => {
                   )}
                   <HStack mb={2} mt={2}>
                     <Avatar src={meet.profile?.avatar}></Avatar>
-                    <Link
-                      style={{ maxWidth: "min-content" }}
-                      to={`/profiles/${meet?.profile?.id}`}
-                    >
+                    <Link style={{ maxWidth: "min-content" }} to={`/profiles/${meet?.profile?.id}`}>
                       <Text
                         width="max-content"
                         mb={1}
@@ -168,11 +163,7 @@ const MeetPage: FC = () => {
                 <Stack
                   spacing={{ base: 4, sm: 6 }}
                   direction={"column"}
-                  divider={
-                    <StackDivider
-                      borderColor={useColorModeValue("gray.200", "gray.600")}
-                    />
-                  }
+                  divider={<StackDivider borderColor={useColorModeValue("gray.200", "gray.600")} />}
                 >
                   <VStack spacing={{ base: 4, sm: 6 }}>
                     <Text
@@ -184,10 +175,9 @@ const MeetPage: FC = () => {
                       {meet.description}
                     </Text>
                     <Text fontSize={"lg"}>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Ad aliquid amet at delectus doloribus dolorum expedita
-                      hic, ipsum maxime modi nam officiis porro, quae, quisquam
-                      quos reprehenderit velit? Natus, totam.
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aliquid amet at
+                      delectus doloribus dolorum expedita hic, ipsum maxime modi nam officiis porro,
+                      quae, quisquam quos reprehenderit velit? Natus, totam.
                     </Text>
                   </VStack>
                   {/* <Box>

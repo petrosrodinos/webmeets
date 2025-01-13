@@ -48,7 +48,7 @@ const Item: FC<ItemProps> = ({
     setFile(undefined);
   };
 
-  const handleFileChange = ({ file, name }: { file: File; name: any }) => {
+  const handleFileChange = ({ file }: { file: File; name: any }) => {
     setFile(file);
   };
 

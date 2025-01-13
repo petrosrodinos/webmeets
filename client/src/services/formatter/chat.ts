@@ -2,7 +2,6 @@ import { formatDate } from "lib/date";
 import { formatUser } from "./user";
 import { formatMeet } from "./meet";
 import { Chat } from "interfaces/chat";
-import { formatBooking } from "./booking";
 import { formatProfile } from "./profile";
 import { Profile } from "interfaces/profile";
 
