@@ -10,8 +10,10 @@ import {
   IconButton,
   createIcon,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <Container maxW={"5xl"}>
       <Stack
@@ -40,17 +42,17 @@ export default function Home() {
                 zIndex: -1,
               }}
             >
-              Write once,
+              Seamless Scheduling,
             </Text>
             <br />
             <Text as={"span"} color={"red.400"}>
-              use everywhere!
+              Anytime, Anywhere.!
             </Text>
           </Heading>
           <Text color={"gray.500"}>
-            Snippy is a rich coding snippets app that lets you create your own code snippets,
-            categorize them, and even sync them in the cloud so you can use them anywhere. All that
-            is free!
+            WebMeets is a versatile booking platform that lets you schedule in-person or online
+            video call appointments with professionals effortlessly. Manage your bookings, stay
+            organized, and connect seamlessly—all in one place.
           </Text>
           <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}>
             <Button
@@ -61,6 +63,7 @@ export default function Home() {
               colorScheme={"red"}
               bg={"red.400"}
               _hover={{ bg: "red.500" }}
+              onClick={() => navigate("/auth/signup")}
             >
               Get started
             </Button>
