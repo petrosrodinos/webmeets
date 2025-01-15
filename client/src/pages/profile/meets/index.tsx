@@ -16,7 +16,7 @@ const ProfileMeets: FC<MeetsProps> = () => {
   const { userId } = authStore((state) => state);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: meets, isLoading } = useQuery(["meets"], () => getMeets({ userId }));
+  const { data: meets, isLoading } = useQuery(["meets", userId], () => getMeets({ userId }));
 
   return (
     <>

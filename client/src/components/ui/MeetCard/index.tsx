@@ -5,6 +5,10 @@ import Rating from "../Rating";
 import Tag from "../Tag";
 import { Meet } from "../../../interfaces/meet";
 import { Link } from "react-router-dom";
+import { IoMdTime } from "react-icons/io";
+import { Icon } from "@chakra-ui/react";
+import { BsPeople } from "react-icons/bs";
+import "./style.css";
 
 interface MeetCardProps {
   meet: Meet;
@@ -77,8 +81,14 @@ const MeetCard: FC<MeetCardProps> = ({ meet, fromProfile = false }) => {
           <Tag maxWidth="fit-content" value={category} />
           <Rating value={rating} />
           <Text color={"gray.500"}>{description}</Text>
-          <Text color={"gray.500"}>{duration} minutes</Text>
-          <Text color={"gray.500"}>{maxParticipants} people</Text>
+          <div className="meet-card-icon">
+            <Icon as={IoMdTime} color={"gray.500"} />
+            <Text color={"gray.500"}>{duration} minutes</Text>
+          </div>
+          <div className="meet-card-icon">
+            <Icon as={BsPeople} color={"gray.500"} />
+            <Text color={"gray.500"}>{maxParticipants} people</Text>
+          </div>
         </Stack>
         {/* {(!fromProfiles || !fromProfile) && (
           <Stack
